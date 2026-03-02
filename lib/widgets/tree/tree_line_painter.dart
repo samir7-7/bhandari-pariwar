@@ -14,12 +14,12 @@ class TreeLinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final linePaint = Paint()
       ..color = const Color(0xFF7A8B99)
-      ..strokeWidth = 0.8
+      ..strokeWidth = 0.6
       ..style = PaintingStyle.stroke;
 
     final spousePaint = Paint()
       ..color = const Color(0xFFD4836B)
-      ..strokeWidth = 0.8
+      ..strokeWidth = 0.6
       ..style = PaintingStyle.stroke;
 
     for (final link in bracketLinks) {

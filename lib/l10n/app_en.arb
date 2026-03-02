@@ -95,5 +95,35 @@
   "seedDataInProgress": "Loading family data...",
   "clearData": "Clear All Members",
   "clearDataConfirm": "This will permanently delete all family members from the database. This cannot be undone. Continue?",
-  "clearDataSuccess": "All family members have been removed."
+  "clearDataSuccess": "All family members have been removed.",
+  "searchHint": "Search by name...",
+  "goToInTree": "Go to in tree",
+  "addChildToMember": "Add Child",
+  "addSpouseToMember": "Add Spouse",
+  "editThisMember": "Edit",
+  "selectParent": "Select Parent",
+  "selectParentHint": "Search and select the father/parent",
+  "noSpouse": "No spouse linked",
+  "hasSpouseAlready": "This member already has a spouse",
+  "memberAdded": "Member added successfully!",
+  "spouseAdded": "Spouse linked successfully!",
+  "generation": "Generation",
+  "tapToViewDetails": "Tap a member to view details",
+  "longPressToToggle": "Long press to expand/collapse",
+  "familyName": "Family Name",
+  "fatherName": "Father's Name",
+  "grandfatherName": "Grandfather's Name",
+  "matchFound": "Match found! Adding under {parentName}",
+  "@matchFound": {
+    "placeholders": {
+      "parentName": { "type": "String" }
+    }
+  },
+  "noMatchFound": "No matching parent found. Please select manually.",
+  "confirmAddUnder": "Add this member under {parentName}?",
+  "@confirmAddUnder": {
+    "placeholders": {
+      "parentName": { "type": "String" }
+    }
+  }
 }

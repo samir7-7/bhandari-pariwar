@@ -156,7 +156,7 @@ final treeCanvasSizeProvider = Provider<Size>((ref) {
       maxY = offset.dy + TreeLayoutEngine.nodeHeight;
     }
   }
-  return Size(maxX + 40, maxY + 40);
+  return Size(maxX + 16, maxY + 16);
 });
 
 final memberSearchProvider = StateProvider<String>((ref) => '');

@@ -583,6 +583,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All family members have been removed.'**
   String get clearDataSuccess;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name...'**
+  String get searchHint;
+
+  /// No description provided for @goToInTree.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to in tree'**
+  String get goToInTree;
+
+  /// No description provided for @addChildToMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Child'**
+  String get addChildToMember;
+
+  /// No description provided for @addSpouseToMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Spouse'**
+  String get addSpouseToMember;
+
+  /// No description provided for @editThisMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get editThisMember;
+
+  /// No description provided for @selectParent.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Parent'**
+  String get selectParent;
+
+  /// No description provided for @selectParentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search and select the father/parent'**
+  String get selectParentHint;
+
+  /// No description provided for @noSpouse.
+  ///
+  /// In en, this message translates to:
+  /// **'No spouse linked'**
+  String get noSpouse;
+
+  /// No description provided for @hasSpouseAlready.
+  ///
+  /// In en, this message translates to:
+  /// **'This member already has a spouse'**
+  String get hasSpouseAlready;
+
+  /// No description provided for @memberAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Member added successfully!'**
+  String get memberAdded;
+
+  /// No description provided for @spouseAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Spouse linked successfully!'**
+  String get spouseAdded;
+
+  /// No description provided for @generation.
+  ///
+  /// In en, this message translates to:
+  /// **'Generation'**
+  String get generation;
+
+  /// No description provided for @tapToViewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a member to view details'**
+  String get tapToViewDetails;
+
+  /// No description provided for @longPressToToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press to expand/collapse'**
+  String get longPressToToggle;
+
+  /// No description provided for @familyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Family Name'**
+  String get familyName;
+
+  /// No description provided for @fatherName.
+  ///
+  /// In en, this message translates to:
+  /// **'Father\'s Name'**
+  String get fatherName;
+
+  /// No description provided for @grandfatherName.
+  ///
+  /// In en, this message translates to:
+  /// **'Grandfather\'s Name'**
+  String get grandfatherName;
+
+  /// No description provided for @matchFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Match found! Adding under {parentName}'**
+  String matchFound(String parentName);
+
+  /// No description provided for @noMatchFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching parent found. Please select manually.'**
+  String get noMatchFound;
+
+  /// No description provided for @confirmAddUnder.
+  ///
+  /// In en, this message translates to:
+  /// **'Add this member under {parentName}?'**
+  String confirmAddUnder(String parentName);
 }
 
 class _AppLocalizationsDelegate

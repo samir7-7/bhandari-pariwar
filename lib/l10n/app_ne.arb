@@ -95,5 +95,35 @@
   "seedDataInProgress": "परिवारको डाटा लोड हुँदैछ...",
   "clearData": "सबै सदस्यहरू हटाउनुहोस्",
   "clearDataConfirm": "यसले डाटाबेसबाट सबै परिवारका सदस्यहरू स्थायी रूपमा हटाउनेछ। यो पूर्ववत गर्न सकिँदैन। जारी राख्ने?",
-  "clearDataSuccess": "सबै परिवारका सदस्यहरू हटाइएको छ।"
+  "clearDataSuccess": "सबै परिवारका सदस्यहरू हटाइएको छ।",
+  "searchHint": "नामले खोज्नुहोस्...",
+  "goToInTree": "वंशवृक्षमा जानुहोस्",
+  "addChildToMember": "सन्तान थप्नुहोस्",
+  "addSpouseToMember": "जीवनसाथी थप्नुहोस्",
+  "editThisMember": "सम्पादन",
+  "selectParent": "अभिभावक छान्नुहोस्",
+  "selectParentHint": "बुबा/अभिभावक खोज्नुहोस् र छान्नुहोस्",
+  "noSpouse": "कुनै जीवनसाथी लिङ्क छैन",
+  "hasSpouseAlready": "यो सदस्यसँग पहिले नै जीवनसाथी छ",
+  "memberAdded": "सदस्य सफलतापूर्वक थपियो!",
+  "spouseAdded": "जीवनसाथी सफलतापूर्वक लिङ्क भयो!",
+  "generation": "पुस्ता",
+  "tapToViewDetails": "विवरण हेर्न सदस्यमा ट्याप गर्नुहोस्",
+  "longPressToToggle": "विस्तार/संकुचनका लागि लामो थिच्नुहोस्",
+  "familyName": "थर",
+  "fatherName": "बुबाको नाम",
+  "grandfatherName": "हजुरबुबाको नाम",
+  "matchFound": "{parentName} अन्तर्गत मिल्यो!",
+  "@matchFound": {
+    "placeholders": {
+      "parentName": { "type": "String" }
+    }
+  },
+  "noMatchFound": "मिल्ने अभिभावक भेटिएन। कृपया म्यानुअल रूपमा छान्नुहोस्।",
+  "confirmAddUnder": "{parentName} अन्तर्गत यो सदस्य थप्ने?",
+  "@confirmAddUnder": {
+    "placeholders": {
+      "parentName": { "type": "String" }
+    }
+  }
 }

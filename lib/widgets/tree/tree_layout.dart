@@ -3,12 +3,12 @@ import 'dart:math' as math;
 import 'package:bhandari_pariwar/models/member.dart';
 
 class TreeLayoutEngine {
-  static const double nodeWidth = 80.0;
-  static const double nodeHeight = 26.0;
-  static const double coupleGap = 6.0;
-  static const double siblingGap = 8.0;
-  static const double generationGap = 40.0;
-  static const double padding = 12.0;
+  static const double nodeWidth = 72.0;
+  static const double nodeHeight = 24.0;
+  static const double coupleGap = 3.0;
+  static const double siblingGap = 4.0;
+  static const double generationGap = 28.0;
+  static const double padding = 8.0;
 
   final Map<String, List<Member>> childrenMap;
   final Map<String, String> spouseMap;

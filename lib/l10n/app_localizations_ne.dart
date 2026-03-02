@@ -260,4 +260,69 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get clearDataSuccess => 'सबै परिवारका सदस्यहरू हटाइएको छ।';
+
+  @override
+  String get searchHint => 'नामले खोज्नुहोस्...';
+
+  @override
+  String get goToInTree => 'वंशवृक्षमा जानुहोस्';
+
+  @override
+  String get addChildToMember => 'सन्तान थप्नुहोस्';
+
+  @override
+  String get addSpouseToMember => 'जीवनसाथी थप्नुहोस्';
+
+  @override
+  String get editThisMember => 'सम्पादन';
+
+  @override
+  String get selectParent => 'अभिभावक छान्नुहोस्';
+
+  @override
+  String get selectParentHint => 'बुबा/अभिभावक खोज्नुहोस् र छान्नुहोस्';
+
+  @override
+  String get noSpouse => 'कुनै जीवनसाथी लिङ्क छैन';
+
+  @override
+  String get hasSpouseAlready => 'यो सदस्यसँग पहिले नै जीवनसाथी छ';
+
+  @override
+  String get memberAdded => 'सदस्य सफलतापूर्वक थपियो!';
+
+  @override
+  String get spouseAdded => 'जीवनसाथी सफलतापूर्वक लिङ्क भयो!';
+
+  @override
+  String get generation => 'पुस्ता';
+
+  @override
+  String get tapToViewDetails => 'विवरण हेर्न सदस्यमा ट्याप गर्नुहोस्';
+
+  @override
+  String get longPressToToggle => 'विस्तार/संकुचनका लागि लामो थिच्नुहोस्';
+
+  @override
+  String get familyName => 'थर';
+
+  @override
+  String get fatherName => 'बुबाको नाम';
+
+  @override
+  String get grandfatherName => 'हजुरबुबाको नाम';
+
+  @override
+  String matchFound(String parentName) {
+    return '$parentName अन्तर्गत मिल्यो!';
+  }
+
+  @override
+  String get noMatchFound =>
+      'मिल्ने अभिभावक भेटिएन। कृपया म्यानुअल रूपमा छान्नुहोस्।';
+
+  @override
+  String confirmAddUnder(String parentName) {
+    return '$parentName अन्तर्गत यो सदस्य थप्ने?';
+  }
 }

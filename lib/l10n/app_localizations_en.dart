@@ -259,4 +259,69 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clearDataSuccess => 'All family members have been removed.';
+
+  @override
+  String get searchHint => 'Search by name...';
+
+  @override
+  String get goToInTree => 'Go to in tree';
+
+  @override
+  String get addChildToMember => 'Add Child';
+
+  @override
+  String get addSpouseToMember => 'Add Spouse';
+
+  @override
+  String get editThisMember => 'Edit';
+
+  @override
+  String get selectParent => 'Select Parent';
+
+  @override
+  String get selectParentHint => 'Search and select the father/parent';
+
+  @override
+  String get noSpouse => 'No spouse linked';
+
+  @override
+  String get hasSpouseAlready => 'This member already has a spouse';
+
+  @override
+  String get memberAdded => 'Member added successfully!';
+
+  @override
+  String get spouseAdded => 'Spouse linked successfully!';
+
+  @override
+  String get generation => 'Generation';
+
+  @override
+  String get tapToViewDetails => 'Tap a member to view details';
+
+  @override
+  String get longPressToToggle => 'Long press to expand/collapse';
+
+  @override
+  String get familyName => 'Family Name';
+
+  @override
+  String get fatherName => 'Father\'s Name';
+
+  @override
+  String get grandfatherName => 'Grandfather\'s Name';
+
+  @override
+  String matchFound(String parentName) {
+    return 'Match found! Adding under $parentName';
+  }
+
+  @override
+  String get noMatchFound =>
+      'No matching parent found. Please select manually.';
+
+  @override
+  String confirmAddUnder(String parentName) {
+    return 'Add this member under $parentName?';
+  }
 }
