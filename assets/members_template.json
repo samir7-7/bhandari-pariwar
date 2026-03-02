@@ -1,0 +1,113 @@
+{
+  "description": "Bhandari Pariwar family members data structure. Each member has bilingual names (en/ne), gender, dates, and family relationship links.",
+  "members": [
+    {
+      "id": "root_male",
+      "name": {
+        "en": "Root Ancestor Name",
+        "ne": "मूल पूर्वजको नाम"
+      },
+      "gender": "male",
+      "birthDate": "1900-01-01",
+      "deathDate": "1980-01-01",
+      "isAlive": false,
+      "parentId": null,
+      "spouseId": "root_female",
+      "birthOrder": 0,
+      "photoUrl": null
+    },
+    {
+      "id": "root_female",
+      "name": {
+        "en": "Root Ancestor Spouse Name",
+        "ne": "मूल पूर्वज पत्नीको नाम"
+      },
+      "gender": "female",
+      "birthDate": "1905-01-01",
+      "deathDate": "1985-01-01",
+      "isAlive": false,
+      "parentId": null,
+      "spouseId": "root_male",
+      "birthOrder": 0,
+      "photoUrl": null
+    },
+    {
+      "id": "child_1",
+      "name": {
+        "en": "First Child Name",
+        "ne": "पहिलो सन्तानको नाम"
+      },
+      "gender": "male",
+      "birthDate": "1930-01-01",
+      "deathDate": null,
+      "isAlive": false,
+      "parentId": "root_male",
+      "spouseId": "child_1_spouse",
+      "birthOrder": 0,
+      "photoUrl": null
+    },
+    {
+      "id": "child_1_spouse",
+      "name": {
+        "en": "First Child Spouse Name",
+        "ne": "पहिलो सन्तानको पत्नीको नाम"
+      },
+      "gender": "female",
+      "birthDate": "1935-01-01",
+      "deathDate": null,
+      "isAlive": false,
+      "parentId": null,
+      "spouseId": "child_1",
+      "birthOrder": 0,
+      "photoUrl": null
+    },
+    {
+      "id": "child_2",
+      "name": {
+        "en": "Second Child Name",
+        "ne": "दोस्रो सन्तानको नाम"
+      },
+      "gender": "female",
+      "birthDate": "1933-01-01",
+      "deathDate": null,
+      "isAlive": false,
+      "parentId": "root_male",
+      "spouseId": null,
+      "birthOrder": 1,
+      "photoUrl": null
+    },
+    {
+      "id": "grandchild_1",
+      "name": {
+        "en": "Grandchild Name",
+        "ne": "नातिको नाम"
+      },
+      "gender": "male",
+      "birthDate": "1960-01-01",
+      "deathDate": null,
+      "isAlive": true,
+      "parentId": "child_1",
+      "spouseId": null,
+      "birthOrder": 0,
+      "photoUrl": null
+    }
+  ],
+  "field_descriptions": {
+    "id": "Unique identifier for the member. Use descriptive IDs or let Firestore auto-generate them.",
+    "name": "Object with 'en' (English) and 'ne' (Nepali) keys for bilingual names.",
+    "gender": "'male' or 'female'",
+    "birthDate": "ISO 8601 date string (YYYY-MM-DD) or null if unknown",
+    "deathDate": "ISO 8601 date string (YYYY-MM-DD) or null if alive/unknown",
+    "isAlive": "true if the member is alive, false if deceased",
+    "parentId": "ID of the father/parent member. null for root ancestors. Children link to the male parent. Spouses have parentId as null.",
+    "spouseId": "ID of the spouse member. Both spouses should point to each other.",
+    "birthOrder": "0-based order among siblings (0 = eldest). Used to sort children left-to-right in the tree.",
+    "photoUrl": "URL to the member's photo in Firebase Storage, or null if no photo."
+  },
+  "instructions": {
+    "adding_a_couple": "Create two members (male and female) and set each one's spouseId to the other's id.",
+    "adding_children": "Set the child's parentId to the father's (male parent's) id. Set birthOrder to position among siblings.",
+    "root_ancestors": "The topmost couple has parentId: null for both. They are linked via spouseId.",
+    "importing_to_firestore": "Each member object in the 'members' array becomes a document in the 'members' collection in Firestore. The 'id' field becomes the document ID."
+  }
+}

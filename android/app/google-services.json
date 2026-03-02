@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "193053007353",
+    "project_id": "bhandari-pariwar",
+    "storage_bucket": "bhandari-pariwar.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193053007353:android:5e00a7474dc8ef2348f128",
+        "android_client_info": {
+          "package_name": "com.bhandaripariwar.bhandari_pariwar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL5HaR_-Ey1a8olyC1hDI0mGqmUpWj4go"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

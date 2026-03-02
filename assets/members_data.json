@@ -1,0 +1,148 @@
+[
+  {"id":"jaymangal","name":{"en":"Jaymangal Bhandari","ne":"जयमंगल भण्डारी"},"gender":"male","isAlive":false,"parentId":null,"spouseId":"indra_chaya","birthOrder":0},
+  {"id":"indra_chaya","name":{"en":"Indra Chaya Bhandari","ne":"इन्द्र छाया भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"jaymangal","birthOrder":0},
+
+  {"id":"dharmananda","name":{"en":"Dharmananda Bhandari","ne":"धर्मानन्द भण्डारी"},"gender":"male","isAlive":false,"parentId":"jaymangal","spouseId":"tulasi","birthOrder":0},
+  {"id":"tulasi","name":{"en":"Tulasi Bhandari","ne":"तुलसी भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"dharmananda","birthOrder":0},
+
+  {"id":"baijanath","name":{"en":"Baijanath Bhandari","ne":"बैजनाथ भण्डारी"},"gender":"male","isAlive":false,"parentId":"dharmananda","spouseId":"rohini","birthOrder":0},
+  {"id":"rohini","name":{"en":"Rohini Bhandari","ne":"रोहिणी भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"baijanath","birthOrder":0},
+  {"id":"narayandas","name":{"en":"Narayandas Bhandari","ne":"नारायणदास भण्डारी"},"gender":"male","isAlive":false,"parentId":"dharmananda","spouseId":null,"birthOrder":1},
+  {"id":"bishnu_hari","name":{"en":"Bishnu Hari Bhandari","ne":"विष्णु हरि भण्डारी"},"gender":"male","isAlive":false,"parentId":"dharmananda","spouseId":null,"birthOrder":2},
+  {"id":"chabilal_g14","name":{"en":"Chabilal Bhandari","ne":"चबिलाल भण्डारी"},"gender":"male","isAlive":false,"parentId":"dharmananda","spouseId":null,"birthOrder":3},
+
+  {"id":"barapati","name":{"en":"Barapati (Nandikeshar) Bhandari","ne":"बरपति (नन्दिकेशर) भण्डारी"},"gender":"male","isAlive":false,"parentId":"baijanath","spouseId":"basundhara","birthOrder":0},
+  {"id":"basundhara","name":{"en":"Basundhara Bhandari","ne":"बसुन्धरा भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"barapati","birthOrder":0},
+
+  {"id":"kripananda","name":{"en":"Kripananda Bhandari","ne":"कृपानन्द भण्डारी"},"gender":"male","isAlive":false,"parentId":"barapati","spouseId":"bhagiratha_w16","birthOrder":0},
+  {"id":"bhagiratha_w16","name":{"en":"Bhagiratha Bhandari","ne":"भागीरथा भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"kripananda","birthOrder":0},
+  {"id":"laxminarayan","name":{"en":"Laxminarayan Bhandari","ne":"लक्ष्मीनारायण भण्डारी"},"gender":"male","isAlive":false,"parentId":"barapati","spouseId":"gauradevi","birthOrder":1},
+  {"id":"gauradevi","name":{"en":"Gauradevi Bhandari","ne":"गौरादेवी भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"laxminarayan","birthOrder":0},
+  {"id":"rangalal","name":{"en":"Rangalal Bhandari","ne":"रंगलाल भण्डारी"},"gender":"male","isAlive":false,"parentId":"barapati","spouseId":null,"birthOrder":2},
+  {"id":"shree_prasad","name":{"en":"Shree Prasad Bhandari","ne":"श्री प्रसाद भण्डारी"},"gender":"male","isAlive":false,"parentId":"barapati","spouseId":"bedmaya","birthOrder":3},
+  {"id":"bedmaya","name":{"en":"Bedmaya Bhandari","ne":"वेदमाया भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"shree_prasad","birthOrder":0},
+
+  {"id":"sp_son1","name":{"en":"Son of Bedmaya","ne":"वेदमायाको छोरा"},"gender":"male","isAlive":false,"parentId":"shree_prasad","spouseId":null,"birthOrder":0},
+  {"id":"sp_son2","name":{"en":"Son of Khadimaya","ne":"खडिमायाको छोरा"},"gender":"male","isAlive":false,"parentId":"shree_prasad","spouseId":null,"birthOrder":1},
+  {"id":"sabitri","name":{"en":"Sabitri Bhandari","ne":"सावित्री भण्डारी"},"gender":"female","isAlive":false,"parentId":"shree_prasad","spouseId":null,"birthOrder":2},
+  {"id":"pingala","name":{"en":"Pingala Bhandari","ne":"पिंगला भण्डारी"},"gender":"female","isAlive":false,"parentId":"shree_prasad","spouseId":null,"birthOrder":3},
+  {"id":"thagmaya","name":{"en":"Thagmaya Bhandari","ne":"ठगमाया भण्डारी"},"gender":"female","isAlive":false,"parentId":"shree_prasad","spouseId":null,"birthOrder":4},
+  {"id":"maiya","name":{"en":"Maiya Bhandari","ne":"मैया भण्डारी"},"gender":"female","isAlive":false,"parentId":"shree_prasad","spouseId":null,"birthOrder":5},
+  {"id":"narbada_sp","name":{"en":"Narbada Bhandari","ne":"नर्बदा भण्डारी"},"gender":"female","isAlive":false,"parentId":"shree_prasad","spouseId":null,"birthOrder":6},
+
+  {"id":"dhanapati","name":{"en":"Dhanapati Bhandari","ne":"धनपति भण्डारी"},"gender":"male","isAlive":false,"parentId":"laxminarayan","spouseId":"pramadevi","birthOrder":0},
+  {"id":"pramadevi","name":{"en":"Pramadevi (Padma Devi) Bhandari","ne":"प्रमादेवी (पद्मा देवी) भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"dhanapati","birthOrder":0},
+  {"id":"kapil_mani","name":{"en":"Kapil Mani Bhandari","ne":"कपिल मणि भण्डारी"},"gender":"male","isAlive":false,"parentId":"laxminarayan","spouseId":"naramaya","birthOrder":1},
+  {"id":"naramaya","name":{"en":"Naramaya (Rana Maya) Bhandari","ne":"नारामाया (राणा माया) भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"kapil_mani","birthOrder":0},
+  {"id":"yagyanidi","name":{"en":"Yagyanidi Bhandari","ne":"यज्ञनिधि भण्डारी"},"gender":"male","isAlive":false,"parentId":"laxminarayan","spouseId":null,"birthOrder":2},
+  {"id":"khadananda","name":{"en":"Khadananda Bhandari","ne":"खडानन्द भण्डारी"},"gender":"male","isAlive":false,"parentId":"laxminarayan","spouseId":null,"birthOrder":3},
+  {"id":"narbada_g17","name":{"en":"Narbada Bhandari","ne":"नर्बदा भण्डारी"},"gender":"female","isAlive":false,"parentId":"laxminarayan","spouseId":null,"birthOrder":4},
+  {"id":"bhagiratha_g17","name":{"en":"Bhagiratha Bhandari","ne":"भागीरथा भण्डारी"},"gender":"female","isAlive":false,"parentId":"laxminarayan","spouseId":null,"birthOrder":5},
+  {"id":"krishna_maya_g17","name":{"en":"Krishna Maya Bhandari","ne":"कृष्ण माया भण्डारी"},"gender":"female","isAlive":false,"parentId":"laxminarayan","spouseId":null,"birthOrder":6},
+
+  {"id":"nanda_prasad","name":{"en":"Nanda Prasad Bhandari","ne":"नन्द प्रसाद भण्डारी"},"gender":"male","isAlive":false,"parentId":"dhanapati","spouseId":"madanmaya","birthOrder":0},
+  {"id":"madanmaya","name":{"en":"Madanmaya Bhandari","ne":"मदनमाया भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"nanda_prasad","birthOrder":0},
+  {"id":"ganga_prasad","name":{"en":"Ganga Prasad Bhandari","ne":"गंगा प्रसाद भण्डारी"},"gender":"male","isAlive":false,"parentId":"dhanapati","spouseId":"urmila","birthOrder":1},
+  {"id":"urmila","name":{"en":"Urmila Bhandari","ne":"उर्मिला भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"ganga_prasad","birthOrder":0},
+  {"id":"yamnath","name":{"en":"Yamnath Bhandari","ne":"यमनाथ भण्डारी"},"gender":"male","isAlive":false,"parentId":"dhanapati","spouseId":"bishnu_maya","birthOrder":2},
+  {"id":"bishnu_maya","name":{"en":"Bishnu Maya Bhandari","ne":"विष्णु माया भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"yamnath","birthOrder":0},
+  {"id":"bhawani_prasad","name":{"en":"Bhawani Prasad Bhandari","ne":"भवानी प्रसाद भण्डारी"},"gender":"male","isAlive":false,"parentId":"dhanapati","spouseId":"mayadevi","birthOrder":3},
+  {"id":"mayadevi","name":{"en":"Mayadevi Bhandari","ne":"मायादेवी भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"bhawani_prasad","birthOrder":0},
+  {"id":"buddhinath","name":{"en":"Buddhinath (Krishna Prasad) Bhandari","ne":"बुद्धिनाथ (कृष्ण प्रसाद) भण्डारी"},"gender":"male","isAlive":false,"parentId":"dhanapati","spouseId":"tilamaya","birthOrder":4},
+  {"id":"tilamaya","name":{"en":"Tilamaya Bhandari","ne":"तिलमाया भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"buddhinath","birthOrder":0},
+
+  {"id":"chabilal_km","name":{"en":"Chabilal Bhandari","ne":"चबिलाल भण्डारी"},"gender":"male","isAlive":false,"parentId":"kapil_mani","spouseId":"radha","birthOrder":0},
+  {"id":"radha","name":{"en":"Radha Bhandari","ne":"राधा भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"chabilal_km","birthOrder":0},
+  {"id":"niti_rama","name":{"en":"Niti Rama Bhandari","ne":"निति राम भण्डारी"},"gender":"male","isAlive":false,"parentId":"kapil_mani","spouseId":"renuka","birthOrder":1},
+  {"id":"renuka","name":{"en":"Renuka (Sita) Bhandari","ne":"रेणुका (सीता) भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"niti_rama","birthOrder":0},
+  {"id":"jay","name":{"en":"Jay Bhandari","ne":"जय भण्डारी"},"gender":"male","isAlive":false,"parentId":"kapil_mani","spouseId":"devimaya_w","birthOrder":2},
+  {"id":"devimaya_w","name":{"en":"Devi Maya Bhandari","ne":"देवी माया भण्डारी"},"gender":"female","isAlive":false,"parentId":null,"spouseId":"jay","birthOrder":0},
+
+  {"id":"khagendra","name":{"en":"Khagendra Prasad Bhandari","ne":"खगेन्द्र प्रसाद भण्डारी"},"gender":"male","isAlive":true,"parentId":"nanda_prasad","spouseId":"rama_w","birthOrder":0},
+  {"id":"rama_w","name":{"en":"Rama Bhandari","ne":"रमा भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"khagendra","birthOrder":0},
+  {"id":"dipak","name":{"en":"Dipak Bhandari","ne":"दीपक भण्डारी"},"gender":"male","isAlive":true,"parentId":"nanda_prasad","spouseId":"sita_d","birthOrder":1},
+  {"id":"sita_d","name":{"en":"Sita Bhandari","ne":"सीता भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"dipak","birthOrder":0},
+  {"id":"homnath","name":{"en":"Homnath Bhandari","ne":"होमनाथ भण्डारी"},"gender":"male","isAlive":true,"parentId":"nanda_prasad","spouseId":"sita_h","birthOrder":2},
+  {"id":"sita_h","name":{"en":"Sita Bhandari","ne":"सीता भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"homnath","birthOrder":0},
+
+  {"id":"sambhu","name":{"en":"Sambhu Bhandari","ne":"शम्भु भण्डारी"},"gender":"male","isAlive":true,"parentId":"ganga_prasad","spouseId":"bimala","birthOrder":0},
+  {"id":"bimala","name":{"en":"Bimala Bhandari","ne":"विमला भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"sambhu","birthOrder":0},
+  {"id":"sankhar","name":{"en":"Sankhar Bhandari","ne":"शंखर भण्डारी"},"gender":"male","isAlive":true,"parentId":"ganga_prasad","spouseId":"lanka","birthOrder":1},
+  {"id":"lanka","name":{"en":"Lanka Bhandari","ne":"लंका भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"sankhar","birthOrder":0},
+  {"id":"nirmala","name":{"en":"Nirmala Bhandari","ne":"निर्मला भण्डारी"},"gender":"female","isAlive":true,"parentId":"ganga_prasad","spouseId":null,"birthOrder":2},
+  {"id":"sita_gp","name":{"en":"Sita Bhandari","ne":"सीता भण्डारी"},"gender":"female","isAlive":true,"parentId":"ganga_prasad","spouseId":null,"birthOrder":3},
+  {"id":"susma","name":{"en":"Susma Bhandari","ne":"सुष्मा भण्डारी"},"gender":"female","isAlive":true,"parentId":"ganga_prasad","spouseId":null,"birthOrder":4},
+
+  {"id":"khyam","name":{"en":"Khyam Bhandari","ne":"ख्याम भण्डारी"},"gender":"male","isAlive":false,"parentId":"yamnath","spouseId":null,"birthOrder":0},
+  {"id":"bikash","name":{"en":"Bikash Bhandari","ne":"बिकास भण्डारी"},"gender":"male","isAlive":true,"parentId":"yamnath","spouseId":"asmita","birthOrder":1},
+  {"id":"asmita","name":{"en":"Asmita (Anu) Bhandari","ne":"अस्मिता (अनु) भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"bikash","birthOrder":0},
+  {"id":"goma","name":{"en":"Goma Bhandari","ne":"गोमा भण्डारी"},"gender":"female","isAlive":true,"parentId":"yamnath","spouseId":null,"birthOrder":2},
+  {"id":"ritika","name":{"en":"Ritika Bhandari","ne":"रितिका भण्डारी"},"gender":"female","isAlive":true,"parentId":"yamnath","spouseId":null,"birthOrder":3},
+
+  {"id":"himal","name":{"en":"Himal Bhandari","ne":"हिमाल भण्डारी"},"gender":"male","isAlive":true,"parentId":"bhawani_prasad","spouseId":"puja_h","birthOrder":0},
+  {"id":"puja_h","name":{"en":"Puja Bhandari","ne":"पूजा भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"himal","birthOrder":0},
+  {"id":"bidur","name":{"en":"Bidur Bhandari","ne":"बिदुर भण्डारी"},"gender":"male","isAlive":true,"parentId":"bhawani_prasad","spouseId":"puja_b","birthOrder":1},
+  {"id":"puja_b","name":{"en":"Puja Bhandari","ne":"पूजा भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"bidur","birthOrder":0},
+  {"id":"indira","name":{"en":"Indira Bhandari","ne":"इन्दिरा भण्डारी"},"gender":"female","isAlive":true,"parentId":"bhawani_prasad","spouseId":null,"birthOrder":2},
+  {"id":"mandira_d","name":{"en":"Mandira Bhandari","ne":"मन्दिरा भण्डारी"},"gender":"female","isAlive":true,"parentId":"bhawani_prasad","spouseId":null,"birthOrder":3},
+
+  {"id":"pradip","name":{"en":"Dr. Pradip Bhandari","ne":"डा. प्रदीप भण्डारी"},"gender":"male","isAlive":true,"parentId":"buddhinath","spouseId":"jyoti","birthOrder":0},
+  {"id":"jyoti","name":{"en":"Dr. Jyoti Bhandari","ne":"डा. ज्योति भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"pradip","birthOrder":0},
+  {"id":"dr_sila","name":{"en":"Dr. Sila Bhandari","ne":"डा. शिला भण्डारी"},"gender":"female","isAlive":true,"parentId":"buddhinath","spouseId":null,"birthOrder":1},
+  {"id":"devimaya_d","name":{"en":"Devi Maya Bhandari","ne":"देवी माया भण्डारी"},"gender":"female","isAlive":true,"parentId":"buddhinath","spouseId":null,"birthOrder":2},
+  {"id":"radamaya","name":{"en":"Rada Maya Bhandari","ne":"राधा माया भण्डारी"},"gender":"female","isAlive":true,"parentId":"buddhinath","spouseId":null,"birthOrder":3},
+  {"id":"durga","name":{"en":"Durga Bhandari","ne":"दुर्गा भण्डारी"},"gender":"female","isAlive":true,"parentId":"buddhinath","spouseId":null,"birthOrder":4},
+  {"id":"bishnu_d","name":{"en":"Bishnu Bhandari","ne":"विष्णु भण्डारी"},"gender":"female","isAlive":true,"parentId":"buddhinath","spouseId":null,"birthOrder":5},
+
+  {"id":"nischit","name":{"en":"Nischit Bhandari","ne":"निश्चित भण्डारी"},"gender":"male","isAlive":true,"parentId":"chabilal_km","spouseId":null,"birthOrder":0},
+  {"id":"dikshya","name":{"en":"Dikshya Bhandari","ne":"दीक्षा भण्डारी"},"gender":"female","isAlive":true,"parentId":"chabilal_km","spouseId":null,"birthOrder":1},
+  {"id":"rakshya","name":{"en":"Rakshya Bhandari","ne":"रक्षा भण्डारी"},"gender":"female","isAlive":true,"parentId":"chabilal_km","spouseId":null,"birthOrder":2},
+
+  {"id":"madan_1","name":{"en":"Madan Bhandari","ne":"मदन भण्डारी"},"gender":"male","isAlive":true,"parentId":"niti_rama","spouseId":"alina","birthOrder":0},
+  {"id":"alina","name":{"en":"Alina Bhandari","ne":"अलिना भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"madan_1","birthOrder":0},
+  {"id":"madan_2","name":{"en":"Madan Bhandari","ne":"मदन भण्डारी"},"gender":"male","isAlive":true,"parentId":"niti_rama","spouseId":"rojila","birthOrder":1},
+  {"id":"rojila","name":{"en":"Rojila Bhandari","ne":"रोजिला भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"madan_2","birthOrder":0},
+  {"id":"sujan","name":{"en":"Sujan Bhandari","ne":"सुजन भण्डारी"},"gender":"male","isAlive":true,"parentId":"niti_rama","spouseId":"mandira_w","birthOrder":2},
+  {"id":"mandira_w","name":{"en":"Mandira Bhandari","ne":"मन्दिरा भण्डारी"},"gender":"female","isAlive":true,"parentId":null,"spouseId":"sujan","birthOrder":0},
+
+  {"id":"sandesh","name":{"en":"Sandesh Bhandari","ne":"सन्देश भण्डारी"},"gender":"male","isAlive":true,"parentId":"jay","spouseId":null,"birthOrder":0},
+  {"id":"samikshya","name":{"en":"Samikshya Bhandari","ne":"समिक्षा भण्डारी"},"gender":"female","isAlive":true,"parentId":"jay","spouseId":null,"birthOrder":1},
+  {"id":"sarda","name":{"en":"Sarda Bhandari","ne":"शारदा भण्डारी"},"gender":"female","isAlive":true,"parentId":"jay","spouseId":null,"birthOrder":2},
+
+  {"id":"mandip","name":{"en":"Mandip Bhandari","ne":"मन्दीप भण्डारी"},"gender":"male","isAlive":true,"parentId":"khagendra","spouseId":null,"birthOrder":0},
+  {"id":"sandip","name":{"en":"Sandip Bhandari","ne":"सन्दीप भण्डारी"},"gender":"male","isAlive":true,"parentId":"khagendra","spouseId":null,"birthOrder":1},
+
+  {"id":"nischal","name":{"en":"Nischal Bhandari","ne":"निश्चल भण्डारी"},"gender":"male","isAlive":true,"parentId":"dipak","spouseId":null,"birthOrder":0},
+  {"id":"nishma","name":{"en":"Nishma Bhandari","ne":"निश्मा भण्डारी"},"gender":"female","isAlive":true,"parentId":"dipak","spouseId":null,"birthOrder":1},
+
+  {"id":"homnath_son","name":{"en":"(Name Not Provided)","ne":"(नाम उपलब्ध छैन)"},"gender":"male","isAlive":true,"parentId":"homnath","spouseId":null,"birthOrder":0},
+  {"id":"chandrakala","name":{"en":"Chandrakala Bhandari","ne":"चन्द्रकला भण्डारी"},"gender":"female","isAlive":true,"parentId":"homnath","spouseId":null,"birthOrder":1},
+  {"id":"doma","name":{"en":"Doma Bhandari","ne":"डोमा भण्डारी"},"gender":"female","isAlive":true,"parentId":"homnath","spouseId":null,"birthOrder":2},
+  {"id":"sushila","name":{"en":"Sushila Bhandari","ne":"सुशिला भण्डारी"},"gender":"female","isAlive":true,"parentId":"homnath","spouseId":null,"birthOrder":3},
+
+  {"id":"sparsh","name":{"en":"Sparsh Bhandari","ne":"स्पर्श भण्डारी"},"gender":"male","isAlive":true,"parentId":"sambhu","spouseId":null,"birthOrder":0},
+  {"id":"sijal","name":{"en":"Sijal Bhandari","ne":"सिजल भण्डारी"},"gender":"male","isAlive":true,"parentId":"sambhu","spouseId":null,"birthOrder":1},
+  {"id":"sneha","name":{"en":"Sneha Bhandari","ne":"स्नेहा भण्डारी"},"gender":"female","isAlive":true,"parentId":"sambhu","spouseId":null,"birthOrder":2},
+
+  {"id":"lakshya","name":{"en":"Lakshya Bhandari","ne":"लक्ष्य भण्डारी"},"gender":"female","isAlive":true,"parentId":"sankhar","spouseId":null,"birthOrder":0},
+  {"id":"sabya","name":{"en":"Sabya Bhandari","ne":"सभ्य भण्डारी"},"gender":"female","isAlive":true,"parentId":"sankhar","spouseId":null,"birthOrder":1},
+  {"id":"aagya","name":{"en":"Aagya Bhandari","ne":"आज्ञा भण्डारी"},"gender":"female","isAlive":true,"parentId":"sankhar","spouseId":null,"birthOrder":2},
+
+  {"id":"alwin","name":{"en":"Alwin Bhandari","ne":"अल्विन भण्डारी"},"gender":"male","isAlive":true,"parentId":"bikash","spouseId":null,"birthOrder":0},
+
+  {"id":"anmol","name":{"en":"Anmol Bhandari","ne":"अनमोल भण्डारी"},"gender":"male","isAlive":true,"parentId":"himal","spouseId":null,"birthOrder":0},
+  {"id":"aadarsh","name":{"en":"Aadarsh Bhandari","ne":"आदर्श भण्डारी"},"gender":"male","isAlive":true,"parentId":"bidur","spouseId":null,"birthOrder":0},
+
+  {"id":"saswotdip","name":{"en":"Saswotdip Bhandari","ne":"सस्वोत्दीप भण्डारी"},"gender":"male","isAlive":true,"parentId":"pradip","spouseId":null,"birthOrder":0},
+  {"id":"saddik","name":{"en":"Saddik Bhandari","ne":"सद्दिक भण्डारी"},"gender":"male","isAlive":true,"parentId":"pradip","spouseId":null,"birthOrder":1},
+  {"id":"hima","name":{"en":"Hima Bhandari","ne":"हिमा भण्डारी"},"gender":"female","isAlive":true,"parentId":"pradip","spouseId":null,"birthOrder":2},
+
+  {"id":"aman","name":{"en":"Aman Bhandari","ne":"अमन भण्डारी"},"gender":"male","isAlive":true,"parentId":"madan_1","spouseId":null,"birthOrder":0},
+  {"id":"anbi","name":{"en":"Anbi Bhandari","ne":"अन्बी भण्डारी"},"gender":"female","isAlive":true,"parentId":"madan_1","spouseId":null,"birthOrder":1},
+
+  {"id":"aayushree","name":{"en":"Aayushree Bhandari","ne":"आयुश्री भण्डारी"},"gender":"female","isAlive":true,"parentId":"madan_2","spouseId":null,"birthOrder":0},
+  {"id":"ashriti","name":{"en":"Ashriti Bhandari","ne":"आश्रिती भण्डारी"},"gender":"female","isAlive":true,"parentId":"madan_2","spouseId":null,"birthOrder":1},
+
+  {"id":"abijal","name":{"en":"Abijal Bhandari","ne":"अबिजल भण्डारी"},"gender":"male","isAlive":true,"parentId":"sujan","spouseId":null,"birthOrder":0},
+  {"id":"aditya","name":{"en":"Aditya Bhandari","ne":"आदित्य भण्डारी"},"gender":"male","isAlive":true,"parentId":"sujan","spouseId":null,"birthOrder":1}
+]

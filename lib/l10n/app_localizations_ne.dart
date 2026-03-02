@@ -1,0 +1,263 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Nepali (`ne`).
+class AppLocalizationsNe extends AppLocalizations {
+  AppLocalizationsNe([String locale = 'ne']) : super(locale);
+
+  @override
+  String get appTitle => 'भण्डारी परिवार';
+
+  @override
+  String get familyTree => 'वंशवृक्ष';
+
+  @override
+  String get notices => 'सूचनाहरू';
+
+  @override
+  String get about => 'परिचय';
+
+  @override
+  String get settings => 'सेटिङ्स';
+
+  @override
+  String get selectLanguage => 'भाषा छान्नुहोस्';
+
+  @override
+  String get continueButton => 'अगाडि बढ्नुहोस्';
+
+  @override
+  String get english => 'अंग्रेजी';
+
+  @override
+  String get nepali => 'नेपाली';
+
+  @override
+  String get familyOverview => 'परिवार परिचय';
+
+  @override
+  String get historyAndSayings => 'इतिहास र भनाइहरू';
+
+  @override
+  String get committee => 'समिति';
+
+  @override
+  String get chairman => 'अध्यक्ष';
+
+  @override
+  String get noNotices => 'अहिले कुनै सूचना छैन';
+
+  @override
+  String publishedOn(String date) {
+    return '$date मा प्रकाशित';
+  }
+
+  @override
+  String get born => 'जन्म';
+
+  @override
+  String get died => 'मृत्यु';
+
+  @override
+  String get gender => 'लिङ्ग';
+
+  @override
+  String get male => 'पुरुष';
+
+  @override
+  String get female => 'महिला';
+
+  @override
+  String get alive => 'जीवित';
+
+  @override
+  String get deceased => 'स्वर्गवासी';
+
+  @override
+  String get name => 'नाम';
+
+  @override
+  String get birthDate => 'जन्म मिति';
+
+  @override
+  String get deathDate => 'मृत्यु मिति';
+
+  @override
+  String get photo => 'फोटो';
+
+  @override
+  String get addChild => 'सन्तान थप्नुहोस्';
+
+  @override
+  String get addSpouse => 'जीवनसाथी थप्नुहोस्';
+
+  @override
+  String get editMember => 'सदस्य सम्पादन गर्नुहोस्';
+
+  @override
+  String get addMember => 'सदस्य थप्नुहोस्';
+
+  @override
+  String get save => 'सुरक्षित गर्नुहोस्';
+
+  @override
+  String get cancel => 'रद्द गर्नुहोस्';
+
+  @override
+  String get delete => 'हटाउनुहोस्';
+
+  @override
+  String get adminLogin => 'प्रशासक लगइन';
+
+  @override
+  String get email => 'इमेल';
+
+  @override
+  String get password => 'पासवर्ड';
+
+  @override
+  String get login => 'लगइन';
+
+  @override
+  String get logout => 'लगआउट';
+
+  @override
+  String get loginFailed =>
+      'लगइन असफल भयो। कृपया आफ्नो प्रमाणहरू जाँच गर्नुहोस्।';
+
+  @override
+  String get addNotice => 'सूचना थप्नुहोस्';
+
+  @override
+  String get noticeTitle => 'शीर्षक';
+
+  @override
+  String get noticeBody => 'विवरण';
+
+  @override
+  String get sendNotification => 'पुश सूचना पठाउनुहोस्';
+
+  @override
+  String get publish => 'प्रकाशित गर्नुहोस्';
+
+  @override
+  String get editContent => 'सामग्री सम्पादन गर्नुहोस्';
+
+  @override
+  String get changeLanguage => 'भाषा परिवर्तन गर्नुहोस्';
+
+  @override
+  String get pushNotifications => 'पुश सूचनाहरू';
+
+  @override
+  String get enableNotifications => 'सूचनाहरू सक्षम गर्नुहोस्';
+
+  @override
+  String get appVersion => 'एप संस्करण';
+
+  @override
+  String familyMembers(int count) {
+    return '$count परिवारका सदस्यहरू';
+  }
+
+  @override
+  String get expandAll => 'सबै खोल्नुहोस्';
+
+  @override
+  String get collapseAll => 'सबै बन्द गर्नुहोस्';
+
+  @override
+  String get searchMember => 'सदस्य खोज्नुहोस्...';
+
+  @override
+  String get noResults => 'कुनै नतिजा भेटिएन';
+
+  @override
+  String get loading => 'लोड हुँदैछ...';
+
+  @override
+  String get error => 'केही गलत भयो';
+
+  @override
+  String get retry => 'पुनः प्रयास गर्नुहोस्';
+
+  @override
+  String get welcomeTitle => 'भण्डारी परिवारमा स्वागत छ';
+
+  @override
+  String get welcomeSubtitle => 'आफ्नो पारिवारिक सम्पदा अन्वेषण गर्नुहोस्';
+
+  @override
+  String get chooseLanguagePrompt =>
+      'अगाडि बढ्न कृपया आफ्नो मनपर्ने भाषा छान्नुहोस्';
+
+  @override
+  String get admin => 'प्रशासक';
+
+  @override
+  String get contactInfo => 'सम्पर्क र प्रतिक्रिया';
+
+  @override
+  String get relationship => 'सम्बन्ध';
+
+  @override
+  String get children => 'सन्तानहरू';
+
+  @override
+  String get spouse => 'जीवनसाथी';
+
+  @override
+  String get parent => 'बुबा/आमा';
+
+  @override
+  String get dashboard => 'ड्यासबोर्ड';
+
+  @override
+  String get viewFamilyTree => 'वंशवृक्ष हेर्नुहोस्';
+
+  @override
+  String get viewNotices => 'सूचनाहरू हेर्नुहोस्';
+
+  @override
+  String get aboutFamily => 'परिवारको बारेमा';
+
+  @override
+  String get totalMembers => 'कुल सदस्यहरू';
+
+  @override
+  String get recentNotices => 'हालका सूचनाहरू';
+
+  @override
+  String get quickLinks => 'द्रुत लिङ्कहरू';
+
+  @override
+  String get seedData => 'परिवारको डाटा लोड गर्नुहोस्';
+
+  @override
+  String get seedDataSubtitle => 'परिवारका सदस्यहरू डाटाबेसमा आयात गर्नुहोस्';
+
+  @override
+  String get seedDataConfirm =>
+      'यसले सबै परिवारका सदस्यहरू डाटाबेसमा लोड गर्नेछ। समान ID भएका सदस्यहरू अधिलेखित हुनेछन्। जारी राख्ने?';
+
+  @override
+  String seedDataSuccess(int count) {
+    return '$count परिवारका सदस्यहरू सफलतापूर्वक लोड भयो!';
+  }
+
+  @override
+  String get seedDataInProgress => 'परिवारको डाटा लोड हुँदैछ...';
+
+  @override
+  String get clearData => 'सबै सदस्यहरू हटाउनुहोस्';
+
+  @override
+  String get clearDataConfirm =>
+      'यसले डाटाबेसबाट सबै परिवारका सदस्यहरू स्थायी रूपमा हटाउनेछ। यो पूर्ववत गर्न सकिँदैन। जारी राख्ने?';
+
+  @override
+  String get clearDataSuccess => 'सबै परिवारका सदस्यहरू हटाइएको छ।';
+}
