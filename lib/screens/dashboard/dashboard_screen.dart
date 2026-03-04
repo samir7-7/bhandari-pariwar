@@ -14,6 +14,7 @@ class DashboardScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final membersAsync = ref.watch(allMembersProvider);
     final noticesAsync = ref.watch(allNoticesProvider);
+    final maxGen = ref.watch(maxGenerationDepthProvider);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -46,7 +47,10 @@ class DashboardScreen extends ConsumerWidget {
                       const SizedBox(height: 16),
                       Text(
                         l10n.appTitle,
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall
+                            ?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
@@ -54,9 +58,10 @@ class DashboardScreen extends ConsumerWidget {
                       const SizedBox(height: 4),
                       Text(
                         l10n.welcomeSubtitle,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.white70,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: Colors.white70,
+                                ),
                       ),
                     ],
                   ),
@@ -66,37 +71,57 @@ class DashboardScreen extends ConsumerWidget {
 
             const SizedBox(height: 24),
 
-            // Stats row
+            // Stats row — 4 cards
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.people,
-                      label: l10n.totalMembers,
-                      value: membersAsync.when(
-                        data: (members) => '${members.length}',
-                        loading: () => '...',
-                        error: (_, __) => '-',
+              child: membersAsync.when(
+                data: (members) {
+                  final totalCount = members.length;
+
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: _StatCard(
+                          icon: Icons.people,
+                          label: l10n.totalMembers,
+                          value: '$totalCount',
+                          color: const Color(0xFF6D4C2A),
+                        ),
                       ),
-                      color: Colors.blue,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.campaign,
-                      label: l10n.recentNotices,
-                      value: noticesAsync.when(
-                        data: (notices) => '${notices.length}',
-                        loading: () => '...',
-                        error: (_, __) => '-',
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _StatCard(
+                          icon: Icons.account_tree,
+                          label: l10n.generation,
+                          value: '${maxGen + 1}',
+                          color: const Color(0xFFB8860B),
+                        ),
                       ),
-                      color: Colors.orange,
+                    ],
+                  );
+                },
+                loading: () => Row(
+                  children: [
+                    Expanded(
+                      child: _StatCard(
+                        icon: Icons.people,
+                        label: l10n.totalMembers,
+                        value: '...',
+                        color: const Color(0xFF6D4C2A),
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _StatCard(
+                        icon: Icons.campaign,
+                        label: l10n.recentNotices,
+                        value: '...',
+                        color: Colors.orange,
+                      ),
+                    ),
+                  ],
+                ),
+                error: (_, __) => const SizedBox.shrink(),
               ),
             ),
 

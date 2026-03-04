@@ -41,9 +41,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final screens = [
       DashboardScreen(onNavigateToTab: _navigateToTab),
       const FamilyTreeScreen(),
-      const NoticesScreen(),
-      const AboutScreen(),
-      const SettingsScreen(),
+      NoticesScreen(onBack: () => _navigateToTab(0)),
+      AboutScreen(onBack: () => _navigateToTab(0)),
+      SettingsScreen(onBack: () => _navigateToTab(0)),
     ];
 
     return Scaffold(

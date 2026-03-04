@@ -78,6 +78,42 @@ class ExpandedNodesNotifier extends StateNotifier<Set<String>> {
   void collapseAll() {
     state = {};
   }
+
+  /// Expand tree to a specific generation depth from root.
+  void expandToDepth(List<Member> members, int depth) {
+    final childrenMap = <String, List<Member>>{};
+    for (final m in members) {
+      if (m.parentId != null) {
+        childrenMap.putIfAbsent(m.parentId!, () => []).add(m);
+      }
+    }
+
+    final root = members.where((m) {
+      if (!m.isRoot) return false;
+      if (childrenMap.containsKey(m.id)) return true;
+      return false;
+    }).toList();
+    if (root.isEmpty) return;
+
+    final expanded = <String>{};
+    void expand(String id, int currentDepth) {
+      if (currentDepth >= depth) return;
+      expanded.add(id);
+      final children = childrenMap[id] ?? [];
+      for (final child in children) {
+        expand(child.id, currentDepth + 1);
+      }
+    }
+
+    for (final r in root) {
+      expand(r.id, 0);
+      if (r.spouseId != null) {
+        expanded.add(r.spouseId!);
+      }
+    }
+
+    state = expanded;
+  }
 }
 
 final childrenMapProvider =
@@ -170,3 +206,47 @@ final filteredMembersProvider = Provider<List<Member>>((ref) {
     return m.name.values.any((n) => n.toLowerCase().contains(query));
   }).toList();
 });
+
+/// Provides the generation depth for each member (root = 0).
+final memberGenerationProvider =
+    Provider<Map<String, int>>((ref) {
+  final members = ref.watch(allMembersProvider).valueOrNull ?? [];
+  if (members.isEmpty) return {};
+
+  final childrenMap = ref.watch(childrenMapProvider);
+  final roots = ref.watch(rootMembersProvider);
+
+  final generations = <String, int>{};
+
+  void computeDepth(String id, int depth) {
+    generations[id] = depth;
+    // Also assign generation to spouse
+    final member = members.cast<Member?>().firstWhere(
+          (m) => m?.id == id,
+          orElse: () => null,
+        );
+    if (member?.spouseId != null) {
+      generations[member!.spouseId!] = depth;
+    }
+    final children = childrenMap[id] ?? [];
+    for (final child in children) {
+      computeDepth(child.id, depth + 1);
+    }
+  }
+
+  for (final root in roots) {
+    computeDepth(root.id, 0);
+  }
+
+  return generations;
+});
+
+/// Maximum generation depth in the tree.
+final maxGenerationDepthProvider = Provider<int>((ref) {
+  final generations = ref.watch(memberGenerationProvider);
+  if (generations.isEmpty) return 0;
+  return generations.values.fold(0, (max, v) => v > max ? v : max);
+});
+
+/// Current generation depth setting for the slider.
+final generationDepthSettingProvider = StateProvider<int>((ref) => 3);

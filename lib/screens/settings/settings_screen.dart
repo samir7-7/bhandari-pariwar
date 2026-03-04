@@ -9,7 +9,9 @@ import 'package:bhandari_pariwar/services/notification_service.dart';
 import 'package:bhandari_pariwar/services/seed_service.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
-  const SettingsScreen({super.key});
+  final VoidCallback? onBack;
+
+  const SettingsScreen({super.key, this.onBack});
 
   @override
   ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
@@ -27,6 +29,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: widget.onBack != null
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: widget.onBack,
+              )
+            : null,
         title: Text(l10n.settings),
       ),
       body: ListView(

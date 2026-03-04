@@ -41,10 +41,12 @@ class MemberDetailSheet extends ConsumerWidget {
 
     final dateFormat = DateFormat('dd MMM yyyy');
     final primaryColor = Theme.of(context).colorScheme.primary;
+    final generations = ref.watch(memberGenerationProvider);
+    final gen = generations[member.id] ?? 0;
 
     return Container(
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Color(0xFFFAF5ED), // warm parchment background
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: DraggableScrollableSheet(
@@ -65,20 +67,20 @@ class MemberDetailSheet extends ConsumerWidget {
                   height: 4,
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: const Color(0xFFB8860B).withValues(alpha: 0.35),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
 
-                // Photo with colored ring.
+                // Photo with colored ring — vintage style.
                 Container(
                   padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: member.isMale
-                          ? const Color(0xFF4A90D9)
-                          : const Color(0xFFE91E8C),
+                          ? const Color(0xFFB8860B)
+                          : const Color(0xFFA0522D),
                       width: 2,
                     ),
                   ),
@@ -162,16 +164,35 @@ class MemberDetailSheet extends ConsumerWidget {
                         ),
                       ),
                     ],
+                    const SizedBox(width: 8),
+                    // Generation badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFB8860B)
+                            .withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '${l10n.generation} $gen',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF8B7355),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
 
-                // Info card.
+                // Info card — vintage styling.
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade50,
+                    color: const Color(0xFFF5E6C8).withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Colors.grey.shade200),
                   ),

@@ -17,7 +17,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: const Color(0xFFFAF8F5),
+      scaffoldBackgroundColor: const Color(0xFFFAF5ED),
       appBarTheme: const AppBarTheme(
         centerTitle: true,
         elevation: 0,
@@ -26,19 +26,19 @@ class AppTheme {
         foregroundColor: Colors.white,
         titleTextStyle: TextStyle(
           fontSize: 18,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
           color: Colors.white,
-          letterSpacing: 0.3,
+          letterSpacing: 0.5,
         ),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: _primaryColor,
         unselectedItemColor: Colors.grey.shade500,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFFAF5ED),
         elevation: 8,
         selectedLabelStyle: const TextStyle(
-            fontSize: 12, fontWeight: FontWeight.w600),
+            fontSize: 12, fontWeight: FontWeight.w700),
         unselectedLabelStyle: const TextStyle(fontSize: 11),
       ),
       cardTheme: CardThemeData(

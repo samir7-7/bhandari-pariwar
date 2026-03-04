@@ -8,7 +8,9 @@ import 'package:bhandari_pariwar/providers/settings_provider.dart';
 import 'package:bhandari_pariwar/screens/about/committee_screen.dart';
 
 class AboutScreen extends ConsumerWidget {
-  const AboutScreen({super.key});
+  final VoidCallback? onBack;
+
+  const AboutScreen({super.key, this.onBack});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,6 +20,12 @@ class AboutScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: onBack != null
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: onBack,
+              )
+            : null,
         title: Text(l10n.about),
       ),
       body: ListView(

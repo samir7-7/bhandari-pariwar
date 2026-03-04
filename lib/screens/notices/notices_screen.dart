@@ -8,7 +8,9 @@ import 'package:bhandari_pariwar/providers/auth_provider.dart';
 import 'package:bhandari_pariwar/providers/settings_provider.dart';
 
 class NoticesScreen extends ConsumerWidget {
-  const NoticesScreen({super.key});
+  final VoidCallback? onBack;
+
+  const NoticesScreen({super.key, this.onBack});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,6 +21,12 @@ class NoticesScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: onBack != null
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: onBack,
+              )
+            : null,
         title: Text(l10n.notices),
       ),
       body: noticesAsync.when(
