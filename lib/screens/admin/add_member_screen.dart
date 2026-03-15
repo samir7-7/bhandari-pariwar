@@ -42,6 +42,20 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
   String? _selectedParentId;
   final _fatherNameController = TextEditingController();
   final _grandfatherNameController = TextEditingController();
+  final _birthDateBsController = TextEditingController();
+  final _birthPlaceController = TextEditingController();
+  final _currentAddressController = TextEditingController();
+  final _permanentAddressController = TextEditingController();
+  final _motherNameController = TextEditingController();
+  final _mobilePrimaryController = TextEditingController();
+  final _mobileSecondaryController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _educationController = TextEditingController();
+  final _bloodGroupController = TextEditingController();
+  final _familyCountController = TextEditingController();
+  final _sonsCountController = TextEditingController();
+  final _daughtersCountController = TextEditingController();
+  final _notesController = TextEditingController();
   List<Member> _parentCandidates = [];
 
   bool get _isEditing => widget.editMemberId != null;
@@ -72,9 +86,24 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
       if (member != null) {
         _nameEnController.text = member.name['en'] ?? '';
         _nameNeController.text = member.name['ne'] ?? '';
+        _birthDateBsController.text = member.birthDateBs ?? '';
+        _birthPlaceController.text = member.birthPlace['en'] ?? '';
+        _currentAddressController.text = member.currentAddress['en'] ?? '';
+        _permanentAddressController.text = member.permanentAddress['en'] ?? '';
+        _fatherNameController.text = member.fatherName['en'] ?? '';
+        _motherNameController.text = member.motherName['en'] ?? '';
+        _mobilePrimaryController.text = member.mobilePrimary ?? '';
+        _mobileSecondaryController.text = member.mobileSecondary ?? '';
+        _emailController.text = member.email ?? '';
+        _educationController.text = member.educationOrProfession['en'] ?? '';
+        _bloodGroupController.text = member.bloodGroup ?? '';
+        _familyCountController.text = member.familyCount?.toString() ?? '';
+        _sonsCountController.text = member.sonsCount?.toString() ?? '';
+        _daughtersCountController.text = member.daughtersCount?.toString() ?? '';
+        _notesController.text = member.notes['en'] ?? '';
         setState(() {
           _gender = member.gender;
-          _birthDate = member.birthDate;
+          _birthDate = member.birthDateAd ?? member.birthDate;
           _deathDate = member.deathDate;
           _isAlive = member.isAlive;
           _birthOrder = member.birthOrder;
@@ -89,6 +118,20 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
     _nameNeController.dispose();
     _fatherNameController.dispose();
     _grandfatherNameController.dispose();
+    _birthDateBsController.dispose();
+    _birthPlaceController.dispose();
+    _currentAddressController.dispose();
+    _permanentAddressController.dispose();
+    _motherNameController.dispose();
+    _mobilePrimaryController.dispose();
+    _mobileSecondaryController.dispose();
+    _emailController.dispose();
+    _educationController.dispose();
+    _bloodGroupController.dispose();
+    _familyCountController.dispose();
+    _sonsCountController.dispose();
+    _daughtersCountController.dispose();
+    _notesController.dispose();
     super.dispose();
   }
 
@@ -355,6 +398,138 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                 onChanged: (v) => _birthOrder = int.tryParse(v) ?? 0,
               ),
               ],
+              const SizedBox(height: 12),
+
+              TextFormField(
+                controller: _birthDateBsController,
+                decoration: const InputDecoration(
+                  labelText: 'Birth Date (BS)',
+                  prefixIcon: Icon(Icons.event_note_outlined),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _birthPlaceController,
+                decoration: const InputDecoration(
+                  labelText: 'Birth Place',
+                  prefixIcon: Icon(Icons.place_outlined),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _currentAddressController,
+                decoration: const InputDecoration(
+                  labelText: 'Current Address',
+                  prefixIcon: Icon(Icons.home_outlined),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _permanentAddressController,
+                decoration: const InputDecoration(
+                  labelText: 'Permanent Address',
+                  prefixIcon: Icon(Icons.location_city_outlined),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _motherNameController,
+                decoration: const InputDecoration(
+                  labelText: 'Mother Name',
+                  prefixIcon: Icon(Icons.badge_outlined),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _mobilePrimaryController,
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(
+                  labelText: 'Primary Mobile',
+                  prefixIcon: Icon(Icons.phone_outlined),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _mobileSecondaryController,
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(
+                  labelText: 'Secondary Mobile',
+                  prefixIcon: Icon(Icons.phone_android_outlined),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email_outlined),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _educationController,
+                decoration: const InputDecoration(
+                  labelText: 'Education / Profession',
+                  prefixIcon: Icon(Icons.school_outlined),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _bloodGroupController,
+                decoration: const InputDecoration(
+                  labelText: 'Blood Group',
+                  prefixIcon: Icon(Icons.bloodtype_outlined),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _familyCountController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Family Count',
+                        prefixIcon: Icon(Icons.groups_outlined),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _sonsCountController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Sons',
+                        prefixIcon: Icon(Icons.boy_outlined),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _daughtersCountController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Daughters',
+                        prefixIcon: Icon(Icons.girl_outlined),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _notesController,
+                minLines: 2,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  labelText: 'Notes',
+                  prefixIcon: Icon(Icons.sticky_note_2_outlined),
+                  alignLabelWithHint: true,
+                ),
+              ),
               const SizedBox(height: 32),
 
               // Save button.
@@ -675,6 +850,14 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
         name['ne'] = _nameNeController.text.trim();
       }
 
+      final fatherNameMap = _localizedMap(_fatherNameController.text);
+      final motherNameMap = _localizedMap(_motherNameController.text);
+      final birthPlaceMap = _localizedMap(_birthPlaceController.text);
+      final currentAddressMap = _localizedMap(_currentAddressController.text);
+      final permanentAddressMap = _localizedMap(_permanentAddressController.text);
+      final educationMap = _localizedMap(_educationController.text);
+      final notesMap = _localizedMap(_notesController.text);
+
       if (_isEditing) {
         // Upload photo if changed.
         if (_photoFile != null) {
@@ -688,9 +871,27 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
           'name': name,
           'gender': _gender,
           'birthDate': _birthDate?.toIso8601String(),
+          'birthDateAd': _birthDate?.toIso8601String(),
+          'birthDateBs': _birthDateBsController.text.trim().isEmpty
+              ? null
+              : _birthDateBsController.text.trim(),
           'deathDate': _deathDate?.toIso8601String(),
           'isAlive': _isAlive,
           'birthOrder': _birthOrder,
+          'fatherName': fatherNameMap,
+          'motherName': motherNameMap,
+          'birthPlace': birthPlaceMap,
+          'currentAddress': currentAddressMap,
+          'permanentAddress': permanentAddressMap,
+          'mobilePrimary': _nullIfEmpty(_mobilePrimaryController.text),
+          'mobileSecondary': _nullIfEmpty(_mobileSecondaryController.text),
+          'email': _nullIfEmpty(_emailController.text),
+          'educationOrProfession': educationMap,
+          'bloodGroup': _nullIfEmpty(_bloodGroupController.text),
+          'familyCount': _parseOptionalInt(_familyCountController.text),
+          'sonsCount': _parseOptionalInt(_sonsCountController.text),
+          'daughtersCount': _parseOptionalInt(_daughtersCountController.text),
+          'notes': notesMap,
         };
         if (photoUrl != null) {
           updates['photoUrl'] = photoUrl;
@@ -704,9 +905,25 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
           name: name,
           gender: _gender,
           birthDate: _birthDate,
+          birthDateAd: _birthDate,
+          birthDateBs: _nullIfEmpty(_birthDateBsController.text),
           deathDate: _deathDate,
           isAlive: _isAlive,
           parentId: _resolvedParentId,
+          fatherName: fatherNameMap,
+          motherName: motherNameMap,
+          birthPlace: birthPlaceMap,
+          currentAddress: currentAddressMap,
+          permanentAddress: permanentAddressMap,
+          mobilePrimary: _nullIfEmpty(_mobilePrimaryController.text),
+          mobileSecondary: _nullIfEmpty(_mobileSecondaryController.text),
+          email: _nullIfEmpty(_emailController.text),
+          educationOrProfession: educationMap,
+          bloodGroup: _nullIfEmpty(_bloodGroupController.text),
+          familyCount: _parseOptionalInt(_familyCountController.text),
+          sonsCount: _parseOptionalInt(_sonsCountController.text),
+          daughtersCount: _parseOptionalInt(_daughtersCountController.text),
+          notes: notesMap,
           birthOrder: _birthOrder,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
@@ -750,6 +967,23 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
   }
 
   AppLocalizations get l10n => AppLocalizations.of(context)!;
+
+  String? _nullIfEmpty(String value) {
+    final v = value.trim();
+    return v.isEmpty ? null : v;
+  }
+
+  int? _parseOptionalInt(String value) {
+    final v = value.trim();
+    if (v.isEmpty) return null;
+    return int.tryParse(v);
+  }
+
+  Map<String, String?> _localizedMap(String englishValue) {
+    final value = englishValue.trim();
+    if (value.isEmpty) return const {};
+    return {'en': value};
+  }
 }
 
 /// Banner showing context about who this member is being added to.

@@ -7,7 +7,12 @@ final authStateProvider = StreamProvider<User?>((ref) {
   return authService.authStateChanges;
 });
 
+/// Returns true only for users who signed in with email+password
+/// (non-anonymous). Anonymous sign-in is used only for Firestore seed
+/// write access and must not grant admin privileges.
 final isAdminProvider = Provider<bool>((ref) {
   final authState = ref.watch(authStateProvider);
-  return authState.valueOrNull != null;
+  final user = authState.valueOrNull;
+  // Anonymous users are signed in for seeding purposes only — they are NOT admins.
+  return user != null && !user.isAnonymous;
 });

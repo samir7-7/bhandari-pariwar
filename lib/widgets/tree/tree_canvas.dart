@@ -5,13 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bhandari_pariwar/models/member.dart';
 import 'package:bhandari_pariwar/providers/family_tree_provider.dart';
 import 'package:bhandari_pariwar/providers/settings_provider.dart';
-import 'package:bhandari_pariwar/providers/auth_provider.dart';
 import 'package:bhandari_pariwar/widgets/tree/tree_layout.dart';
 import 'package:bhandari_pariwar/widgets/tree/tree_line_painter.dart';
 import 'package:bhandari_pariwar/widgets/tree/tree_node_widget.dart';
 import 'package:bhandari_pariwar/widgets/tree/tree_controls.dart';
-import 'package:bhandari_pariwar/screens/member_detail/member_detail_sheet.dart';
 import 'package:bhandari_pariwar/screens/family_tree/family_tree_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -24,11 +23,16 @@ class TreeCanvas extends ConsumerStatefulWidget {
 
   const TreeCanvas({super.key, this.focusMemberId});
 
-  /// Captures the tree canvas as an image and generates a shareable PDF.
+  /// Captures the tree canvas as an image and generates a downloadable PDF.
   static Future<void> saveAsPdf(BuildContext context) async {
     final boundary = repaintBoundaryKey.currentContext?.findRenderObject()
         as RenderRepaintBoundary?;
-    if (boundary == null) return;
+    if (boundary == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tree is not ready to export yet.')),
+      );
+      return;
+    }
 
     // Show a loading indicator
     final messenger = ScaffoldMessenger.of(context);
@@ -54,17 +58,16 @@ class TreeCanvas extends ConsumerStatefulWidget {
       final image = await boundary.toImage(pixelRatio: 2.0);
       final byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
-      if (byteData == null) return;
+      if (byteData == null) {
+        throw Exception('Could not read image bytes.');
+      }
       final pngBytes = byteData.buffer.asUint8List();
 
       final pdfDoc = pw.Document();
       final pdfImage = pw.MemoryImage(pngBytes);
 
-      // Use landscape A3 or larger to fit the tree
-      final pageFormat = PdfPageFormat(
-        image.width.toDouble(),
-        image.height.toDouble(),
-      );
+      // Use a fixed page size for compatibility across viewers/printers.
+      final pageFormat = PdfPageFormat.a3.landscape;
 
       pdfDoc.addPage(
         pw.Page(
@@ -84,10 +87,24 @@ class TreeCanvas extends ConsumerStatefulWidget {
       messenger.hideCurrentSnackBar();
 
       final pdfBytes = await pdfDoc.save();
-      await Printing.sharePdf(
-        bytes: pdfBytes,
-        filename: 'bhandari_family_tree.pdf',
-      );
+
+      // Use sharePdf to let user save/share the PDF
+      try {
+        await Printing.sharePdf(
+          bytes: pdfBytes,
+          filename: 'bhandari_family_tree.pdf',
+        );
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text('PDF ready!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } catch (e) {
+        messenger.showSnackBar(
+          SnackBar(content: Text('Failed to save PDF: $e')),
+        );
+      }
     } catch (e) {
       messenger.hideCurrentSnackBar();
       messenger.showSnackBar(
@@ -119,16 +136,19 @@ class _TreeCanvasState extends ConsumerState<TreeCanvas> {
     final rootPos = positions[roots.first.id];
     if (rootPos == null) return;
 
-    final spouseMap = <String, String>{};
+    final spouseMap = <String, List<String>>{};
     final members = ref.read(allMembersProvider).valueOrNull ?? [];
     for (final m in members) {
-      if (m.spouseId != null) spouseMap[m.id] = m.spouseId!;
+      if (m.allSpouseIds.isNotEmpty) spouseMap[m.id] = m.allSpouseIds;
     }
-    final hasSpouse = spouseMap.containsKey(roots.first.id);
+    final spouseCount = spouseMap[roots.first.id]?.length ?? 0;
+    final groupWidth = spouseCount <= 0
+        ? TreeLayoutEngine.nodeWidth
+        : TreeLayoutEngine.nodeWidth +
+            spouseCount *
+                (TreeLayoutEngine.nodeWidth + TreeLayoutEngine.coupleGap);
 
-    final rootCenterX = hasSpouse
-        ? rootPos.dx + TreeLayoutEngine.nodeWidth + TreeLayoutEngine.coupleGap / 2
-        : rootPos.dx + TreeLayoutEngine.nodeWidth / 2;
+    final rootCenterX = rootPos.dx + groupWidth / 2;
     final rootCenterY = rootPos.dy + TreeLayoutEngine.nodeHeight / 2;
 
     const scale = 1.8;
@@ -246,16 +266,17 @@ class _TreeCanvasState extends ConsumerState<TreeCanvas> {
     final expanded = ref.watch(expandedNodesProvider);
     final langCode = ref.watch(currentLanguageProvider);
     final highlightedId = ref.watch(highlightedMemberProvider);
-    final isAdmin = ref.watch(isAdminProvider);
+    final highlightedPath = ref.watch(highlightedPathProvider);
     final maxGenDepth = ref.watch(maxGenerationDepthProvider);
     final genDepth = ref.watch(generationDepthSettingProvider);
 
-    final spouseMap = <String, String>{};
+    final spouseMap = <String, List<String>>{};
     for (final m in members) {
-      if (m.spouseId != null) {
-        spouseMap[m.id] = m.spouseId!;
+      if (m.allSpouseIds.isNotEmpty) {
+        spouseMap[m.id] = m.allSpouseIds;
       }
     }
+    final memberById = {for (final member in members) member.id: member};
 
     final bracketLinks = TreeLayoutEngine.buildBracketLinks(
       positions,
@@ -315,6 +336,7 @@ class _TreeCanvasState extends ConsumerState<TreeCanvas> {
                     painter: TreeLinePainter(
                       bracketLinks: bracketLinks,
                       spouseLinks: spouseLinks,
+                      highlightedIds: highlightedPath,
                     ),
                   ),
                 ),
@@ -322,13 +344,10 @@ class _TreeCanvasState extends ConsumerState<TreeCanvas> {
                 ...positions.entries.map((entry) {
                   final memberId = entry.key;
                   final offset = entry.value;
-                  final member = members.cast<Member?>().firstWhere(
-                        (m) => m?.id == memberId,
-                        orElse: () => null,
-                      );
+                  final member = memberById[memberId];
                   if (member == null) return const SizedBox.shrink();
 
-                  final isHighlighted = memberId == highlightedId;
+                  final isHighlighted = highlightedPath.contains(memberId);
                   final hasChildren =
                       (childrenMap[member.id] ?? []).isNotEmpty;
                   final isExpanded = expanded.contains(member.id);
@@ -339,7 +358,7 @@ class _TreeCanvasState extends ConsumerState<TreeCanvas> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
-                        _showMemberDetail(context, member, isAdmin);
+                        _showMemberDetail(context, member);
                       },
                       onLongPress: () {
                         if (hasChildren) {
@@ -412,16 +431,7 @@ class _TreeCanvasState extends ConsumerState<TreeCanvas> {
     );
   }
 
-  void _showMemberDetail(
-      BuildContext context, Member member, bool isAdmin) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => MemberDetailSheet(
-        memberId: member.id,
-        showAdminActions: isAdmin,
-      ),
-    );
+  void _showMemberDetail(BuildContext context, Member member) {
+    context.push('/member/${member.id}');
   }
 }

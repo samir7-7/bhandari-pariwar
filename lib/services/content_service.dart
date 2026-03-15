@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bhandari_pariwar/models/about_content.dart';
 import 'package:bhandari_pariwar/models/committee_member.dart';
+import 'package:bhandari_pariwar/models/elder_saying.dart';
+import 'package:bhandari_pariwar/models/kendriya_samiti.dart';
 
 final contentServiceProvider =
     Provider<ContentService>((ref) => ContentService());
@@ -40,5 +42,62 @@ class ContentService {
 
   Future<void> updateCommittee(CommitteeContent committee) async {
     await _collection.doc('committee').set(committee.toFirestore());
+  }
+
+  // --- Kendriya Samiti ---
+
+  Stream<KendriyaSamitiContent?> watchKendriyaSamiti() {
+    return _collection.doc('kendriya_samiti').snapshots().map(
+          (doc) =>
+              doc.exists ? KendriyaSamitiContent.fromFirestore(doc) : null,
+        );
+  }
+
+  Future<KendriyaSamitiContent?> getKendriyaSamiti() async {
+    final doc = await _collection.doc('kendriya_samiti').get();
+    if (!doc.exists) return null;
+    return KendriyaSamitiContent.fromFirestore(doc);
+  }
+
+  Future<void> updateKendriyaSamiti(KendriyaSamitiContent content) async {
+    await _collection.doc('kendriya_samiti').set(content.toFirestore());
+  }
+
+  // --- Bidesh Samiti ---
+
+  Stream<KendriyaSamitiContent?> watchBideshSamiti() {
+    return _collection.doc('bidesh_samiti').snapshots().map(
+          (doc) =>
+              doc.exists ? KendriyaSamitiContent.fromFirestore(doc) : null,
+        );
+  }
+
+  Future<KendriyaSamitiContent?> getBideshSamiti() async {
+    final doc = await _collection.doc('bidesh_samiti').get();
+    if (!doc.exists) return null;
+    return KendriyaSamitiContent.fromFirestore(doc);
+  }
+
+  Future<void> updateBideshSamiti(KendriyaSamitiContent content) async {
+    await _collection.doc('bidesh_samiti').set(content.toFirestore());
+  }
+
+  // --- Elder Sayings ---
+
+  Stream<ElderSayingsContent?> watchElderSayings() {
+    return _collection.doc('elder_sayings').snapshots().map(
+          (doc) =>
+              doc.exists ? ElderSayingsContent.fromFirestore(doc) : null,
+        );
+  }
+
+  Future<ElderSayingsContent?> getElderSayings() async {
+    final doc = await _collection.doc('elder_sayings').get();
+    if (!doc.exists) return null;
+    return ElderSayingsContent.fromFirestore(doc);
+  }
+
+  Future<void> updateElderSayings(ElderSayingsContent content) async {
+    await _collection.doc('elder_sayings').set(content.toFirestore());
   }
 }

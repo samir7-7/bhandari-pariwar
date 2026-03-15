@@ -4,6 +4,18 @@ import 'package:bhandari_pariwar/models/member.dart';
 import 'package:bhandari_pariwar/services/member_service.dart';
 import 'package:bhandari_pariwar/widgets/tree/tree_layout.dart';
 
+int _compareTreeOrder(Member a, Member b) {
+  final birthOrderCompare = a.birthOrder.compareTo(b.birthOrder);
+  if (birthOrderCompare != 0) return birthOrderCompare;
+
+  final sourceA = a.sourceOrder ?? 1 << 30;
+  final sourceB = b.sourceOrder ?? 1 << 30;
+  final sourceCompare = sourceA.compareTo(sourceB);
+  if (sourceCompare != 0) return sourceCompare;
+
+  return a.id.compareTo(b.id);
+}
+
 final allMembersProvider = StreamProvider<List<Member>>((ref) {
   final service = ref.watch(memberServiceProvider);
   return service.watchAllMembers();
@@ -55,8 +67,9 @@ class ExpandedNodesNotifier extends StateNotifier<Set<String>> {
 
     for (final r in root) {
       expand(r.id, 0);
-      if (r.spouseId != null) {
-        expanded.add(r.spouseId!);
+      final primarySpouseId = r.primarySpouseId;
+      if (primarySpouseId != null) {
+        expanded.add(primarySpouseId);
       }
     }
 
@@ -107,8 +120,9 @@ class ExpandedNodesNotifier extends StateNotifier<Set<String>> {
 
     for (final r in root) {
       expand(r.id, 0);
-      if (r.spouseId != null) {
-        expanded.add(r.spouseId!);
+      final primarySpouseId = r.primarySpouseId;
+      if (primarySpouseId != null) {
+        expanded.add(primarySpouseId);
       }
     }
 
@@ -126,7 +140,7 @@ final childrenMapProvider =
     }
   }
   for (final children in map.values) {
-    children.sort((a, b) => a.birthOrder.compareTo(b.birthOrder));
+    children.sort(_compareTreeOrder);
   }
   return map;
 });
@@ -147,8 +161,11 @@ final rootMembersProvider = Provider<List<Member>>((ref) {
 
   // If no root with children found, fall back to any root member
   if (roots.isEmpty) {
-    return members.where((m) => m.isRoot).toList();
+    final fallbackRoots = members.where((m) => m.isRoot).toList()
+      ..sort(_compareTreeOrder);
+    return fallbackRoots;
   }
+  roots.sort(_compareTreeOrder);
   return roots;
 });
 
@@ -162,10 +179,10 @@ final treeLayoutProvider =
   final roots = ref.watch(rootMembersProvider);
   if (roots.isEmpty) return {};
 
-  final spouseMap = <String, String>{};
+  final spouseMap = <String, List<String>>{};
   for (final m in members) {
-    if (m.spouseId != null) {
-      spouseMap[m.id] = m.spouseId!;
+    if (m.allSpouseIds.isNotEmpty) {
+      spouseMap[m.id] = m.allSpouseIds;
     }
   }
 
@@ -217,16 +234,14 @@ final memberGenerationProvider =
   final roots = ref.watch(rootMembersProvider);
 
   final generations = <String, int>{};
+  final memberById = {for (final member in members) member.id: member};
 
   void computeDepth(String id, int depth) {
     generations[id] = depth;
-    // Also assign generation to spouse
-    final member = members.cast<Member?>().firstWhere(
-          (m) => m?.id == id,
-          orElse: () => null,
-        );
-    if (member?.spouseId != null) {
-      generations[member!.spouseId!] = depth;
+    // Also assign generation to spouse(s)
+    final member = memberById[id];
+    for (final spouseId in member?.allSpouseIds ?? const <String>[]) {
+      generations[spouseId] = depth;
     }
     final children = childrenMap[id] ?? [];
     for (final child in children) {

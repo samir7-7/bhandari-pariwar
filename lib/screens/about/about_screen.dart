@@ -6,6 +6,9 @@ import 'package:bhandari_pariwar/providers/content_provider.dart';
 import 'package:bhandari_pariwar/providers/auth_provider.dart';
 import 'package:bhandari_pariwar/providers/settings_provider.dart';
 import 'package:bhandari_pariwar/screens/about/committee_screen.dart';
+import 'package:bhandari_pariwar/screens/about/kendriya_samiti_screen.dart';
+import 'package:bhandari_pariwar/screens/about/bidesh_samiti_screen.dart';
+import 'package:bhandari_pariwar/screens/about/elder_sayings_screen.dart';
 
 class AboutScreen extends ConsumerWidget {
   final VoidCallback? onBack;
@@ -36,6 +39,12 @@ class AboutScreen extends ConsumerWidget {
           _HistoryCard(langCode: langCode, isAdmin: isAdmin),
           const SizedBox(height: 16),
           _CommitteeCard(langCode: langCode),
+          const SizedBox(height: 16),
+          _KendriyaSamitiCard(langCode: langCode),
+          const SizedBox(height: 16),
+          _BideshSamitiCard(langCode: langCode),
+          const SizedBox(height: 16),
+          _ElderSayingsCard(langCode: langCode),
         ],
       ),
     );
@@ -241,6 +250,96 @@ class _CommitteeCard extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => const CommitteeScreen(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _KendriyaSamitiCard extends StatelessWidget {
+  final String langCode;
+
+  const _KendriyaSamitiCard({required this.langCode});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Card(
+      child: ListTile(
+        leading: const Icon(Icons.groups, color: Color(0xFF8B4513)),
+        title: Text(
+          l10n.kendriyaSamiti,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Text(l10n.bhandariSamajNepal),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const KendriyaSamitiScreen(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _BideshSamitiCard extends StatelessWidget {
+  final String langCode;
+
+  const _BideshSamitiCard({required this.langCode});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Card(
+      child: ListTile(
+        leading: const Icon(Icons.public, color: Color(0xFF1B5E20)),
+        title: Text(
+          l10n.bideshSamiti,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Text(l10n.bhandariSamajNepal),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const BideshSamitiScreen(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ElderSayingsCard extends StatelessWidget {
+  final String langCode;
+
+  const _ElderSayingsCard({required this.langCode});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Card(
+      child: ListTile(
+        leading: const Icon(Icons.format_quote, color: Color(0xFFB8860B)),
+        title: Text(
+          l10n.elderSayings,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Text(l10n.elderSayingsSubtitle),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const ElderSayingsScreen(),
             ),
           );
         },

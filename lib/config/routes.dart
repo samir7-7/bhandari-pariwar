@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bhandari_pariwar/screens/splash/splash_screen.dart';
 import 'package:bhandari_pariwar/screens/home/home_screen.dart';
 import 'package:bhandari_pariwar/screens/family_tree/family_tree_screen.dart';
+import 'package:bhandari_pariwar/screens/member_detail/member_profile_screen.dart';
 import 'package:bhandari_pariwar/screens/notices/notice_detail_screen.dart';
 import 'package:bhandari_pariwar/screens/admin/admin_login_screen.dart';
 import 'package:bhandari_pariwar/screens/admin/add_member_screen.dart';
@@ -33,6 +34,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           final memberId = state.uri.queryParameters['memberId'];
           return FamilyTreeScreen(focusMemberId: memberId);
         },
+      ),
+      GoRoute(
+        path: '/member/:memberId',
+        builder: (context, state) => MemberProfileScreen(
+          memberId: state.pathParameters['memberId']!,
+        ),
       ),
       GoRoute(
         path: '/notices/:noticeId',

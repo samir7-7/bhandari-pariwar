@@ -41,8 +41,14 @@ class MemberService {
 
   Future<void> setSpouseLink(String memberId, String spouseId) async {
     final batch = FirebaseFirestore.instance.batch();
-    batch.update(_collection.doc(memberId), {'spouseId': spouseId});
-    batch.update(_collection.doc(spouseId), {'spouseId': memberId});
+    batch.update(_collection.doc(memberId), {
+      'spouseId': spouseId,
+      'spouseIds': FieldValue.arrayUnion([spouseId]),
+    });
+    batch.update(_collection.doc(spouseId), {
+      'spouseId': memberId,
+      'spouseIds': FieldValue.arrayUnion([memberId]),
+    });
     await batch.commit();
   }
 }

@@ -54,7 +54,6 @@ class DefaultFirebaseOptions {
     appId: '1:193053007353:android:5e00a7474dc8ef2348f128',
     messagingSenderId: '193053007353',
     projectId: 'bhandari-pariwar',
-    storageBucket: 'bhandari-pariwar.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -62,7 +61,6 @@ class DefaultFirebaseOptions {
     appId: '1:193053007353:ios:68228bb25ccf1c3848f128',
     messagingSenderId: '193053007353',
     projectId: 'bhandari-pariwar',
-    storageBucket: 'bhandari-pariwar.firebasestorage.app',
     iosBundleId: 'com.bhandaripariwar.bhandariPariwar',
   );
 }

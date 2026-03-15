@@ -125,5 +125,15 @@
     "placeholders": {
       "parentName": { "type": "String" }
     }
-  }
+  },
+  "kendriyaSamiti": "Central Committee",
+  "bhandariSamajNepal": "Bhandari Bandhu Samaj, Nepal",
+  "noCommitteeMembers": "No committee members yet",
+  "phone": "Phone",
+  "address": "Address",
+  "position": "Position",
+  "bideshSamiti": "Foreign Committee",
+  "elderSayings": "Sayings of the Elders",
+  "elderSayingsSubtitle": "Wisdom from family elders",
+  "noElderSayings": "No elder sayings yet"
 }

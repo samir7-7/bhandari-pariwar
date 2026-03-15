@@ -173,7 +173,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     try {
       final seedService = ref.read(seedServiceProvider);
-      final count = await seedService.seedMembersFromAsset();
+      final count = await seedService.seedMembersFromAsset(
+        replaceExisting: true,
+      );
 
       if (mounted) {
         messenger.showSnackBar(

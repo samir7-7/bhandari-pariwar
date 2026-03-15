@@ -11,7 +11,7 @@ class TreeLayoutEngine {
   static const double padding = 12.0;
 
   final Map<String, List<Member>> childrenMap;
-  final Map<String, String> spouseMap;
+  final Map<String, List<String>> spouseMap;
   final Set<String> expandedNodes;
 
   final Map<String, double> _subtreeWidths = {};
@@ -33,8 +33,9 @@ class TreeLayoutEngine {
   }
 
   double _unitWidth(String nodeId) {
-    final hasSpouse = spouseMap.containsKey(nodeId);
-    return hasSpouse ? (nodeWidth * 2 + coupleGap) : nodeWidth;
+    final spouseCount = spouseMap[nodeId]?.length ?? 0;
+    if (spouseCount <= 0) return nodeWidth;
+    return nodeWidth + spouseCount * (nodeWidth + coupleGap);
   }
 
   double _computeSubtreeWidth(String nodeId) {
@@ -71,15 +72,16 @@ class TreeLayoutEngine {
     Map<String, Offset> positions,
   ) {
     final unitW = _unitWidth(nodeId);
-    final hasSpouse = spouseMap.containsKey(nodeId);
+    final spouses = spouseMap[nodeId] ?? const <String>[];
 
     // Center the node (or couple) within allocated width.
     final nodeLeft = left + (allocatedWidth - unitW) / 2;
     positions[nodeId] = Offset(nodeLeft, top);
 
-    if (hasSpouse) {
-      final spouseId = spouseMap[nodeId]!;
-      positions[spouseId] = Offset(nodeLeft + nodeWidth + coupleGap, top);
+    for (int i = 0; i < spouses.length; i++) {
+      final spouseId = spouses[i];
+      positions[spouseId] =
+          Offset(nodeLeft + nodeWidth + coupleGap + i * (nodeWidth + coupleGap), top);
     }
 
     final children = childrenMap[nodeId] ?? [];
@@ -109,7 +111,7 @@ class TreeLayoutEngine {
   static List<BracketLink> buildBracketLinks(
     Map<String, Offset> positions,
     Map<String, List<Member>> childrenMap,
-    Map<String, String> spouseMap,
+    Map<String, List<String>> spouseMap,
     Set<String> expandedNodes,
   ) {
     final links = <BracketLink>[];
@@ -122,12 +124,13 @@ class TreeLayoutEngine {
       if (!expandedNodes.contains(parentId)) continue;
 
       final parentPos = positions[parentId]!;
-      final hasSpouse = spouseMap.containsKey(parentId);
+        final spouseCount = spouseMap[parentId]?.length ?? 0;
+        final parentGroupWidth = spouseCount <= 0
+          ? nodeWidth
+          : nodeWidth + spouseCount * (nodeWidth + coupleGap);
 
       // Parent connection point: bottom center of couple or single node.
-      final parentCenterX = hasSpouse
-          ? parentPos.dx + nodeWidth + coupleGap / 2
-          : parentPos.dx + nodeWidth / 2;
+        final parentCenterX = parentPos.dx + parentGroupWidth / 2;
       final parentBottomY = parentPos.dy + nodeHeight;
 
       final childXPositions = <double>[];
@@ -136,16 +139,22 @@ class TreeLayoutEngine {
       for (final child in children) {
         if (!positions.containsKey(child.id)) continue;
         final childPos = positions[child.id]!;
-        final childHasSpouse = spouseMap.containsKey(child.id);
-        final childCenterX = childHasSpouse
-            ? childPos.dx + nodeWidth + coupleGap / 2
-            : childPos.dx + nodeWidth / 2;
+        final childSpouseCount = spouseMap[child.id]?.length ?? 0;
+        final childGroupWidth = childSpouseCount <= 0
+          ? nodeWidth
+          : nodeWidth + childSpouseCount * (nodeWidth + coupleGap);
+        final childCenterX = childPos.dx + childGroupWidth / 2;
         childXPositions.add(childCenterX);
         childTopY ??= childPos.dy;
       }
 
       if (childXPositions.isNotEmpty && childTopY != null) {
         links.add(BracketLink(
+          parentId: parentId,
+          childIds: children
+              .where((c) => positions.containsKey(c.id))
+              .map((c) => c.id)
+              .toList(),
           parentX: parentCenterX,
           parentBottomY: parentBottomY,
           childXPositions: childXPositions,
@@ -160,25 +169,31 @@ class TreeLayoutEngine {
   /// Returns list of spouse connection bars (horizontal line between couples).
   static List<SpouseLink> buildSpouseLinks(
     Map<String, Offset> positions,
-    Map<String, String> spouseMap,
+    Map<String, List<String>> spouseMap,
   ) {
     final links = <SpouseLink>[];
-    final visited = <String>{};
+    final visitedPairs = <String>{};
 
     for (final entry in spouseMap.entries) {
-      if (visited.contains(entry.key) || visited.contains(entry.value)) continue;
-      visited.add(entry.key);
-      visited.add(entry.value);
+      for (final spouseId in entry.value) {
+        final pair = [entry.key, spouseId]..sort();
+        final pairKey = '${pair[0]}::${pair[1]}';
+        if (visitedPairs.contains(pairKey)) continue;
+        visitedPairs.add(pairKey);
 
-      final pos1 = positions[entry.key];
-      final pos2 = positions[entry.value];
-      if (pos1 == null || pos2 == null) continue;
+        final pos1 = positions[entry.key];
+        final pos2 = positions[spouseId];
+        if (pos1 == null || pos2 == null) continue;
 
-      links.add(SpouseLink(
-        leftX: pos1.dx + nodeWidth,
-        rightX: pos2.dx,
-        y: pos1.dy + nodeHeight / 2,
-      ));
+        final leftX = math.min(pos1.dx, pos2.dx) + nodeWidth;
+        final rightX = math.max(pos1.dx, pos2.dx);
+
+        links.add(SpouseLink(
+          leftX: leftX,
+          rightX: rightX,
+          y: pos1.dy + nodeHeight / 2,
+        ));
+      }
     }
 
     return links;
@@ -186,12 +201,16 @@ class TreeLayoutEngine {
 }
 
 class BracketLink {
+  final String parentId;
+  final List<String> childIds;
   final double parentX;
   final double parentBottomY;
   final List<double> childXPositions;
   final double childTopY;
 
   const BracketLink({
+    required this.parentId,
+    required this.childIds,
     required this.parentX,
     required this.parentBottomY,
     required this.childXPositions,

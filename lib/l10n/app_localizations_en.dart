@@ -324,4 +324,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String confirmAddUnder(String parentName) {
     return 'Add this member under $parentName?';
   }
+
+  @override
+  String get kendriyaSamiti => 'Central Committee';
+
+  @override
+  String get bhandariSamajNepal => 'Bhandari Bandhu Samaj, Nepal';
+
+  @override
+  String get noCommitteeMembers => 'No committee members yet';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get position => 'Position';
+
+  @override
+  String get bideshSamiti => 'Foreign Committee';
+
+  @override
+  String get elderSayings => 'Sayings of the Elders';
+
+  @override
+  String get elderSayingsSubtitle => 'Wisdom from family elders';
+
+  @override
+  String get noElderSayings => 'No elder sayings yet';
 }

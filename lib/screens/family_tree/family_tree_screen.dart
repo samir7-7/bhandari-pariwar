@@ -4,10 +4,31 @@ import 'package:bhandari_pariwar/l10n/app_localizations.dart';
 import 'package:bhandari_pariwar/models/member.dart';
 import 'package:bhandari_pariwar/providers/family_tree_provider.dart';
 import 'package:bhandari_pariwar/providers/settings_provider.dart';
+import 'package:bhandari_pariwar/screens/family_tree/member_list_view.dart';
 import 'package:bhandari_pariwar/widgets/tree/tree_canvas.dart';
+import 'package:go_router/go_router.dart';
 
 /// Provider for the currently highlighted member in the tree.
 final highlightedMemberProvider = StateProvider<String?>((ref) => null);
+
+/// Provider for the full ancestor path of the highlighted member.
+/// Contains the highlighted member + all ancestors up to the root.
+final highlightedPathProvider = Provider<Set<String>>((ref) {
+  final highlightedId = ref.watch(highlightedMemberProvider);
+  if (highlightedId == null) return {};
+
+  final members = ref.watch(allMembersProvider).valueOrNull ?? [];
+  if (members.isEmpty) return {};
+
+  final memberMap = {for (final m in members) m.id: m};
+  final path = <String>{highlightedId};
+  String? currentId = memberMap[highlightedId]?.parentId;
+  while (currentId != null) {
+    path.add(currentId);
+    currentId = memberMap[currentId]?.parentId;
+  }
+  return path;
+});
 
 class FamilyTreeScreen extends ConsumerStatefulWidget {
   final String? focusMemberId;
@@ -21,6 +42,7 @@ class FamilyTreeScreen extends ConsumerStatefulWidget {
 class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
   final _searchController = TextEditingController();
   List<Member> _searchResults = [];
+  bool _isListView = false;
 
   @override
   void dispose() {
@@ -95,6 +117,10 @@ class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
     );
   }
 
+  void _openMemberProfile(Member member) {
+    context.push('/member/${member.id}');
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -111,12 +137,21 @@ class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
             : null,
         title: Text(l10n.familyTree),
         actions: [
-          // Search button opens bottom sheet
           IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: _openSearchSheet,
-            tooltip: l10n.searchMember,
+            icon: Icon(_isListView ? Icons.account_tree : Icons.view_list),
+            tooltip: _isListView ? 'Tree view' : 'List view',
+            onPressed: () {
+              setState(() {
+                _isListView = !_isListView;
+              });
+            },
           ),
+          if (!_isListView)
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: _openSearchSheet,
+              tooltip: l10n.searchMember,
+            ),
           // Member count badge
           membersAsync.whenOrNull(
                 data: (members) => Center(
@@ -139,60 +174,61 @@ class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
                 ),
               ) ??
               const SizedBox.shrink(),
-          // Overflow menu
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert),
-            onSelected: (value) {
-              final members =
-                  ref.read(allMembersProvider).valueOrNull ?? [];
-              if (value == 'expand') {
-                ref.read(expandedNodesProvider.notifier).expandAll(members);
-              } else if (value == 'collapse') {
-                ref.read(expandedNodesProvider.notifier).collapseAll();
-              } else if (value == 'save_pdf') {
-                TreeCanvas.saveAsPdf(context);
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'expand',
-                child: Row(
-                  children: [
-                    const Icon(Icons.unfold_more, size: 20),
-                    const SizedBox(width: 12),
-                    Text(l10n.expandAll),
-                  ],
+          if (!_isListView)
+            PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert),
+              onSelected: (value) {
+                final members = ref.read(allMembersProvider).valueOrNull ?? [];
+                if (value == 'expand') {
+                  ref.read(expandedNodesProvider.notifier).expandAll(members);
+                } else if (value == 'collapse') {
+                  ref.read(expandedNodesProvider.notifier).collapseAll();
+                } else if (value == 'save_pdf') {
+                  TreeCanvas.saveAsPdf(context);
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'expand',
+                  child: Row(
+                    children: [
+                      const Icon(Icons.unfold_more, size: 20),
+                      const SizedBox(width: 12),
+                      Text(l10n.expandAll),
+                    ],
+                  ),
                 ),
-              ),
-              PopupMenuItem(
-                value: 'collapse',
-                child: Row(
-                  children: [
-                    const Icon(Icons.unfold_less, size: 20),
-                    const SizedBox(width: 12),
-                    Text(l10n.collapseAll),
-                  ],
+                PopupMenuItem(
+                  value: 'collapse',
+                  child: Row(
+                    children: [
+                      const Icon(Icons.unfold_less, size: 20),
+                      const SizedBox(width: 12),
+                      Text(l10n.collapseAll),
+                    ],
+                  ),
                 ),
-              ),
-              const PopupMenuDivider(),
-              const PopupMenuItem(
-                value: 'save_pdf',
-                child: Row(
-                  children: [
-                    Icon(Icons.picture_as_pdf, size: 20),
-                    SizedBox(width: 12),
-                    Text('Save as PDF'),
-                  ],
+                const PopupMenuDivider(),
+                const PopupMenuItem(
+                  value: 'save_pdf',
+                  child: Row(
+                    children: [
+                      Icon(Icons.picture_as_pdf, size: 20),
+                      SizedBox(width: 12),
+                      Text('Save as PDF'),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
         ],
       ),
-      body: TreeCanvas(
-        focusMemberId:
-            widget.focusMemberId ?? ref.watch(highlightedMemberProvider),
-      ),
+      body: _isListView
+          ? MemberListView(onOpenMember: _openMemberProfile)
+          : TreeCanvas(
+              focusMemberId:
+                  widget.focusMemberId ?? ref.watch(highlightedMemberProvider),
+            ),
     );
   }
 }

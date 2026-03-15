@@ -703,6 +703,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add this member under {parentName}?'**
   String confirmAddUnder(String parentName);
+
+  /// No description provided for @kendriyaSamiti.
+  ///
+  /// In en, this message translates to:
+  /// **'Central Committee'**
+  String get kendriyaSamiti;
+
+  /// No description provided for @bhandariSamajNepal.
+  ///
+  /// In en, this message translates to:
+  /// **'Bhandari Bandhu Samaj, Nepal'**
+  String get bhandariSamajNepal;
+
+  /// No description provided for @noCommitteeMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'No committee members yet'**
+  String get noCommitteeMembers;
+
+  /// No description provided for @phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get phone;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @position.
+  ///
+  /// In en, this message translates to:
+  /// **'Position'**
+  String get position;
+
+  /// No description provided for @bideshSamiti.
+  ///
+  /// In en, this message translates to:
+  /// **'Foreign Committee'**
+  String get bideshSamiti;
+
+  /// No description provided for @elderSayings.
+  ///
+  /// In en, this message translates to:
+  /// **'Sayings of the Elders'**
+  String get elderSayings;
+
+  /// No description provided for @elderSayingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Wisdom from family elders'**
+  String get elderSayingsSubtitle;
+
+  /// No description provided for @noElderSayings.
+  ///
+  /// In en, this message translates to:
+  /// **'No elder sayings yet'**
+  String get noElderSayings;
 }
 
 class _AppLocalizationsDelegate

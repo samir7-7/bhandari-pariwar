@@ -32,9 +32,10 @@ class MemberDetailSheet extends ConsumerWidget {
     }
 
     final children = childrenMap[member.id] ?? [];
-    final spouse = member.spouseId != null
-        ? ref.watch(memberByIdProvider(member.spouseId!))
-        : null;
+    final spouseMembers = member.allSpouseIds
+      .map((id) => ref.watch(memberByIdProvider(id)))
+      .whereType<dynamic>()
+      .toList();
     final parent = member.parentId != null
         ? ref.watch(memberByIdProvider(member.parentId!))
         : null;
@@ -43,6 +44,17 @@ class MemberDetailSheet extends ConsumerWidget {
     final primaryColor = Theme.of(context).colorScheme.primary;
     final generations = ref.watch(memberGenerationProvider);
     final gen = generations[member.id] ?? 0;
+    final displayBirthDateAd = member.birthDateAd ?? member.birthDate;
+    final spouseNames = spouseMembers
+      .map((spouse) => spouse.localizedName(langCode))
+      .join(', ');
+    final fatherName = member.localizedFatherName(langCode).trim();
+    final motherName = member.localizedMotherName(langCode).trim();
+    final birthPlace = member.localizedBirthPlace(langCode).trim();
+    final currentAddress = member.localizedCurrentAddress(langCode).trim();
+    final permanentAddress = member.localizedPermanentAddress(langCode).trim();
+    final education = member.localizedEducationOrProfession(langCode).trim();
+    final note = member.localizedNote(langCode).trim();
 
     return Container(
       decoration: const BoxDecoration(
@@ -198,12 +210,19 @@ class MemberDetailSheet extends ConsumerWidget {
                   ),
                   child: Column(
                     children: [
-                      if (member.birthDate != null)
+                      if (displayBirthDateAd != null)
                         _InfoRow(
                           icon: Icons.cake_outlined,
-                          label: l10n.born,
-                          value: dateFormat.format(member.birthDate!),
+                          label: 'Birth (AD)',
+                          value: dateFormat.format(displayBirthDateAd),
                           iconColor: Colors.green.shade400,
+                        ),
+                      if ((member.birthDateBs ?? '').trim().isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.event_note_outlined,
+                          label: 'Birth (BS)',
+                          value: member.birthDateBs!.trim(),
+                          iconColor: Colors.green.shade300,
                         ),
                       if (member.deathDate != null)
                         _InfoRow(
@@ -219,12 +238,105 @@ class MemberDetailSheet extends ConsumerWidget {
                           value: parent.localizedName(langCode),
                           iconColor: primaryColor,
                         ),
-                      if (spouse != null)
+                      if (spouseNames.isNotEmpty)
                         _InfoRow(
                           icon: Icons.favorite_outline,
-                          label: l10n.spouse,
-                          value: spouse.localizedName(langCode),
+                          label: spouseMembers.length > 1
+                              ? '${l10n.spouse}s'
+                              : l10n.spouse,
+                          value: spouseNames,
                           iconColor: Colors.red.shade300,
+                        ),
+                      if (fatherName.isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.badge_outlined,
+                          label: l10n.fatherName,
+                          value: fatherName,
+                          iconColor: const Color(0xFF8B7355),
+                        ),
+                      if (motherName.isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.badge_outlined,
+                          label: 'Mother Name',
+                          value: motherName,
+                          iconColor: const Color(0xFF8B7355),
+                        ),
+                      if (birthPlace.isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.place_outlined,
+                          label: 'Birth Place',
+                          value: birthPlace,
+                          iconColor: Colors.brown.shade400,
+                        ),
+                      if (currentAddress.isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.home_outlined,
+                          label: 'Current Address',
+                          value: currentAddress,
+                          iconColor: Colors.brown.shade400,
+                        ),
+                      if (permanentAddress.isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.location_city_outlined,
+                          label: 'Permanent Address',
+                          value: permanentAddress,
+                          iconColor: Colors.brown.shade400,
+                        ),
+                      if ((member.mobilePrimary ?? '').trim().isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.phone_outlined,
+                          label: 'Mobile',
+                          value: member.mobilePrimary!.trim(),
+                          iconColor: Colors.teal.shade500,
+                        ),
+                      if ((member.mobileSecondary ?? '').trim().isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.phone_android_outlined,
+                          label: 'Alt Mobile',
+                          value: member.mobileSecondary!.trim(),
+                          iconColor: Colors.teal.shade400,
+                        ),
+                      if ((member.email ?? '').trim().isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.email_outlined,
+                          label: 'Email',
+                          value: member.email!.trim(),
+                          iconColor: Colors.blueGrey.shade500,
+                        ),
+                      if (education.isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.school_outlined,
+                          label: 'Education/Profession',
+                          value: education,
+                          iconColor: Colors.indigo.shade400,
+                        ),
+                      if ((member.bloodGroup ?? '').trim().isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.bloodtype_outlined,
+                          label: 'Blood Group',
+                          value: member.bloodGroup!.trim(),
+                          iconColor: Colors.red.shade400,
+                        ),
+                      if (member.familyCount != null)
+                        _InfoRow(
+                          icon: Icons.groups_outlined,
+                          label: 'Family Count',
+                          value: member.familyCount.toString(),
+                          iconColor: Colors.deepOrange.shade400,
+                        ),
+                      if (member.sonsCount != null)
+                        _InfoRow(
+                          icon: Icons.boy_outlined,
+                          label: 'Sons',
+                          value: member.sonsCount.toString(),
+                          iconColor: Colors.orange.shade500,
+                        ),
+                      if (member.daughtersCount != null)
+                        _InfoRow(
+                          icon: Icons.girl_outlined,
+                          label: 'Daughters',
+                          value: member.daughtersCount.toString(),
+                          iconColor: Colors.pink.shade300,
                         ),
                       if (children.isNotEmpty)
                         _InfoRow(
@@ -235,10 +347,32 @@ class MemberDetailSheet extends ConsumerWidget {
                               .join(', '),
                           iconColor: Colors.orange.shade400,
                         ),
-                      if (member.birthDate == null &&
+                      if (note.isNotEmpty)
+                        _InfoRow(
+                          icon: Icons.format_quote_outlined,
+                          label: 'Notes',
+                          value: note,
+                          iconColor: const Color(0xFF8B7355),
+                        ),
+                      if (displayBirthDateAd == null &&
+                          (member.birthDateBs ?? '').trim().isEmpty &&
                           member.deathDate == null &&
                           parent == null &&
-                          spouse == null &&
+                          spouseNames.isEmpty &&
+                          fatherName.isEmpty &&
+                          motherName.isEmpty &&
+                          birthPlace.isEmpty &&
+                          currentAddress.isEmpty &&
+                          permanentAddress.isEmpty &&
+                          (member.mobilePrimary ?? '').trim().isEmpty &&
+                          (member.mobileSecondary ?? '').trim().isEmpty &&
+                          (member.email ?? '').trim().isEmpty &&
+                          education.isEmpty &&
+                          (member.bloodGroup ?? '').trim().isEmpty &&
+                          member.familyCount == null &&
+                          member.sonsCount == null &&
+                          member.daughtersCount == null &&
+                          note.isEmpty &&
                           children.isEmpty)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -278,15 +412,13 @@ class MemberDetailSheet extends ConsumerWidget {
                           icon: Icons.favorite,
                           label: l10n.addSpouseToMember,
                           color: Colors.pink.shade400,
-                          enabled: member.spouseId == null,
-                          onTap: member.spouseId == null
-                              ? () {
-                                  Navigator.of(context).pop();
-                                  context.push(
-                                    '/admin/add-member?parentId=${member.id}&asSpouse=true',
-                                  );
-                                }
-                              : null,
+                          enabled: true,
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            context.push(
+                              '/admin/add-member?parentId=${member.id}&asSpouse=true',
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(width: 8),

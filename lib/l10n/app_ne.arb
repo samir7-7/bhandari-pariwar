@@ -125,5 +125,15 @@
     "placeholders": {
       "parentName": { "type": "String" }
     }
-  }
+  },
+  "kendriyaSamiti": "केन्द्रीय समिति",
+  "bhandariSamajNepal": "भण्डारी बन्धु समाज, नेपाल",
+  "noCommitteeMembers": "समितिका सदस्यहरू अझै छैनन्",
+  "phone": "फोन",
+  "address": "ठेगाना",
+  "position": "पद",
+  "bideshSamiti": "विदेश समिति",
+  "elderSayings": "बुजुर्गहरूको भनाइ",
+  "elderSayingsSubtitle": "परिवारका ज्येष्ठहरूको महत्त्वपूर्ण वचन",
+  "noElderSayings": "बुजुर्गहरूको भनाइ अर्को छैनन्"
 }

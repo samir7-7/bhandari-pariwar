@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bhandari_pariwar/l10n/app_localizations.dart';
 import 'package:bhandari_pariwar/providers/family_tree_provider.dart';
 import 'package:bhandari_pariwar/providers/notice_provider.dart';
+import 'package:bhandari_pariwar/screens/about/kendriya_samiti_screen.dart';
+import 'package:bhandari_pariwar/screens/about/bidesh_samiti_screen.dart';
+import 'package:bhandari_pariwar/screens/about/elder_sayings_screen.dart';
 
 class DashboardScreen extends ConsumerWidget {
   final void Function(int tab) onNavigateToTab;
@@ -176,6 +179,48 @@ class DashboardScreen extends ConsumerWidget {
                     subtitle: l10n.historyAndSayings,
                     color: Colors.teal,
                     onTap: () => onNavigateToTab(3),
+                  ),
+                  const SizedBox(height: 12),
+                  _QuickLinkCard(
+                    icon: Icons.groups,
+                    title: l10n.kendriyaSamiti,
+                    subtitle: l10n.bhandariSamajNepal,
+                    color: const Color(0xFF8B4513),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const KendriyaSamitiScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  _QuickLinkCard(
+                    icon: Icons.public,
+                    title: l10n.bideshSamiti,
+                    subtitle: l10n.bhandariSamajNepal,
+                    color: const Color(0xFF1B5E20),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const BideshSamitiScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  _QuickLinkCard(
+                    icon: Icons.format_quote,
+                    title: l10n.elderSayings,
+                    subtitle: l10n.elderSayingsSubtitle,
+                    color: const Color(0xFFB8860B),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const ElderSayingsScreen(),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 12),
                   _QuickLinkCard(
