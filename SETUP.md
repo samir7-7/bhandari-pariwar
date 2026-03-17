@@ -32,6 +32,92 @@ flutter pub get
 
 ---
 
+## Step 2b: Configure Supabase Storage (Required for Photo Upload/Replace/Delete)
+
+If photo upload fails with 403 unauthorized, run this one-shot SQL in Supabase SQL Editor.
+It is safe to run multiple times.
+
+```sql
+-- Ensure the photos bucket exists and is publicly readable.
+insert into storage.buckets (id, name, public)
+values ('photos', 'photos', true)
+on conflict (id) do update set public = true;
+
+-- Drop old policies so this script is re-runnable.
+drop policy if exists "photos_public_read" on storage.objects;
+drop policy if exists "photos_insert_anon" on storage.objects;
+drop policy if exists "photos_insert_authenticated" on storage.objects;
+drop policy if exists "photos_update_anon" on storage.objects;
+drop policy if exists "photos_update_authenticated" on storage.objects;
+drop policy if exists "photos_delete_anon" on storage.objects;
+drop policy if exists "photos_delete_authenticated" on storage.objects;
+
+-- Public read for images in photos bucket.
+create policy "photos_public_read"
+on storage.objects
+for select
+to public
+using (bucket_id = 'photos');
+
+-- Upload permissions.
+create policy "photos_insert_anon"
+on storage.objects
+for insert
+to anon
+with check (bucket_id = 'photos');
+
+create policy "photos_insert_authenticated"
+on storage.objects
+for insert
+to authenticated
+with check (bucket_id = 'photos');
+
+-- Update permissions (needed for overwrite/metadata changes).
+create policy "photos_update_anon"
+on storage.objects
+for update
+to anon
+using (bucket_id = 'photos')
+with check (bucket_id = 'photos');
+
+create policy "photos_update_authenticated"
+on storage.objects
+for update
+to authenticated
+using (bucket_id = 'photos')
+with check (bucket_id = 'photos');
+
+-- Delete permissions (needed when replacing/removing old photos).
+create policy "photos_delete_anon"
+on storage.objects
+for delete
+to anon
+using (bucket_id = 'photos');
+
+create policy "photos_delete_authenticated"
+on storage.objects
+for delete
+to authenticated
+using (bucket_id = 'photos');
+```
+
+Optional:
+
+- Authentication -> Providers -> Anonymous -> Enabled
+
+Note:
+
+- Anonymous provider can stay disabled if you use anon-role storage policies above.
+- If you enable anonymous sign-in, uploads will also work through a temporary session.
+
+The app upload behavior is now:
+
+- pick large image -> auto-resize/compress before upload
+- upload a new unique file path in bucket `photos`
+- if this is an edit, delete old photo from Supabase Storage
+
+---
+
 ## Step 3: Set Up Firebase Project
 
 ### 3a. Create Firebase Project

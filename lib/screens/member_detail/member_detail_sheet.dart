@@ -42,8 +42,8 @@ class MemberDetailSheet extends ConsumerWidget {
 
     final dateFormat = DateFormat('dd MMM yyyy');
     final primaryColor = Theme.of(context).colorScheme.primary;
-    final generations = ref.watch(memberGenerationProvider);
-    final gen = generations[member.id] ?? 0;
+    final generations = ref.watch(memberDisplayGenerationProvider);
+    final gen = generations[member.id] ?? ref.watch(generationBaseProvider);
     final displayBirthDateAd = member.birthDateAd ?? member.birthDate;
     final spouseNames = spouseMembers
       .map((spouse) => spouse.localizedName(langCode))

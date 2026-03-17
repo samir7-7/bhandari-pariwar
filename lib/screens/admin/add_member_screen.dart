@@ -36,6 +36,7 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
   bool _isAlive = true;
   File? _photoFile;
   bool _isLoading = false;
+  bool _hasUnsavedChanges = false;
   int _birthOrder = 0;
 
   // Smart parent matching fields.
@@ -204,21 +205,28 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
             ? ref.watch(memberByIdProvider(widget.parentId!))
             : null;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_isEditing
-            ? l10n.editMember
-            : widget.asSpouse
-                ? l10n.addSpouseToMember
-                : l10n.addMember),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+    return WillPopScope(
+      onWillPop: _handleSystemBack,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: _handleBackPressed,
+          ),
+          title: Text(_isEditing
+              ? l10n.editMember
+              : widget.asSpouse
+                  ? l10n.addSpouseToMember
+                  : l10n.addMember),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Form(
+            key: _formKey,
+            onChanged: _markDirty,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               // Context banner: who are we adding under/to?
               if (spouseTarget != null)
                 _ContextBanner(
@@ -240,7 +248,7 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
               // Photo picker.
               Center(
                 child: GestureDetector(
-                  onTap: _pickPhoto,
+                  onTap: _isLoading ? null : _pickPhoto,
                   child: Stack(
                     children: [
                       CircleAvatar(
@@ -301,7 +309,10 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
               const SizedBox(height: 8),
               RadioGroup<String>(
                 groupValue: _gender,
-                onChanged: (v) => setState(() => _gender = v ?? _gender),
+                onChanged: (v) => setState(() {
+                  _gender = v ?? _gender;
+                  _markDirty();
+                }),
                 child: Row(
                   children: [
                     Expanded(
@@ -359,6 +370,7 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
                 onChanged: (v) => setState(() {
                   _isAlive = v;
                   if (v) _deathDate = null;
+                  _markDirty();
                 }),
               ),
 
@@ -554,10 +566,52 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
               ),
               const SizedBox(height: 20),
             ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  void _markDirty() {
+    if (_isLoading || _hasUnsavedChanges) return;
+    _hasUnsavedChanges = true;
+  }
+
+  Future<bool> _confirmDiscardChanges() async {
+    if (!_hasUnsavedChanges || _isLoading) return true;
+    final shouldDiscard = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Discard changes?'),
+        content: const Text('You have unsaved changes. Leave this page?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Stay'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Discard'),
+          ),
+        ],
+      ),
+    );
+    return shouldDiscard ?? false;
+  }
+
+  Future<void> _handleBackPressed() async {
+    final canLeave = await _confirmDiscardChanges();
+    if (!canLeave || !mounted) return;
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/home?tab=tree');
+    }
+  }
+
+  Future<bool> _handleSystemBack() async {
+    return _confirmDiscardChanges();
   }
 
   /// Builds the parent selector section with smart matching.
@@ -791,7 +845,10 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
     final storageService = ref.read(storageServiceProvider);
     final file = await storageService.pickImage();
     if (file != null) {
-      setState(() => _photoFile = File(file.path));
+      setState(() {
+        _photoFile = File(file.path);
+      });
+      _markDirty();
     }
   }
 
@@ -811,6 +868,7 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
           _deathDate = picked;
         }
       });
+      _markDirty();
     }
   }
 
@@ -861,9 +919,11 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
       if (_isEditing) {
         // Upload photo if changed.
         if (_photoFile != null) {
+          final existing = ref.read(memberByIdProvider(widget.editMemberId!));
           photoUrl = await storageService.uploadMemberPhoto(
             widget.editMemberId!,
             _photoFile!,
+            previousPublicUrl: existing?.photoUrl,
           );
         }
 
@@ -954,11 +1014,18 @@ class _AddMemberScreenState extends ConsumerState<AddMemberScreen> {
         }
       }
 
-      if (mounted) context.pop();
+      if (mounted) {
+        _hasUnsavedChanges = false;
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/home?tab=tree');
+        }
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text('Failed to save member. $e')),
         );
       }
     } finally {

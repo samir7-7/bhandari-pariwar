@@ -243,9 +243,10 @@ class _TreeCanvasState extends ConsumerState<TreeCanvas> {
     return membersAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) => Center(child: Text('Error: $e')),
-      data: (members) {
+      data: (_) {
+        final members = ref.watch(treeMembersProvider);
         if (members.isEmpty) {
-          return const Center(child: Text('No family members yet'));
+          return const Center(child: Text('No members in selected branch'));
         }
 
         WidgetsBinding.instance.addPostFrameCallback((_) {

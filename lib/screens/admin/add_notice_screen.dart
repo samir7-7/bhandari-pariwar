@@ -24,6 +24,7 @@ class _AddNoticeScreenState extends ConsumerState<AddNoticeScreen> {
   bool _sendNotification = true;
   File? _imageFile;
   bool _isLoading = false;
+  bool _hasUnsavedChanges = false;
 
   @override
   void dispose() {
@@ -38,17 +39,24 @@ class _AddNoticeScreenState extends ConsumerState<AddNoticeScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.addNotice),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+    return WillPopScope(
+      onWillPop: _handleSystemBack,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: _handleBackPressed,
+          ),
+          title: Text(l10n.addNotice),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Form(
+            key: _formKey,
+            onChanged: _markDirty,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               // Title (English)
               TextFormField(
                 controller: _titleEnController,
@@ -95,7 +103,7 @@ class _AddNoticeScreenState extends ConsumerState<AddNoticeScreen> {
 
               // Image picker
               OutlinedButton.icon(
-                onPressed: _pickImage,
+                onPressed: _isLoading ? null : _pickImage,
                 icon: const Icon(Icons.image),
                 label: Text(_imageFile != null ? 'Image selected' : l10n.photo),
               ),
@@ -118,7 +126,12 @@ class _AddNoticeScreenState extends ConsumerState<AddNoticeScreen> {
                 contentPadding: EdgeInsets.zero,
                 title: Text(l10n.sendNotification),
                 value: _sendNotification,
-                onChanged: (v) => setState(() => _sendNotification = v),
+                onChanged: _isLoading
+                    ? null
+                    : (v) => setState(() {
+                          _sendNotification = v;
+                          _markDirty();
+                        }),
               ),
               const SizedBox(height: 24),
 
@@ -140,17 +153,62 @@ class _AddNoticeScreenState extends ConsumerState<AddNoticeScreen> {
                 ),
               ),
             ],
+            ),
           ),
         ),
       ),
     );
   }
 
+  void _markDirty() {
+    if (_isLoading || _hasUnsavedChanges) return;
+    _hasUnsavedChanges = true;
+  }
+
+  Future<bool> _confirmDiscardChanges() async {
+    if (!_hasUnsavedChanges || _isLoading) return true;
+    final shouldDiscard = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Discard changes?'),
+        content: const Text('You have unsaved changes. Leave this page?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Stay'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Discard'),
+          ),
+        ],
+      ),
+    );
+    return shouldDiscard ?? false;
+  }
+
+  Future<void> _handleBackPressed() async {
+    final canLeave = await _confirmDiscardChanges();
+    if (!canLeave || !mounted) return;
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/home?tab=notices');
+    }
+  }
+
+  Future<bool> _handleSystemBack() async {
+    return _confirmDiscardChanges();
+  }
+
   Future<void> _pickImage() async {
     final storageService = ref.read(storageServiceProvider);
     final file = await storageService.pickImage();
     if (file != null) {
-      setState(() => _imageFile = File(file.path));
+      setState(() {
+        _imageFile = File(file.path);
+      });
+      _markDirty();
     }
   }
 
@@ -198,11 +256,21 @@ class _AddNoticeScreenState extends ConsumerState<AddNoticeScreen> {
         });
       }
 
-      if (mounted) context.pop();
+      if (mounted) {
+        _hasUnsavedChanges = false;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Notice published successfully')),
+        );
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/home?tab=notices');
+        }
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text('Failed to publish notice. $e')),
         );
       }
     } finally {

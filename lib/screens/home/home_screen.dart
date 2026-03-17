@@ -30,6 +30,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
+  @override
+  void didUpdateWidget(covariant HomeScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialTab != widget.initialTab &&
+        _currentIndex != widget.initialTab) {
+      setState(() => _currentIndex = widget.initialTab);
+    }
+  }
+
   void _navigateToTab(int index) {
     setState(() => _currentIndex = index);
   }

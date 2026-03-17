@@ -346,8 +346,11 @@ class _EditBideshSamitiScreenState
                     photoUrl = await storageService.uploadBideshPhoto(
                       memberKey,
                       selectedPhotoFile!,
+                      previousPublicUrl: member.photoUrl,
                     );
                   } else if (removePhoto) {
+                    final storageService = ref.read(storageServiceProvider);
+                    await storageService.deleteByPublicUrl(member.photoUrl);
                     photoUrl = null;
                   }
                 } catch (e) {

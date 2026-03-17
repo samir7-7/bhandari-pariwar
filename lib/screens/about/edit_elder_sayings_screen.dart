@@ -341,8 +341,11 @@ class _EditElderSayingsScreenState
                     photoUrl = await storageService.uploadElderSayingPhoto(
                       saying.id,
                       selectedPhotoFile!,
+                      previousPublicUrl: saying.photoUrl,
                     );
                   } else if (removePhoto) {
+                    final storageService = ref.read(storageServiceProvider);
+                    await storageService.deleteByPublicUrl(saying.photoUrl);
                     photoUrl = null;
                   }
                 } catch (e) {

@@ -31,15 +31,40 @@ class _MemberListViewState extends ConsumerState<MemberListView> {
   Widget build(BuildContext context) {
     final membersAsync = ref.watch(allMembersProvider);
     final langCode = ref.watch(currentLanguageProvider);
-    final generations = ref.watch(memberGenerationProvider);
+    final generations = ref.watch(memberDisplayGenerationProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
       color: const Color(0xFFF9F0E1),
       child: membersAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('Error: $error')),
-        data: (members) {
+        error: (error, _) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  l10n.error,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF3E2723),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                OutlinedButton.icon(
+                  onPressed: () => ref.invalidate(allMembersProvider),
+                  icon: const Icon(Icons.refresh),
+                  label: Text(l10n.retry),
+                ),
+              ],
+            ),
+          ),
+        ),
+        data: (_) {
+          final members = ref.watch(treeMembersProvider);
           final memberMap = {for (final member in members) member.id: member};
           final lowerQuery = _query.trim().toLowerCase();
 
@@ -131,11 +156,12 @@ class _MemberListViewState extends ConsumerState<MemberListView> {
                           final generation = generationKeys[index];
                           final generationMembers = grouped[generation]!;
                           return _GenerationSection(
-                            generationLabel: 'Generation ${generation + 1}',
+                            generationLabel: '${l10n.generation} $generation',
                             members: generationMembers,
                             langCode: langCode,
                             memberMap: memberMap,
                             onOpenMember: widget.onOpenMember,
+                            l10n: l10n,
                           );
                         },
                       ),
@@ -154,6 +180,7 @@ class _GenerationSection extends StatelessWidget {
   final String langCode;
   final Map<String, Member> memberMap;
   final void Function(Member member) onOpenMember;
+  final AppLocalizations l10n;
 
   const _GenerationSection({
     required this.generationLabel,
@@ -161,6 +188,7 @@ class _GenerationSection extends StatelessWidget {
     required this.langCode,
     required this.memberMap,
     required this.onOpenMember,
+    required this.l10n,
   });
 
   @override
@@ -248,7 +276,12 @@ class _GenerationSection extends StatelessWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            _buildRelationshipLine(parent, spouses, langCode),
+                            _buildRelationshipLine(
+                              parent,
+                              spouses,
+                              langCode,
+                              l10n,
+                            ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -277,16 +310,17 @@ class _GenerationSection extends StatelessWidget {
     Member? parent,
     List<String> spouses,
     String langCode,
+    AppLocalizations l10n,
   ) {
     final chunks = <String>[];
     if (parent != null) {
-      chunks.add('Parent: ${parent.localizedName(langCode)}');
+      chunks.add('${l10n.parent}: ${parent.localizedName(langCode)}');
     }
     if (spouses.isNotEmpty) {
-      chunks.add('Spouse: ${spouses.join(', ')}');
+      chunks.add('${l10n.spouse}: ${spouses.join(', ')}');
     }
     if (chunks.isEmpty) {
-      return 'Tap to view full profile';
+      return l10n.tapToViewDetails;
     }
     return chunks.join('  |  ');
   }

@@ -25,6 +25,8 @@ dependencies:
   pdf: ^3.11.1
   printing: ^5.13.3
   url_launcher: ^6.3.1
+  flutter_image_compress: ^2.4.0
+  image_cropper: ^9.1.0
 
 dev_dependencies:
   flutter_test:

@@ -22,6 +22,7 @@ class _EditContentScreenState extends ConsumerState<EditContentScreen> {
   final _bodyNeController = TextEditingController();
   bool _isLoading = false;
   bool _dataLoaded = false;
+  bool _hasUnsavedChanges = false;
 
   @override
   void initState() {
@@ -69,15 +70,22 @@ class _EditContentScreenState extends ConsumerState<EditContentScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: _handleBackPressed,
+        ),
         title: Text(l10n.editContent),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      body: WillPopScope(
+        onWillPop: _handleSystemBack,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Form(
+            key: _formKey,
+            onChanged: _markDirty,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Text('Title', style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 8),
               TextFormField(
@@ -133,10 +141,52 @@ class _EditContentScreenState extends ConsumerState<EditContentScreen> {
                 ),
               ),
             ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  void _markDirty() {
+    if (_isLoading || !_dataLoaded || _hasUnsavedChanges) return;
+    _hasUnsavedChanges = true;
+  }
+
+  Future<bool> _confirmDiscardChanges() async {
+    if (!_hasUnsavedChanges || _isLoading) return true;
+    final shouldDiscard = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Discard changes?'),
+        content: const Text('You have unsaved changes. Leave this page?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Stay'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Discard'),
+          ),
+        ],
+      ),
+    );
+    return shouldDiscard ?? false;
+  }
+
+  Future<void> _handleBackPressed() async {
+    final canLeave = await _confirmDiscardChanges();
+    if (!canLeave || !mounted) return;
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/home?tab=about');
+    }
+  }
+
+  Future<bool> _handleSystemBack() async {
+    return _confirmDiscardChanges();
   }
 
   Future<void> _save() async {
@@ -169,11 +219,21 @@ class _EditContentScreenState extends ConsumerState<EditContentScreen> {
         'updatedBy': authService.currentUser?.uid,
       });
 
-      if (mounted) context.pop();
+      if (mounted) {
+        _hasUnsavedChanges = false;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Content saved successfully')),
+        );
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/home?tab=about');
+        }
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text('Failed to save content. $e')),
         );
       }
     } finally {

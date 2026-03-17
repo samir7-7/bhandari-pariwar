@@ -9,6 +9,7 @@ import 'package:bhandari_pariwar/screens/about/committee_screen.dart';
 import 'package:bhandari_pariwar/screens/about/kendriya_samiti_screen.dart';
 import 'package:bhandari_pariwar/screens/about/bidesh_samiti_screen.dart';
 import 'package:bhandari_pariwar/screens/about/elder_sayings_screen.dart';
+import 'package:bhandari_pariwar/screens/about/acknowledgements_screen.dart';
 
 class AboutScreen extends ConsumerWidget {
   final VoidCallback? onBack;
@@ -36,6 +37,8 @@ class AboutScreen extends ConsumerWidget {
         children: [
           _FamilyOverviewCard(langCode: langCode, isAdmin: isAdmin),
           const SizedBox(height: 16),
+          _AcknowledgementsCard(langCode: langCode),
+          const SizedBox(height: 16),
           _HistoryCard(langCode: langCode, isAdmin: isAdmin),
           const SizedBox(height: 16),
           _CommitteeCard(langCode: langCode),
@@ -46,6 +49,40 @@ class AboutScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           _ElderSayingsCard(langCode: langCode),
         ],
+      ),
+    );
+  }
+}
+
+class _AcknowledgementsCard extends StatelessWidget {
+  final String langCode;
+
+  const _AcknowledgementsCard({required this.langCode});
+
+  @override
+  Widget build(BuildContext context) {
+    final isNepali = langCode == 'ne';
+
+    return Card(
+      child: ListTile(
+        leading: const Icon(Icons.workspace_premium, color: Color(0xFF8B5A2B)),
+        title: Text(
+          isNepali ? 'कृतज्ञता तथा धन्यवाद' : 'Acknowledgements & Thanks',
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Text(
+          isNepali
+              ? 'पारिवारिक विवरण लेखन कार्यमा सहयोग गर्नुहुने सबैप्रति सम्मान'
+              : 'Gratitude to everyone who made this family documentation possible',
+        ),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const AcknowledgementsScreen(),
+            ),
+          );
+        },
       ),
     );
   }

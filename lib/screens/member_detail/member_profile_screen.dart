@@ -25,26 +25,78 @@ class MemberProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Navigator.of(context).canPop()
+        leading: context.canPop()
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.go('/home?tab=tree');
+                  }
+                },
               )
             : null,
         title: Text(l10n.familyTree),
       ),
       body: membersAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('Error: $error')),
+        error: (error, _) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  l10n.error,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF3E2723),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                OutlinedButton.icon(
+                  onPressed: () => ref.invalidate(allMembersProvider),
+                  icon: const Icon(Icons.refresh),
+                  label: Text(l10n.retry),
+                ),
+              ],
+            ),
+          ),
+        ),
         data: (members) {
           final memberMap = {for (final member in members) member.id: member};
           final member = memberMap[memberId];
           if (member == null) {
-            return const Center(child: Text('Member not found'));
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      l10n.noResults,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF3E2723),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    OutlinedButton.icon(
+                      onPressed: () => context.go('/home?tab=tree'),
+                      icon: const Icon(Icons.account_tree),
+                      label: Text(l10n.goToInTree),
+                    ),
+                  ],
+                ),
+              ),
+            );
           }
 
           final childrenMap = ref.watch(childrenMapProvider);
-          final generations = ref.watch(memberGenerationProvider);
+          final generations = ref.watch(memberDisplayGenerationProvider);
           final isAdmin = ref.watch(isAdminProvider);
 
           final parent =
@@ -82,7 +134,7 @@ class MemberProfileScreen extends ConsumerWidget {
           final daughters = children.where((child) => !child.isMale).toList();
 
           final dateFormat = DateFormat('dd MMM yyyy');
-          final gen = (generations[member.id] ?? 0) + 1;
+          final gen = generations[member.id] ?? ref.watch(generationBaseProvider);
 
           final displayBirthDateAd = member.birthDateAd ?? member.birthDate;
           final birthPlace = member.localizedBirthPlace(langCode).trim();

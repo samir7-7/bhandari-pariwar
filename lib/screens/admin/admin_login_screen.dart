@@ -17,6 +17,7 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -33,13 +34,14 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
       appBar: AppBar(
         title: Text(l10n.adminLogin),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
               Icon(
                 Icons.admin_panel_settings,
                 size: 64,
@@ -52,8 +54,10 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
                   labelText: l10n.email,
                   prefixIcon: const Icon(Icons.email),
                 ),
+                textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.emailAddress,
                 autocorrect: false,
+                autofillHints: const [AutofillHints.username, AutofillHints.email],
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Email is required';
@@ -67,8 +71,19 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
                 decoration: InputDecoration(
                   labelText: l10n.password,
                   prefixIcon: const Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() => _obscurePassword = !_obscurePassword);
+                    },
+                    icon: Icon(
+                      _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                    ),
+                  ),
                 ),
-                obscureText: true,
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (_) => _isLoading ? null : _login(),
+                obscureText: _obscurePassword,
+                autofillHints: const [AutofillHints.password],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Password is required';
@@ -101,6 +116,7 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
                 ),
               ),
             ],
+            ),
           ),
         ),
       ),

@@ -17,7 +17,7 @@ class DashboardScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final membersAsync = ref.watch(allMembersProvider);
     final noticesAsync = ref.watch(allNoticesProvider);
-    final maxGen = ref.watch(maxGenerationDepthProvider);
+    final maxGen = ref.watch(maxDisplayGenerationProvider);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -96,7 +96,7 @@ class DashboardScreen extends ConsumerWidget {
                         child: _StatCard(
                           icon: Icons.account_tree,
                           label: l10n.generation,
-                          value: '${maxGen + 1}',
+                          value: '$maxGen',
                           color: const Color(0xFFB8860B),
                         ),
                       ),

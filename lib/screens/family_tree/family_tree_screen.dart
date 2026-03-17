@@ -41,7 +41,6 @@ class FamilyTreeScreen extends ConsumerStatefulWidget {
 
 class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
   final _searchController = TextEditingController();
-  List<Member> _searchResults = [];
   bool _isListView = false;
 
   @override
@@ -50,22 +49,8 @@ class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
     super.dispose();
   }
 
-  void _onSearchChanged(String query) {
-    final members = ref.read(allMembersProvider).valueOrNull ?? [];
-    if (query.trim().isEmpty) {
-      setState(() => _searchResults = []);
-      return;
-    }
-    final lowerQuery = query.toLowerCase();
-    setState(() {
-      _searchResults = members.where((m) {
-        return m.name.values.any((n) => n.toLowerCase().contains(lowerQuery));
-      }).toList();
-    });
-  }
-
   void _selectMember(Member member) {
-    final members = ref.read(allMembersProvider).valueOrNull ?? [];
+    final members = ref.read(treeMembersProvider);
     _expandAncestors(member, members);
     ref.read(highlightedMemberProvider.notifier).state = member.id;
 
@@ -98,19 +83,12 @@ class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
 
   void _openSearchSheet() {
     _searchController.clear();
-    _searchResults = [];
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => _SearchBottomSheet(
         searchController: _searchController,
-        onSearchChanged: (query) {
-          _onSearchChanged(query);
-          // Force rebuild of the sheet
-          (ctx as Element).markNeedsBuild();
-        },
-        searchResults: _searchResults,
         onSelectMember: _selectMember,
         ref: ref,
       ),
@@ -121,18 +99,138 @@ class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
     context.push('/member/${member.id}');
   }
 
+  Member? _findDharmananda(List<Member> members) {
+    for (final member in members) {
+      final hasMatch = member.name.values.any(
+        (value) => value.toLowerCase().contains('dharmananda'),
+      );
+      if (hasMatch) return member;
+    }
+    return null;
+  }
+
+  List<Member> _getDharmanandaSons(List<Member> members) {
+    final dharmananda = _findDharmananda(members);
+    if (dharmananda == null) return [];
+
+    final sons = members
+        .where((m) => m.parentId == dharmananda.id && m.isMale)
+        .toList()
+      ..sort((a, b) {
+        final birthOrderCompare = a.birthOrder.compareTo(b.birthOrder);
+        if (birthOrderCompare != 0) return birthOrderCompare;
+        final sourceA = a.sourceOrder ?? 1 << 30;
+        final sourceB = b.sourceOrder ?? 1 << 30;
+        final sourceCompare = sourceA.compareTo(sourceB);
+        if (sourceCompare != 0) return sourceCompare;
+        return a.id.compareTo(b.id);
+      });
+    return sons;
+  }
+
+  Future<void> _openBranchSelector() async {
+    final members = ref.read(allMembersProvider).valueOrNull ?? [];
+    if (members.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Members are still loading.')),
+      );
+      return;
+    }
+
+    final langCode = ref.read(currentLanguageProvider);
+    final currentBranchId = ref.read(branchRootMemberIdProvider);
+    final sons = _getDharmanandaSons(members);
+    final memberMap = {for (final m in members) m.id: m};
+
+    if (!mounted) return;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.account_tree_outlined),
+                title: const Text('Show Full Family Tree'),
+                trailing: currentBranchId == null
+                    ? const Icon(Icons.check, color: Colors.green)
+                    : null,
+                onTap: () {
+                  ref.read(branchRootMemberIdProvider.notifier).state = null;
+                  ref.read(highlightedMemberProvider.notifier).state = null;
+                  Navigator.of(sheetContext).pop();
+                },
+              ),
+              const Divider(height: 1),
+              if (sons.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    'Could not find sons under Dharmananda in current data.',
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              else
+                ...sons.map((son) {
+                  final spouseNames = son.allSpouseIds
+                      .map((id) => memberMap[id])
+                      .whereType<Member>()
+                      .map((sp) => sp.localizedName(langCode))
+                      .toList();
+
+                  return ListTile(
+                    leading: const Icon(Icons.person_outline),
+                    title: Text(son.localizedName(langCode)),
+                    subtitle: spouseNames.isEmpty
+                        ? null
+                        : Text('Spouse: ${spouseNames.join(', ')}'),
+                    trailing: currentBranchId == son.id
+                        ? const Icon(Icons.check, color: Colors.green)
+                        : null,
+                    onTap: () {
+                      ref.read(branchRootMemberIdProvider.notifier).state = son.id;
+                      ref.read(highlightedMemberProvider.notifier).state = son.id;
+                      Navigator.of(sheetContext).pop();
+                    },
+                  );
+                }),
+              const SizedBox(height: 6),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final membersAsync = ref.watch(allMembersProvider);
+    final visibleMembers = ref.watch(treeMembersProvider);
+    final branchRootId = ref.watch(branchRootMemberIdProvider);
+    final activeBranchMember = branchRootId == null
+        ? null
+        : ref.watch(memberByIdProvider(branchRootId));
+    final langCode = ref.watch(currentLanguageProvider);
 
     return Scaffold(
       appBar: AppBar(
         // Back button — always visible in tree screen
-        leading: Navigator.of(context).canPop()
+        leading: context.canPop()
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    // Safety fallback: never allow router stack to become empty.
+                    context.go('/home?tab=tree');
+                  }
+                },
               )
             : null,
         title: Text(l10n.familyTree),
@@ -154,7 +252,7 @@ class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
             ),
           // Member count badge
           membersAsync.whenOrNull(
-                data: (members) => Center(
+                data: (_) => Center(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 4),
                     child: Container(
@@ -165,7 +263,7 @@ class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        '${members.length}',
+                        '${visibleMembers.length}',
                         style: const TextStyle(
                             fontSize: 12, fontWeight: FontWeight.w600),
                       ),
@@ -174,61 +272,130 @@ class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
                 ),
               ) ??
               const SizedBox.shrink(),
-          if (!_isListView)
-            PopupMenuButton<String>(
+          PopupMenuButton<String>(
               icon: const Icon(Icons.more_vert),
               onSelected: (value) {
-                final members = ref.read(allMembersProvider).valueOrNull ?? [];
                 if (value == 'expand') {
-                  ref.read(expandedNodesProvider.notifier).expandAll(members);
+                  ref
+                      .read(expandedNodesProvider.notifier)
+                      .expandAll(ref.read(treeMembersProvider));
                 } else if (value == 'collapse') {
                   ref.read(expandedNodesProvider.notifier).collapseAll();
                 } else if (value == 'save_pdf') {
                   TreeCanvas.saveAsPdf(context);
+                } else if (value == 'branch') {
+                  _openBranchSelector();
+                } else if (value == 'clear_branch') {
+                  ref.read(branchRootMemberIdProvider.notifier).state = null;
+                  ref.read(highlightedMemberProvider.notifier).state = null;
                 }
               },
               itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: 'expand',
-                  child: Row(
-                    children: [
-                      const Icon(Icons.unfold_more, size: 20),
-                      const SizedBox(width: 12),
-                      Text(l10n.expandAll),
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 'collapse',
-                  child: Row(
-                    children: [
-                      const Icon(Icons.unfold_less, size: 20),
-                      const SizedBox(width: 12),
-                      Text(l10n.collapseAll),
-                    ],
-                  ),
-                ),
-                const PopupMenuDivider(),
                 const PopupMenuItem(
-                  value: 'save_pdf',
+                  value: 'branch',
                   child: Row(
                     children: [
-                      Icon(Icons.picture_as_pdf, size: 20),
+                      Icon(Icons.filter_alt_outlined, size: 20),
                       SizedBox(width: 12),
-                      Text('Save as PDF'),
+                      Text('Select Dharmananda Branch'),
                     ],
                   ),
                 ),
+                if (branchRootId != null)
+                  const PopupMenuItem(
+                    value: 'clear_branch',
+                    child: Row(
+                      children: [
+                        Icon(Icons.filter_alt_off_outlined, size: 20),
+                        SizedBox(width: 12),
+                        Text('Clear Branch Filter'),
+                      ],
+                    ),
+                  ),
+                if (!_isListView) ...[
+                  const PopupMenuDivider(),
+                  PopupMenuItem(
+                    value: 'expand',
+                    child: Row(
+                      children: [
+                        const Icon(Icons.unfold_more, size: 20),
+                        const SizedBox(width: 12),
+                        Text(l10n.expandAll),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'collapse',
+                    child: Row(
+                      children: [
+                        const Icon(Icons.unfold_less, size: 20),
+                        const SizedBox(width: 12),
+                        Text(l10n.collapseAll),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuDivider(),
+                  const PopupMenuItem(
+                    value: 'save_pdf',
+                    child: Row(
+                      children: [
+                        Icon(Icons.picture_as_pdf, size: 20),
+                        SizedBox(width: 12),
+                        Text('Save as PDF'),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
         ],
       ),
-      body: _isListView
-          ? MemberListView(onOpenMember: _openMemberProfile)
-          : TreeCanvas(
-              focusMemberId:
-                  widget.focusMemberId ?? ref.watch(highlightedMemberProvider),
+      body: Column(
+        children: [
+          if (activeBranchMember != null)
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.fromLTRB(12, 8, 12, 4),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFAF5ED),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFFCFB27A).withValues(alpha: 0.4)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.filter_alt, size: 18, color: Color(0xFF8B7355)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Showing branch: ${activeBranchMember.localizedName(langCode)}',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF3E2723),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      ref.read(branchRootMemberIdProvider.notifier).state = null;
+                      ref.read(highlightedMemberProvider.notifier).state = null;
+                    },
+                    child: const Text('Clear'),
+                  ),
+                ],
+              ),
             ),
+          Expanded(
+            child: _isListView
+                ? MemberListView(onOpenMember: _openMemberProfile)
+                : TreeCanvas(
+                    focusMemberId:
+                        widget.focusMemberId ?? ref.watch(highlightedMemberProvider),
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -236,15 +403,11 @@ class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
 /// Beautiful search bottom sheet with vintage styling.
 class _SearchBottomSheet extends StatefulWidget {
   final TextEditingController searchController;
-  final ValueChanged<String> onSearchChanged;
-  final List<Member> searchResults;
   final void Function(Member) onSelectMember;
   final WidgetRef ref;
 
   const _SearchBottomSheet({
     required this.searchController,
-    required this.onSearchChanged,
-    required this.searchResults,
     required this.onSelectMember,
     required this.ref,
   });
@@ -256,15 +419,8 @@ class _SearchBottomSheet extends StatefulWidget {
 class _SearchBottomSheetState extends State<_SearchBottomSheet> {
   List<Member> _results = [];
 
-  @override
-  void initState() {
-    super.initState();
-    _results = widget.searchResults;
-  }
-
   void _doSearch(String query) {
-    final members =
-        widget.ref.read(allMembersProvider).valueOrNull ?? [];
+    final members = widget.ref.read(treeMembersProvider);
     if (query.trim().isEmpty) {
       setState(() => _results = []);
       return;
@@ -282,7 +438,7 @@ class _SearchBottomSheetState extends State<_SearchBottomSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final langCode = widget.ref.watch(currentLanguageProvider);
-    final generations = widget.ref.watch(memberGenerationProvider);
+    final generations = widget.ref.watch(memberDisplayGenerationProvider);
 
     return Container(
       decoration: const BoxDecoration(
@@ -545,7 +701,7 @@ class _SearchBottomSheetState extends State<_SearchBottomSheet> {
                                             BorderRadius.circular(6),
                                       ),
                                       child: Text(
-                                        'Gen $gen',
+                                        '${l10n.generation} $gen',
                                         style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w600,
