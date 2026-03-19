@@ -134,7 +134,8 @@ class MemberProfileScreen extends ConsumerWidget {
           final daughters = children.where((child) => !child.isMale).toList();
 
           final dateFormat = DateFormat('dd MMM yyyy');
-          final gen = generations[member.id] ?? ref.watch(generationBaseProvider);
+          final baseGeneration = ref.watch(generationBaseProvider);
+          final int gen = generations[member.id] ?? baseGeneration;
 
           final displayBirthDateAd = member.birthDateAd ?? member.birthDate;
           final birthPlace = member.localizedBirthPlace(langCode).trim();

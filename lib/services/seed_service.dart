@@ -27,6 +27,7 @@ class SeedService {
       FirebaseFirestore.instance.collection('members');
   static bool _autoSeedDone = false;
   static const _membersSeedChecksumKey = 'members_seed_checksum_v1';
+  static const _elderSayingsSeedVersionKey = 'elder_sayings_seed_version_v1';
 
   Future<void> _ensureFirebaseAuth() async {
     final auth = FirebaseAuth.instance;
@@ -655,23 +656,53 @@ class SeedService {
   ];
 
   /// Seeds elder sayings if the document doesn't exist or has no sayings.
+  /// Also checks version to re-seed when new sayings are added.
   Future<void> seedElderSayingsIfEmpty() async {
+    final prefs = await SharedPreferences.getInstance();
+    const currentVersion = 2; // Increment this when elder sayings data changes
+    final savedVersion = prefs.getInt(_elderSayingsSeedVersionKey) ?? 0;
+    
     final contentCollection =
         FirebaseFirestore.instance.collection('content');
     final doc = await contentCollection.doc('elder_sayings').get();
-    if (doc.exists) {
-      final data = doc.data();
-      final sayings = data?['sayings'] as List<dynamic>?;
-      if (sayings != null && sayings.isNotEmpty) return;
-    }
+    
+    // Always merge if version changed or doc doesn't exist
+    if (!doc.exists || savedVersion < currentVersion) {
+      if (doc.exists) {
+        final data = doc.data();
+        final sayings = data?['sayings'] as List<dynamic>?;
+        if (sayings != null && sayings.isNotEmpty) {
+          final existing = sayings
+              .whereType<Map<String, dynamic>>()
+              .map(ElderSaying.fromMap)
+              .toList();
+          final existingIds = existing.map((s) => s.id).toSet();
+          final missingDefaults = _elderSayingsData
+              .where((s) => !existingIds.contains(s.id))
+              .toList();
 
-    final content = ElderSayingsContent(
-      sayings: _elderSayingsData,
-      updatedAt: DateTime.now(),
-    );
-    await contentCollection
-        .doc('elder_sayings')
-        .set(content.toFirestore());
+          final merged = [...existing, ...missingDefaults]
+            ..sort((a, b) => a.order.compareTo(b.order));
+          await contentCollection.doc('elder_sayings').set(
+                ElderSayingsContent(
+                  sayings: merged,
+                  updatedAt: DateTime.now(),
+                ).toFirestore(),
+              );
+          await prefs.setInt(_elderSayingsSeedVersionKey, currentVersion);
+          return;
+        }
+      }
+
+      final content = ElderSayingsContent(
+        sayings: _elderSayingsData,
+        updatedAt: DateTime.now(),
+      );
+      await contentCollection
+          .doc('elder_sayings')
+          .set(content.toFirestore());
+      await prefs.setInt(_elderSayingsSeedVersionKey, currentVersion);
+    }
   }
 
   static final List<ElderSaying> _elderSayingsData = [
@@ -705,6 +736,50 @@ class SeedService {
             'शिक्षा र समाजसेवामा उहाँको योगदान स्मरणीय छ—विद्यालय स्थापना, शैक्षिक जागरण र वंशावली संरक्षणमा उहाँले उल्लेखनीय भूमिका निभाउनुभयो। कृषि पेशालाई आधुनिक प्रविधिसँग जोडी आत्मनिर्भर बन्न मार्गदर्शन दिनुभयो।\n\n'
             'दीर्घ कर्ममय जीवन पश्चात् वि.सं. २०७६ सालमा उहाँ स्वर्गारोहण गर्नुभयो। उहाँको देह विलीन भए पनि उहाँले रोपेका संस्कार, मूल्य र प्रेरणा परिवार र समाजमा सधैं जीवित रहनेछन्।\n\n'
             'यसरी श्री प्रमानन्द भण्डारीको जीवन साहस, सेवा, धर्म, परम्परा र संस्कारमा अंकित अमित गाथा बनेको छ—जसलाई सम्झँदा मनले कोरिएको हस्तलिखित स्मृतिशिला सम्झन हुन्छ।',
+      },
+    ),
+    const ElderSaying(
+      id: 'elder_2',
+      order: 2,
+      name: {
+        'en': 'Krishna (Buddhinath) Bhandari',
+        'ne': 'कृष्ण (बुद्धिनाथ) भण्डारी',
+      },
+      title: {
+        'en': 'Damak-9, Campus Mode (Jhapa) | Personal Profile',
+        'ne': 'दमक ९ क्याम्पस मोड (झापा) | आत्मवृत्तान्त',
+      },
+      saying: {
+        'ne': 'कृष्ण (बुद्धिनाथ) भण्डारी एक सरल, मेहनती र प्रेरणादायी व्यक्तित्व हुनुहुन्छ। कृषक परिवारमा जन्मिएर उहाँले आफ्नो जीवनको सुरुवात कृषि पेशाबाट गर्नुभयो। सानैदेखि मेहनत, अनुशासन र जिम्मेवारीलाई आत्मसात गर्दै उहाँले आफ्नो जीवनलाई संघर्षपूर्ण तर सफल यात्रामा रूपान्तरण गर्नुभयो।\n\n'
+            'उत्कृष्ट भविष्यको खोजीमा उहाँ वैदेशिक रोजगारीतर्फ लाग्नुभयो। विदेशमा रहँदा भोग्नुपरेका कठिनाइ र चुनौतीहरूलाई सामना गर्दै उहाँले आफ्नो परिवारलाई सुदृढ र सफल बनाउन महत्वपूर्ण योगदान दिनुभयो।\n\n'
+            'परिवार\n'
+            'उहाँकी धर्मपत्नी तिला भण्डारी हुनुहुन्छ।\n'
+            'उहाँका एक छोरा र दुई छोरी छन्—\n'
+            'छोरा: क्यान्सर विशेषज्ञ चिकित्सक\n'
+            'एक छोरी: दन्त चिकित्सक\n'
+            'अर्की छोरी: नर्सिङ क्षेत्रमा संलग्न\n\n'
+            'यसले उहाँको परिवारमा शिक्षा, सेवा र समर्पणको उच्च मूल्य रहेको देखाउँछ।\n\n'
+            'व्यक्तित्व र योगदान\n'
+            'मेहनती र आत्मनिर्भर\n'
+            'परिवारप्रति समर्पित\n'
+            'सामाजिक भावना भएका\n'
+            'नेपाली संस्कृति र परम्पराप्रति सम्मान\n\n'
+            'परम्परागत पहिरनमा देखिने उहाँको व्यक्तित्वले नेपालीपन र गरिमालाई झल्काउँछ।',
+        'en': 'Krishna (Buddhinath) Bhandari is a humble, hardworking, and inspiring individual. Born into a farming family, he began his life through agricultural work. From an early age, he embraced values like hard work, discipline, and responsibility, transforming his life into a journey marked by struggle but ultimately success.\n\n'
+            'In pursuit of a better future, he went abroad for employment. Despite facing many hardships and challenges while living overseas, he played a vital role in building a strong and successful family.\n\n'
+            'Family\n'
+            'His wife is Tila Bhandari.\n'
+            'He has one son and two daughters:\n'
+            'Son: A cancer specialist doctor\n'
+            'One daughter: A dentist\n'
+            'Another daughter: Involved in the nursing field\n\n'
+            'This reflects the strong emphasis on education, service, and dedication within his family.\n\n'
+            'Personality and Contributions\n'
+            'Hardworking and self-reliant\n'
+            'Devoted to his family\n'
+            'Socially responsible\n'
+            'Respectful of Nepali culture and traditions\n\n'
+            'His presence in traditional attire reflects a deep sense of Nepali identity and dignity.',
       },
     ),
   ];

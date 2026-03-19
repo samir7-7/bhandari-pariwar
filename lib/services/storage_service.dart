@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,39 +32,50 @@ class StorageService {
   static const int _uploadQuality = 72;
 
   Future<XFile?> pickImage({ImageSource source = ImageSource.gallery}) async {
-    final picked = await _picker.pickImage(
-      source: source,
-      imageQuality: 100,
-    );
+    try {
+      final picked = await _picker.pickImage(
+        source: source,
+        imageQuality: 100,
+      );
 
-    if (picked == null) return null;
+      if (picked == null) return null;
 
-    final cropped = await _cropper.cropImage(
-      sourcePath: picked.path,
-      compressFormat: ImageCompressFormat.jpg,
-      compressQuality: 95,
-      uiSettings: [
-        AndroidUiSettings(
-          toolbarTitle: 'Crop Photo',
-          toolbarColor: const Color(0xFF7A552B),
-          toolbarWidgetColor: const Color(0xFFFFFFFF),
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false,
-          hideBottomControls: false,
-        ),
-        IOSUiSettings(
-          title: 'Crop Photo',
-          aspectRatioLockEnabled: false,
-          resetAspectRatioEnabled: true,
-        ),
-      ],
-    );
+      try {
+        final cropped = await _cropper.cropImage(
+          sourcePath: picked.path,
+          compressFormat: ImageCompressFormat.jpg,
+          compressQuality: 95,
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: 'Crop Photo',
+              toolbarColor: const ui.Color(0xFF7A552B),
+              toolbarWidgetColor: const ui.Color(0xFFFFFFFF),
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false,
+              hideBottomControls: false,
+            ),
+            IOSUiSettings(
+              title: 'Crop Photo',
+              aspectRatioLockEnabled: false,
+              resetAspectRatioEnabled: true,
+            ),
+          ],
+        );
 
-    if (cropped == null) {
+        if (cropped == null) {
+          // User cancelled crop dialog.
+          return null;
+        }
+
+        return XFile(cropped.path);
+      } catch (_) {
+        // Fallback: if cropper is unavailable on a device/build variant,
+        // continue with original picked file instead of crashing upload flow.
+        return picked;
+      }
+    } catch (_) {
       return null;
     }
-
-    return XFile(cropped.path);
   }
 
   Future<String> uploadMemberPhoto(
