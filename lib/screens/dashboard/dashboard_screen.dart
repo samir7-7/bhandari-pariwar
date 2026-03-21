@@ -18,13 +18,24 @@ class DashboardScreen extends ConsumerWidget {
     final membersAsync = ref.watch(allMembersProvider);
     final noticesAsync = ref.watch(allNoticesProvider);
     final maxGen = ref.watch(maxDisplayGenerationProvider);
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final heroHeight = (screenWidth * 0.9).clamp(280.0, 460.0).toDouble();
+    final horizontalPadding =
+      (screenWidth * 0.04).clamp(12.0, 28.0).toDouble();
+    final heroMainTitleSize =
+      (screenWidth * 0.058).clamp(18.0, 32.0).toDouble();
+    final heroSubTitleSize =
+      (screenWidth * 0.046).clamp(14.0, 24.0).toDouble();
+    final heroThirdTitleSize =
+      (screenWidth * 0.052).clamp(16.0, 28.0).toDouble();
+    final chipTextSize = (screenWidth * 0.034).clamp(12.0, 15.0).toDouble();
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Hero header with Vasista Guru image
+            // Hero header with Rishi image and community banner text
             Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
@@ -36,18 +47,146 @@ class DashboardScreen extends ConsumerWidget {
               child: SafeArea(
                 bottom: false,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    12,
+                    horizontalPadding,
+                    30,
+                  ),
                   child: Column(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          'assets/images/vasista_guru.png',
-                          height: 160,
-                          fit: BoxFit.contain,
+                      Container(
+                        height: heroHeight,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0x33221A44),
+                              Color(0x1AFFFFFF),
+                            ],
+                          ),
+                        ),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top: 12,
+                              left: 8,
+                              child: Container(
+                                width: 52,
+                                height: 52,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: const Color(0x33FFD77A),
+                                  border: Border.all(
+                                    color: const Color(0x55FFD77A),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 18,
+                              right: 8,
+                              child: Container(
+                                width: 66,
+                                height: 66,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: const Color(0x22FFD77A),
+                                  border: Border.all(
+                                    color: const Color(0x44FFD77A),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.asset(
+                                'assets/images/rishi_dashboard.png',
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topCenter,
+                                width: double.infinity,
+                                height: double.infinity,
+                                errorBuilder: (_, __, ___) => Image.asset(
+                                  'assets/images/vasista_guru.png',
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.topCenter,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(
+                                  horizontalPadding,
+                                  18,
+                                  horizontalPadding,
+                                  14,
+                                ),
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20),
+                                  ),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Color(0x00000000),
+                                      Color(0x7F000000),
+                                      Color(0xB2000000),
+                                    ],
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'वसिष्ठ भण्डारी समाज',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Color(0xFFFFE082),
+                                        fontSize: heroMainTitleSize,
+                                        fontWeight: FontWeight.w800,
+                                        height: 1.1,
+                                      ),
+                                    ),
+                                    SizedBox(height: 6),
+                                    Text(
+                                      'धर्मानन्द भण्डारीको',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: heroSubTitleSize,
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.1,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      'पारिवारिक विवरण स्मारिका',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Color(0xFFFFF3CD),
+                                        fontSize: heroThirdTitleSize,
+                                        fontWeight: FontWeight.w800,
+                                        height: 1.1,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 14),
                       Text(
                         l10n.appTitle,
                         style: Theme.of(context)
@@ -65,6 +204,30 @@ class DashboardScreen extends ConsumerWidget {
                             Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: Colors.white70,
                                 ),
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: horizontalPadding,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.24),
+                          ),
+                        ),
+                        child: const Text(
+                          'वंश, परम्परा र सम्वन्धहरुको जीवित अभिलेख',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: chipTextSize,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ],
                   ),

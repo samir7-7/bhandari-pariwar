@@ -55,17 +55,190 @@ class ElderSayingsScreen extends ConsumerWidget {
             );
           }
 
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+          final screenWidth = MediaQuery.of(context).size.width;
+          final crossAxisCount = screenWidth >= 900
+              ? 4
+              : screenWidth >= 640
+                  ? 3
+                  : 2;
+
+          return GridView.builder(
+            padding: const EdgeInsets.fromLTRB(14, 16, 14, 18),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              childAspectRatio: 0.82,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+            ),
             itemCount: content.sayings.length,
             itemBuilder: (context, index) {
-              return _ElderSayingCard(
-                saying: content.sayings[index],
+              final saying = content.sayings[index];
+              return _ElderPreviewCard(
+                saying: saying,
                 langCode: langCode,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => _ElderSayingDetailScreen(
+                        saying: saying,
+                        langCode: langCode,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );
         },
+      ),
+    );
+  }
+}
+
+class _ElderSayingDetailScreen extends StatelessWidget {
+  final ElderSaying saying;
+  final String langCode;
+
+  const _ElderSayingDetailScreen({
+    required this.saying,
+    required this.langCode,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.elderSayings)),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        children: [
+          _ElderSayingCard(saying: saying, langCode: langCode),
+        ],
+      ),
+    );
+  }
+}
+
+class _ElderPreviewCard extends StatelessWidget {
+  final ElderSaying saying;
+  final String langCode;
+  final VoidCallback onTap;
+
+  const _ElderPreviewCard({
+    required this.saying,
+    required this.langCode,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFFF9EFE0),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: const Color(0xFFB8860B).withValues(alpha: 0.28),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF6D4C2A).withValues(alpha: 0.10),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 12, 10, 10),
+          child: Column(
+            children: [
+              Container(
+                width: 74,
+                height: 74,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: const Color(0xFFB8860B),
+                    width: 2,
+                  ),
+                ),
+                child: ClipOval(
+                  child: _buildPhoto(saying.photoUrl, 74),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                saying.localizedName(langCode),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF4A3520),
+                  height: 1.25,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                saying.localizedTitle(langCode),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: const Color(0xFF8B5A2B).withValues(alpha: 0.9),
+                  fontStyle: FontStyle.italic,
+                  height: 1.25,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                'Tap to read',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF8B5A2B).withValues(alpha: 0.9),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPhoto(String? photoUrl, double size) {
+    if (photoUrl != null && photoUrl.isNotEmpty) {
+      return CachedNetworkImage(
+        imageUrl: photoUrl,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        placeholder: (_, __) => SizedBox(
+          width: size,
+          height: size,
+          child: const Center(
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
+        errorWidget: (_, __, ___) => _placeholderIcon(size),
+      );
+    }
+    return _placeholderIcon(size);
+  }
+
+  Widget _placeholderIcon(double size) {
+    return Container(
+      width: size,
+      height: size,
+      color: const Color(0xFFF5E6C8),
+      child: Icon(
+        Icons.person,
+        size: size * 0.45,
+        color: const Color(0xFF6D4C2A),
       ),
     );
   }

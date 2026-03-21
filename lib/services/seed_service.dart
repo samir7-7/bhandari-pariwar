@@ -502,11 +502,7 @@ class SeedService {
     final contentCollection =
         FirebaseFirestore.instance.collection('content');
     final doc = await contentCollection.doc('bidesh_samiti').get();
-    if (doc.exists) {
-      final data = doc.data();
-      final members = data?['members'] as List<dynamic>?;
-      if (members != null && members.isNotEmpty) return;
-    }
+    if (doc.exists) return;
 
     final content = KendriyaSamitiContent(
       members: _bideshSamitiData,

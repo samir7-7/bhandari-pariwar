@@ -40,7 +40,14 @@ class _EditKendriyaSamitiScreenState
   }
 
   Future<void> _save() async {
-    if (!_ensureAdminAccess()) return;
+    await _persistChanges(showSuccessMessage: true, closeOnSuccess: true);
+  }
+
+  Future<bool> _persistChanges({
+    bool showSuccessMessage = false,
+    bool closeOnSuccess = false,
+  }) async {
+    if (!_ensureAdminAccess()) return false;
 
     setState(() => _isSaving = true);
     try {
@@ -52,20 +59,30 @@ class _EditKendriyaSamitiScreenState
         ),
       );
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Saved successfully!')),
-        );
-        Navigator.of(context).pop();
+        if (showSuccessMessage) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Saved successfully!')),
+          );
+        }
+        if (closeOnSuccess) {
+          Navigator.of(context).pop();
+        }
       }
+      return true;
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e')),
         );
       }
+      return false;
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }
+  }
+
+  Future<void> _autoSaveSilently() async {
+    await _persistChanges();
   }
 
   bool _ensureAdminAccess() {
@@ -122,13 +139,14 @@ class _EditKendriyaSamitiScreenState
               child: Text(l10n.cancel),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 if (!_ensureAdminAccess()) {
                   Navigator.pop(ctx);
                   return;
                 }
                 setState(() => _members.removeAt(index));
                 Navigator.pop(ctx);
+                await _autoSaveSilently();
               },
               child: Text(l10n.delete,
                   style: const TextStyle(color: Colors.red)),
@@ -400,6 +418,7 @@ class _EditKendriyaSamitiScreenState
 
                 setState(() => isUploadingPhoto = false);
                 Navigator.pop(ctx);
+                await _autoSaveSilently();
               },
               child: Text(l10n.save),
             ),
@@ -489,6 +508,7 @@ class _EditKendriyaSamitiScreenState
                     _members[i] = _members[i].copyWith(serialNumber: i + 1);
                   }
                 });
+                _autoSaveSilently();
               },
               itemBuilder: (context, index) {
                 final member = _members[index];
