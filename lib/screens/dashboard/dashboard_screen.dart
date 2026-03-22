@@ -219,7 +219,7 @@ class DashboardScreen extends ConsumerWidget {
                             color: Colors.white.withValues(alpha: 0.24),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           'वंश, परम्परा र सम्वन्धहरुको जीवित अभिलेख',
                           textAlign: TextAlign.center,
                           style: TextStyle(
