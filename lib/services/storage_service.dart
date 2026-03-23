@@ -130,6 +130,19 @@ class StorageService {
     );
   }
 
+  Future<String> uploadMemorialSayingPhoto(
+    String sayingId,
+    File file, {
+    String? previousPublicUrl,
+  }) async {
+    return _uploadImage(
+      directory: 'memorial_sayings/$sayingId',
+      baseName: 'photo',
+      file: file,
+      previousPublicUrl: previousPublicUrl,
+    );
+  }
+
   Future<String> uploadKendriyaPhoto(
     String memberKey,
     File file, {

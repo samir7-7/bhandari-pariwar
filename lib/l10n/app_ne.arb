@@ -133,7 +133,11 @@
   "address": "ठेगाना",
   "position": "पद",
   "bideshSamiti": "विशेष समिति",
-  "elderSayings": "बुजुर्गहरूको भनाइ",
-  "elderSayingsSubtitle": "परिवारका ज्येष्ठहरूको महत्त्वपूर्ण वचन",
-  "noElderSayings": "बुजुर्गहरूको भनाइ अर्को छैनन्"
+  "elderSayings": "परिवारका सदस्यहरुको परिचय र अनुभव",
+  "elderSayingsSubtitle": "परिवारका सदस्यहरूको कथा र परिचय",
+  "noElderSayings": "अहिलेसम्म कुनै प्रविष्टि छैन",
+  "memorialSayings": "स्वर्गवासी बुबाआमाको स्मृतिमा",
+  "memorialSayingsSubtitle": "दिवंगत प्रियजनहरूको सम्झना र श्रद्धाञ्जलि",
+  "noMemorialSayings": "अहिलेसम्म कुनै स्मृति प्रविष्टि छैन",
+  "tapToRead": "पढ्न ट्याप गर्नुहोस्"
 }

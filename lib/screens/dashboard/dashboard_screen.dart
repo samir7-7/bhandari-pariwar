@@ -6,6 +6,7 @@ import 'package:bhandari_pariwar/providers/notice_provider.dart';
 import 'package:bhandari_pariwar/screens/about/kendriya_samiti_screen.dart';
 import 'package:bhandari_pariwar/screens/about/bidesh_samiti_screen.dart';
 import 'package:bhandari_pariwar/screens/about/elder_sayings_screen.dart';
+import 'package:bhandari_pariwar/screens/about/memorial_sayings_screen.dart';
 
 class DashboardScreen extends ConsumerWidget {
   final void Function(int tab) onNavigateToTab;
@@ -367,6 +368,20 @@ class DashboardScreen extends ConsumerWidget {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => const BideshSamitiScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  _QuickLinkCard(
+                    icon: Icons.local_florist,
+                    title: l10n.memorialSayings,
+                    subtitle: l10n.memorialSayingsSubtitle,
+                    color: const Color(0xFF6A1B9A),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const MemorialSayingsScreen(),
                         ),
                       );
                     },

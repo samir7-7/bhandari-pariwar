@@ -551,7 +551,7 @@ abstract class AppLocalizations {
   /// No description provided for @seedDataConfirm.
   ///
   /// In en, this message translates to:
-  /// **'This will load all family members into the database. Existing members with the same IDs will be overwritten. Continue?'**
+  /// **'This will safely load any NEW family members from the JSON into the database. Existing members from the app will NOT be overwritten. Continue?'**
   String get seedDataConfirm;
 
   /// No description provided for @seedDataSuccess.
@@ -743,26 +743,50 @@ abstract class AppLocalizations {
   /// No description provided for @bideshSamiti.
   ///
   /// In en, this message translates to:
-  /// **'Foreign Committee'**
+  /// **'Bishesh Samiti'**
   String get bideshSamiti;
 
   /// No description provided for @elderSayings.
   ///
   /// In en, this message translates to:
-  /// **'Sayings of the Elders'**
+  /// **'Family Members\' Introduction & Experience'**
   String get elderSayings;
 
   /// No description provided for @elderSayingsSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Wisdom from family elders'**
+  /// **'Stories and introductions from family members'**
   String get elderSayingsSubtitle;
 
   /// No description provided for @noElderSayings.
   ///
   /// In en, this message translates to:
-  /// **'No elder sayings yet'**
+  /// **'No entries yet'**
   String get noElderSayings;
+
+  /// No description provided for @memorialSayings.
+  ///
+  /// In en, this message translates to:
+  /// **'In Memory of Deceased Parents'**
+  String get memorialSayings;
+
+  /// No description provided for @memorialSayingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tributes and memories of departed loved ones'**
+  String get memorialSayingsSubtitle;
+
+  /// No description provided for @noMemorialSayings.
+  ///
+  /// In en, this message translates to:
+  /// **'No memorial entries yet'**
+  String get noMemorialSayings;
+
+  /// No description provided for @tapToRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to read'**
+  String get tapToRead;
 }
 
 class _AppLocalizationsDelegate

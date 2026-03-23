@@ -34,3 +34,8 @@ final elderSayingsProvider = StreamProvider<ElderSayingsContent?>((ref) {
   final service = ref.watch(contentServiceProvider);
   return service.watchElderSayings();
 });
+
+final memorialSayingsProvider = StreamProvider<ElderSayingsContent?>((ref) {
+  final service = ref.watch(contentServiceProvider);
+  return service.watchMemorialSayings();
+});

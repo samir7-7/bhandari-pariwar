@@ -133,7 +133,11 @@
   "address": "Address",
   "position": "Position",
   "bideshSamiti": "Bishesh Samiti",
-  "elderSayings": "Sayings of the Elders",
-  "elderSayingsSubtitle": "Wisdom from family elders",
-  "noElderSayings": "No elder sayings yet"
+  "elderSayings": "Family Members' Introduction & Experience",
+  "elderSayingsSubtitle": "Stories and introductions from family members",
+  "noElderSayings": "No entries yet",
+  "memorialSayings": "In Memory of Deceased Parents",
+  "memorialSayingsSubtitle": "Tributes and memories of departed loved ones",
+  "noMemorialSayings": "No memorial entries yet",
+  "tapToRead": "Tap to read"
 }

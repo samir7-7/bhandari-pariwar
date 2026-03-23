@@ -5,10 +5,10 @@ import 'package:bhandari_pariwar/l10n/app_localizations.dart';
 import 'package:bhandari_pariwar/providers/content_provider.dart';
 import 'package:bhandari_pariwar/providers/auth_provider.dart';
 import 'package:bhandari_pariwar/providers/settings_provider.dart';
-import 'package:bhandari_pariwar/screens/about/committee_screen.dart';
 import 'package:bhandari_pariwar/screens/about/kendriya_samiti_screen.dart';
 import 'package:bhandari_pariwar/screens/about/bidesh_samiti_screen.dart';
 import 'package:bhandari_pariwar/screens/about/elder_sayings_screen.dart';
+import 'package:bhandari_pariwar/screens/about/memorial_sayings_screen.dart';
 import 'package:bhandari_pariwar/screens/about/acknowledgements_screen.dart';
 
 class AboutScreen extends ConsumerWidget {
@@ -41,11 +41,11 @@ class AboutScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           _HistoryCard(langCode: langCode, isAdmin: isAdmin),
           const SizedBox(height: 16),
-          _CommitteeCard(langCode: langCode),
-          const SizedBox(height: 16),
           _KendriyaSamitiCard(langCode: langCode),
           const SizedBox(height: 16),
           _BideshSamitiCard(langCode: langCode),
+          const SizedBox(height: 16),
+          _MemorialSayingsCard(langCode: langCode),
           const SizedBox(height: 16),
           _ElderSayingsCard(langCode: langCode),
         ],
@@ -265,10 +265,10 @@ class _HistoryCard extends ConsumerWidget {
   }
 }
 
-class _CommitteeCard extends StatelessWidget {
+class _MemorialSayingsCard extends StatelessWidget {
   final String langCode;
 
-  const _CommitteeCard({required this.langCode});
+  const _MemorialSayingsCard({required this.langCode});
 
   @override
   Widget build(BuildContext context) {
@@ -276,17 +276,17 @@ class _CommitteeCard extends StatelessWidget {
 
     return Card(
       child: ListTile(
-        leading: const Icon(Icons.groups),
+        leading: const Icon(Icons.local_florist, color: Color(0xFF6A1B9A)),
         title: Text(
-          l10n.committee,
+          l10n.memorialSayings,
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        subtitle: Text(l10n.chairman),
+        subtitle: Text(l10n.memorialSayingsSubtitle),
         trailing: const Icon(Icons.chevron_right),
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => const CommitteeScreen(),
+              builder: (_) => const MemorialSayingsScreen(),
             ),
           );
         },

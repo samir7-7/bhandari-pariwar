@@ -100,4 +100,23 @@ class ContentService {
   Future<void> updateElderSayings(ElderSayingsContent content) async {
     await _collection.doc('elder_sayings').set(content.toFirestore());
   }
+
+  // --- Memorial Sayings ---
+
+  Stream<ElderSayingsContent?> watchMemorialSayings() {
+    return _collection.doc('memorial_sayings').snapshots().map(
+          (doc) =>
+              doc.exists ? ElderSayingsContent.fromFirestore(doc) : null,
+        );
+  }
+
+  Future<ElderSayingsContent?> getMemorialSayings() async {
+    final doc = await _collection.doc('memorial_sayings').get();
+    if (!doc.exists) return null;
+    return ElderSayingsContent.fromFirestore(doc);
+  }
+
+  Future<void> updateMemorialSayings(ElderSayingsContent content) async {
+    await _collection.doc('memorial_sayings').set(content.toFirestore());
+  }
 }

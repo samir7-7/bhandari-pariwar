@@ -241,7 +241,7 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get seedDataConfirm =>
-      'यसले सबै परिवारका सदस्यहरू डाटाबेसमा लोड गर्नेछ। समान ID भएका सदस्यहरू अधिलेखित हुनेछन्। जारी राख्ने?';
+      'यसले JSON बाट डाटाबेसमा कुनै पनि नयाँ परिवारका सदस्यहरू सुरक्षित रूपमा लोड गर्नेछ। अवस्थित सदस्यहरू अधिलेखित हुनेछैनन्। जारी राख्ने?';
 
   @override
   String seedDataSuccess(int count) {
@@ -345,14 +345,27 @@ class AppLocalizationsNe extends AppLocalizations {
   String get position => 'पद';
 
   @override
-  String get bideshSamiti => 'विदेश समिति';
+  String get bideshSamiti => 'विशेष समिति';
 
   @override
-  String get elderSayings => 'बुजुर्गहरूको भनाइ';
+  String get elderSayings => 'परिवारका सदस्यहरुको परिचय र अनुभव';
 
   @override
-  String get elderSayingsSubtitle => 'परिवारका ज्येष्ठहरूको महत्त्वपूर्ण वचन';
+  String get elderSayingsSubtitle => 'परिवारका सदस्यहरूको कथा र परिचय';
 
   @override
-  String get noElderSayings => 'बुजुर्गहरूको भनाइ अर्को छैनन्';
+  String get noElderSayings => 'अहिलेसम्म कुनै प्रविष्टि छैन';
+
+  @override
+  String get memorialSayings => 'स्वर्गवासी बुबाआमाको स्मृतिमा';
+
+  @override
+  String get memorialSayingsSubtitle =>
+      'दिवंगत प्रियजनहरूको सम्झना र श्रद्धाञ्जलि';
+
+  @override
+  String get noMemorialSayings => 'अहिलेसम्म कुनै स्मृति प्रविष्टि छैन';
+
+  @override
+  String get tapToRead => 'पढ्न ट्याप गर्नुहोस्';
 }

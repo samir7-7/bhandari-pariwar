@@ -57,6 +57,9 @@ class SeedService {
 
     // Auto-seed elder sayings if empty
     await seedElderSayingsIfEmpty();
+
+    // Auto-seed memorial sayings if empty
+    await seedMemorialSayingsIfEmpty();
   }
 
   Future<int> seedMembersFromAsset({bool replaceExisting = false}) async {
@@ -659,42 +662,27 @@ class SeedService {
     }
   }
 
+  /// Seeds memorial sayings if the document doesn't exist.
+  Future<void> seedMemorialSayingsIfEmpty() async {
+    final contentCollection =
+        FirebaseFirestore.instance.collection('content');
+    final doc = await contentCollection.doc('memorial_sayings').get();
+
+    if (!doc.exists) {
+      final content = ElderSayingsContent(
+        sayings: _memorialSayingsData,
+        updatedAt: DateTime.now(),
+      );
+      await contentCollection
+          .doc('memorial_sayings')
+          .set(content.toFirestore());
+    }
+  }
+
   static final List<ElderSaying> _elderSayingsData = [
     const ElderSaying(
-      id: 'elder_1',
-      order: 1,
-      name: {
-        'en': 'Late Pramananda Bhandari',
-        'ne': 'स्व. प्रमानन्द भण्डारी',
-      },
-      title: {
-        'en': 'In memory of Late Pramananda Bhandari — By Pitambar Bhandari (Health Service)',
-        'ne': 'स्व.प्रमानन्द भण्डारीको स्मृतिमा — नाम : पिताम्बर भण्डारी (स्वास्थ्य सेवा)',
-      },
-      saying: {
-        'en': 'Born in Khamladu in 1996 BS, Shri Pramananda Bhandari was the eldest son of father Lakshman Bhandari and mother Indradhya Bhandari, among three brothers.\n\n'
-            'From the very beginning, he stood as a symbol of responsibility, integrity, and assertiveness, presenting an ideal for family and society throughout his life.\n\n'
-            'In 2018 BS, braving difficult circumstances, he migrated towards the Madhesh region and began permanent settlement by clearing jungle in the small Barghare area of Damak. Despite hardships, his courage, foresight, and hard work transformed barren land into the center of a fertile life.\n\n'
-            'Together with his wife Durgadevi Bhandari, he not only raised four sons and six daughters but also provided them education, values, and practical knowledge for life. Discipline, affection, and compassion formed the foundation of his family.\n\n'
-            'Service to society, courage, and a helpful nature were his hallmarks. He selflessly encouraged the village community, supported those facing injustice, and provided reassurance in difficult times. His free land surveying service particularly earned him respect and reverence in society.\n\n'
-            'Following ancestral traditions, he arranged worship, rituals, and incense-lamp offerings as directed by the clan. With unwavering devotion to religion, culture, and tradition, he played a leading role in religious ceremonies and cultural programs.\n\n'
-            'His contributions to education and social service are memorable—he played a notable role in establishing schools, educational awareness, and genealogy preservation. He guided others toward self-reliance by connecting agriculture with modern technology.\n\n'
-            'After a long and virtuous life, he ascended to heaven in 2076 BS. Though his body has departed, the values, principles, and inspiration he planted will forever live on in the family and society.\n\n'
-            'Thus, the life of Shri Pramananda Bhandari stands as an immortal saga inscribed in courage, service, religion, tradition, and values—remembering which feels like reading a handwritten memorial etched by the heart.',
-        'ne': 'वि.सं. १९९६ सालमा खाम्लाडु मा जन्मिएका श्री प्रमानन्द भण्डारी, पिता लक्ष्मण भण्डारी र माता इन्द्रध्या भण्डारीका सुपुत्र, तीन दाजुभाइमध्ये जेठा सन्तान हुनुहुन्थ्यो।\n'
-            'प्रारम्भदेखि नै जिम्मेवारी, सत्यनिष्ठा र हक्की स्वभावका प्रतीक उहाँले जीवनभर परिवार र समाजका लागि आदर्श प्रस्तुत गर्नुभयो।\n\n'
-            'वि.सं. २०१८ सालमा कठिन परिस्थितिलाई चिर्दै मधेसतर्फ झरेर दमक को सानो बारघरे क्षेत्रमा झोडा फडानी गरी स्थायी बसोबास आरम्भ गर्नुभयो। कठिनाइका बाबजुद उहाँको साहस, दूरदृष्टि र मेहनतले उजाड भूमिलाई उर्वर जीवनको केन्द्रमा परिणत गर्\u200dयो।\n\n'
-            'उहाँकी धर्मपत्नी दुर्गादेवी भण्डारीसँग मिलेर चार छोरा र छ छोरीको पालन–पोषण गर्नु मात्र नभई उनीहरूलाई शिक्षा, संस्कार र जीवनोपयोगी ज्ञान प्रदान गर्नुभयो। अनुशासन, ममता र करुणा उहाँको परिवारको आधार बने।\n\n'
-            'समाजप्रति सेवा, आट–हिम्मत र सहयोग गर्ने स्वभाव उहाँको विशेषता थियो। गाउँ–समाजलाई प्रोत्साहन दिने, अन्यायमा परेकालाई सहारा दिने र कठिन घडीमा ढाडस दिने कार्य उहाँले सधैं निःस्वार्थ रूपमा गर्नुभयो। विशेषगरी जग्गा नाप–जाँचमा निःशुल्क सेवा दिने कार्यले समाजमा उहाँको सम्मान र श्रद्धा बढायो।\n\n'
-            'श्री भण्डारीले कुलपरम्पराको सम्मानमा कुलको निर्देशन अनुसार पूजा, आजा र धुप–दियोको व्यवस्था गर्नुहुन्थ्यो। धर्म, संस्कृति र परम्पराप्रति अटल श्रद्धा राख्दै उहाँले धार्मिक अनुष्ठान र सांस्कृतिक कार्यक्रममा अग्रणी भूमिका निभाउनुभयो।\n\n'
-            'शिक्षा र समाजसेवामा उहाँको योगदान स्मरणीय छ—विद्यालय स्थापना, शैक्षिक जागरण र वंशावली संरक्षणमा उहाँले उल्लेखनीय भूमिका निभाउनुभयो। कृषि पेशालाई आधुनिक प्रविधिसँग जोडी आत्मनिर्भर बन्न मार्गदर्शन दिनुभयो।\n\n'
-            'दीर्घ कर्ममय जीवन पश्चात् वि.सं. २०७६ सालमा उहाँ स्वर्गारोहण गर्नुभयो। उहाँको देह विलीन भए पनि उहाँले रोपेका संस्कार, मूल्य र प्रेरणा परिवार र समाजमा सधैं जीवित रहनेछन्।\n\n'
-            'यसरी श्री प्रमानन्द भण्डारीको जीवन साहस, सेवा, धर्म, परम्परा र संस्कारमा अंकित अमित गाथा बनेको छ—जसलाई सम्झँदा मनले कोरिएको हस्तलिखित स्मृतिशिला सम्झन हुन्छ।',
-      },
-    ),
-    const ElderSaying(
       id: 'elder_2',
-      order: 2,
+      order: 1,
       name: {
         'en': 'Krishna (Buddhinath) Bhandari',
         'ne': 'कृष्ण (बुद्धिनाथ) भण्डारी',
@@ -734,6 +722,41 @@ class SeedService {
             'Socially responsible\n'
             'Respectful of Nepali culture and traditions\n\n'
             'His presence in traditional attire reflects a deep sense of Nepali identity and dignity.',
+      },
+    ),
+  ];
+
+  static final List<ElderSaying> _memorialSayingsData = [
+    const ElderSaying(
+      id: 'memorial_1',
+      order: 1,
+      name: {
+        'en': 'Late Pramananda Bhandari',
+        'ne': 'स्व. प्रमानन्द भण्डारी',
+      },
+      title: {
+        'en': 'In memory of Late Pramananda Bhandari — By Pitambar Bhandari (Health Service)',
+        'ne': 'स्व.प्रमानन्द भण्डारीको स्मृतिमा — नाम : पिताम्बर भण्डारी (स्वास्थ्य सेवा)',
+      },
+      saying: {
+        'en': 'Born in Khamladu in 1996 BS, Shri Pramananda Bhandari was the eldest son of father Lakshman Bhandari and mother Indradhya Bhandari, among three brothers.\n\n'
+            'From the very beginning, he stood as a symbol of responsibility, integrity, and assertiveness, presenting an ideal for family and society throughout his life.\n\n'
+            'In 2018 BS, braving difficult circumstances, he migrated towards the Madhesh region and began permanent settlement by clearing jungle in the small Barghare area of Damak. Despite hardships, his courage, foresight, and hard work transformed barren land into the center of a fertile life.\n\n'
+            'Together with his wife Durgadevi Bhandari, he not only raised four sons and six daughters but also provided them education, values, and practical knowledge for life. Discipline, affection, and compassion formed the foundation of his family.\n\n'
+            'Service to society, courage, and a helpful nature were his hallmarks. He selflessly encouraged the village community, supported those facing injustice, and provided reassurance in difficult times. His free land surveying service particularly earned him respect and reverence in society.\n\n'
+            'Following ancestral traditions, he arranged worship, rituals, and incense-lamp offerings as directed by the clan. With unwavering devotion to religion, culture, and tradition, he played a leading role in religious ceremonies and cultural programs.\n\n'
+            'His contributions to education and social service are memorable—he played a notable role in establishing schools, educational awareness, and genealogy preservation. He guided others toward self-reliance by connecting agriculture with modern technology.\n\n'
+            'After a long and virtuous life, he ascended to heaven in 2076 BS. Though his body has departed, the values, principles, and inspiration he planted will forever live on in the family and society.\n\n'
+            'Thus, the life of Shri Pramananda Bhandari stands as an immortal saga inscribed in courage, service, religion, tradition, and values—remembering which feels like reading a handwritten memorial etched by the heart.',
+        'ne': 'वि.सं. १९९६ सालमा खाम्लाडु मा जन्मिएका श्री प्रमानन्द भण्डारी, पिता लक्ष्मण भण्डारी र माता इन्द्रध्या भण्डारीका सुपुत्र, तीन दाजुभाइमध्ये जेठा सन्तान हुनुहुन्थ्यो।\n'
+            'प्रारम्भदेखि नै जिम्मेवारी, सत्यनिष्ठा र हक्की स्वभावका प्रतीक उहाँले जीवनभर परिवार र समाजका लागि आदर्श प्रस्तुत गर्नुभयो।\n\n'
+            'वि.सं. २०१८ सालमा कठिन परिस्थितिलाई चिर्दै मधेसतर्फ झरेर दमक को सानो बारघरे क्षेत्रमा झोडा फडानी गरी स्थायी बसोबास आरम्भ गर्नुभयो। कठिनाइका बाबजुद उहाँको साहस, दूरदृष्टि र मेहनतले उजाड भूमिलाई उर्वर जीवनको केन्द्रमा परिणत गर्\u200dयो।\n\n'
+            'उहाँकी धर्मपत्नी दुर्गादेवी भण्डारीसँग मिलेर चार छोरा र छ छोरीको पालन–पोषण गर्नु मात्र नभई उनीहरूलाई शिक्षा, संस्कार र जीवनोपयोगी ज्ञान प्रदान गर्नुभयो। अनुशासन, ममता र करुणा उहाँको परिवारको आधार बने।\n\n'
+            'समाजप्रति सेवा, आट–हिम्मत र सहयोग गर्ने स्वभाव उहाँको विशेषता थियो। गाउँ–समाजलाई प्रोत्साहन दिने, अन्यायमा परेकालाई सहारा दिने र कठिन घडीमा ढाडस दिने कार्य उहाँले सधैं निःस्वार्थ रूपमा गर्नुभयो। विशेषगरी जग्गा नाप–जाँचमा निःशुल्क सेवा दिने कार्यले समाजमा उहाँको सम्मान र श्रद्धा बढायो।\n\n'
+            'श्री भण्डारीले कुलपरम्पराको सम्मानमा कुलको निर्देशन अनुसार पूजा, आजा र धुप–दियोको व्यवस्था गर्नुहुन्थ्यो। धर्म, संस्कृति र परम्पराप्रति अटल श्रद्धा राख्दै उहाँले धार्मिक अनुष्ठान र सांस्कृतिक कार्यक्रममा अग्रणी भूमिका निभाउनुभयो।\n\n'
+            'शिक्षा र समाजसेवामा उहाँको योगदान स्मरणीय छ—विद्यालय स्थापना, शैक्षिक जागरण र वंशावली संरक्षणमा उहाँले उल्लेखनीय भूमिका निभाउनुभयो। कृषि पेशालाई आधुनिक प्रविधिसँग जोडी आत्मनिर्भर बन्न मार्गदर्शन दिनुभयो।\n\n'
+            'दीर्घ कर्ममय जीवन पश्चात् वि.सं. २०७६ सालमा उहाँ स्वर्गारोहण गर्नुभयो। उहाँको देह विलीन भए पनि उहाँले रोपेका संस्कार, मूल्य र प्रेरणा परिवार र समाजमा सधैं जीवित रहनेछन्।\n\n'
+            'यसरी श्री प्रमानन्द भण्डारीको जीवन साहस, सेवा, धर्म, परम्परा र संस्कारमा अंकित अमित गाथा बनेको छ—जसलाई सम्झँदा मनले कोरिएको हस्तलिखित स्मृतिशिला सम्झन हुन्छ।',
       },
     ),
   ];

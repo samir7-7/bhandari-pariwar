@@ -240,7 +240,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get seedDataConfirm =>
-      'This will load all family members into the database. Existing members with the same IDs will be overwritten. Continue?';
+      'This will safely load any NEW family members from the JSON into the database. Existing members from the app will NOT be overwritten. Continue?';
 
   @override
   String seedDataSuccess(int count) {
@@ -344,14 +344,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get position => 'Position';
 
   @override
-  String get bideshSamiti => 'Foreign Committee';
+  String get bideshSamiti => 'Bishesh Samiti';
 
   @override
-  String get elderSayings => 'Sayings of the Elders';
+  String get elderSayings => 'Family Members\' Introduction & Experience';
 
   @override
-  String get elderSayingsSubtitle => 'Wisdom from family elders';
+  String get elderSayingsSubtitle =>
+      'Stories and introductions from family members';
 
   @override
-  String get noElderSayings => 'No elder sayings yet';
+  String get noElderSayings => 'No entries yet';
+
+  @override
+  String get memorialSayings => 'In Memory of Deceased Parents';
+
+  @override
+  String get memorialSayingsSubtitle =>
+      'Tributes and memories of departed loved ones';
+
+  @override
+  String get noMemorialSayings => 'No memorial entries yet';
+
+  @override
+  String get tapToRead => 'Tap to read';
 }

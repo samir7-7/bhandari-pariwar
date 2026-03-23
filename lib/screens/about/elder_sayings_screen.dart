@@ -132,6 +132,7 @@ class _ElderPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
@@ -196,7 +197,7 @@ class _ElderPreviewCard extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'Tap to read',
+                l10n.tapToRead,
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
