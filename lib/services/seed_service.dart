@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:bhandari_pariwar/models/kendriya_samiti.dart';
 import 'package:bhandari_pariwar/models/elder_saying.dart';
 import 'package:bhandari_pariwar/models/committee_member.dart';
@@ -26,8 +26,7 @@ class SeedService {
   final _membersCollection =
       FirebaseFirestore.instance.collection('members');
   static bool _autoSeedDone = false;
-  static const _membersSeedChecksumKey = 'members_seed_checksum_v1';
-  static const _elderSayingsSeedVersionKey = 'elder_sayings_seed_version_v1';
+
 
   Future<void> _ensureFirebaseAuth() async {
     final auth = FirebaseAuth.instance;
