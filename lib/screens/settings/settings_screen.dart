@@ -174,7 +174,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     try {
       final seedService = ref.read(seedServiceProvider);
       final count = await seedService.seedMembersFromAsset(
-        replaceExisting: true,
+        replaceExisting: false,
       );
 
       if (mounted) {

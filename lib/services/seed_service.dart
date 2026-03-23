@@ -41,27 +41,11 @@ class SeedService {
     if (_autoSeedDone) return;
     _autoSeedDone = true;
 
-    final currentChecksum = await _computeCurrentMembersAssetChecksum();
-    final prefs = await SharedPreferences.getInstance();
-    final appliedChecksum = prefs.getString(_membersSeedChecksumKey);
-
     final snap = await _membersCollection.limit(1).get();
     if (snap.docs.isEmpty) {
       await seedMembersFromAsset();
-      await prefs.setString(_membersSeedChecksumKey, currentChecksum);
-    } else if (appliedChecksum != currentChecksum) {
-      // Asset changed: drop old members and re-import cleanly.
-      await seedMembersFromAsset(replaceExisting: true);
-      await prefs.setString(_membersSeedChecksumKey, currentChecksum);
-    } else {
-      // Checksum can match while collection still contains stale or missing docs.
-      // Keep Firestore exactly aligned with the provided seed IDs.
-      final inSync = await _isMembersCollectionInSyncWithAsset();
-      if (!inSync) {
-        await seedMembersFromAsset(replaceExisting: true);
-        await prefs.setString(_membersSeedChecksumKey, currentChecksum);
-      }
     }
+
 
     // Auto-seed kendriya samiti if empty
     await seedKendriyaSamitiIfEmpty();
@@ -88,6 +72,10 @@ class SeedService {
     final jsonString = payload.jsonString;
     final List<dynamic> membersJson = payload.members;
 
+    // Fetch existing IDs to avoid overwriting them
+    final existingSnap = await _membersCollection.get();
+    final existingIds = existingSnap.docs.map((d) => d.id).toSet();
+
     var batch = FirebaseFirestore.instance.batch();
     int count = 0;
     int batchCount = 0;
@@ -95,6 +83,14 @@ class SeedService {
 
     for (final memberData in membersJson) {
       final id = memberData['id'] as String;
+      
+      sourceOrder++;
+
+      // If we aren't replacing existing, and the member already exists, skip it.
+      if (!replaceExisting && existingIds.contains(id)) {
+        continue;
+      }
+
       final doc = _membersCollection.doc(id);
 
       final birthDate = _parseDate(memberData['birthDate']);
@@ -138,7 +134,6 @@ class SeedService {
       batch.set(doc, data);
       count++;
       batchCount++;
-      sourceOrder++;
 
       // Firestore batches are limited to 500 operations.
       if (batchCount >= 450) {
@@ -151,10 +146,6 @@ class SeedService {
     if (batchCount > 0) {
       await batch.commit();
     }
-
-    final checksum = _checksumOf(jsonString);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_membersSeedChecksumKey, checksum);
 
     return count;
   }
@@ -652,44 +643,13 @@ class SeedService {
   ];
 
   /// Seeds elder sayings if the document doesn't exist or has no sayings.
-  /// Also checks version to re-seed when new sayings are added.
   Future<void> seedElderSayingsIfEmpty() async {
-    final prefs = await SharedPreferences.getInstance();
-    const currentVersion = 2; // Increment this when elder sayings data changes
-    final savedVersion = prefs.getInt(_elderSayingsSeedVersionKey) ?? 0;
-    
     final contentCollection =
         FirebaseFirestore.instance.collection('content');
     final doc = await contentCollection.doc('elder_sayings').get();
     
-    // Always merge if version changed or doc doesn't exist
-    if (!doc.exists || savedVersion < currentVersion) {
-      if (doc.exists) {
-        final data = doc.data();
-        final sayings = data?['sayings'] as List<dynamic>?;
-        if (sayings != null && sayings.isNotEmpty) {
-          final existing = sayings
-              .whereType<Map<String, dynamic>>()
-              .map(ElderSaying.fromMap)
-              .toList();
-          final existingIds = existing.map((s) => s.id).toSet();
-          final missingDefaults = _elderSayingsData
-              .where((s) => !existingIds.contains(s.id))
-              .toList();
-
-          final merged = [...existing, ...missingDefaults]
-            ..sort((a, b) => a.order.compareTo(b.order));
-          await contentCollection.doc('elder_sayings').set(
-                ElderSayingsContent(
-                  sayings: merged,
-                  updatedAt: DateTime.now(),
-                ).toFirestore(),
-              );
-          await prefs.setInt(_elderSayingsSeedVersionKey, currentVersion);
-          return;
-        }
-      }
-
+    // Only seed if doc doesn't exist. We don't merge or overwrite to preserve user/admin edits.
+    if (!doc.exists) {
       final content = ElderSayingsContent(
         sayings: _elderSayingsData,
         updatedAt: DateTime.now(),
@@ -697,7 +657,6 @@ class SeedService {
       await contentCollection
           .doc('elder_sayings')
           .set(content.toFirestore());
-      await prefs.setInt(_elderSayingsSeedVersionKey, currentVersion);
     }
   }
 

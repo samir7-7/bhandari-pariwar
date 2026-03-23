@@ -184,22 +184,29 @@ class StorageService {
       final optimized = await _prepareOptimizedImage(file);
       final extension = _fileExtension(optimized.path);
       final ts = DateTime.now().millisecondsSinceEpoch;
-      final path = '$directory/${baseName}_$ts.$extension';
+      // Use steady path so Supabase overwrites existing image instead of creating duplicates.
+      final path = '$directory/$baseName.$extension';
 
       await _storage.from(SupabaseOptions.photosBucket).upload(
         path,
         optimized,
         fileOptions: FileOptions(
           contentType: _contentTypeFor(extension),
-          upsert: false,
+          upsert: true,
         ),
       );
 
-      final publicUrl =
+      final rawUrl =
           _storage.from(SupabaseOptions.photosBucket).getPublicUrl(path);
+          
+      // Bust Flutter's image cache by appending timestamp query to the URL
+      final publicUrl = '$rawUrl?v=$ts';
 
-      if (previousPublicUrl != null && previousPublicUrl != publicUrl) {
-        await deleteByPublicUrl(previousPublicUrl);
+      if (previousPublicUrl != null) {
+        final oldPath = _extractStoragePathFromPublicUrl(previousPublicUrl);
+        if (oldPath != null && oldPath != path) {
+          await deleteByPublicUrl(previousPublicUrl);
+        }
       }
 
       if (optimized.path != file.path) {
