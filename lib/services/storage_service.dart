@@ -169,6 +169,37 @@ class StorageService {
     );
   }
 
+  /// Lists the files in [directory] inside the photos bucket and returns the
+  /// public URL of the first image found.  Returns `null` when the directory
+  /// is empty or does not exist.  Useful as a fallback when the stored
+  /// `photoUrl` points to a file that has been renamed / deleted.
+  Future<String?> resolveDirectoryPhotoUrl(String directory) async {
+    try {
+      await _ensureAuthenticated();
+      final files = await _storage
+          .from(SupabaseOptions.photosBucket)
+          .list(path: directory);
+
+      if (files.isEmpty) return null;
+
+      // Pick the first real file (skip any `.emptyFolderPlaceholder`).
+      final file = files.firstWhere(
+        (f) => f.name != '.emptyFolderPlaceholder',
+        orElse: () => files.first,
+      );
+
+      if (file.name == '.emptyFolderPlaceholder') return null;
+
+      final path = '$directory/${file.name}';
+      final rawUrl =
+          _storage.from(SupabaseOptions.photosBucket).getPublicUrl(path);
+      final ts = DateTime.now().millisecondsSinceEpoch;
+      return '$rawUrl?v=$ts';
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> deleteFile(String path) async {
     try {
       await _ensureAuthenticated();
@@ -353,5 +384,97 @@ class StorageService {
       // Let upload attempt continue; storage policies will decide access.
       return;
     }
+  }
+
+  // ── Gallery ──────────────────────────────────────────────────────────
+
+  static const int galleryMaxPhotos = 7;
+  static const String _galleryDirectory = 'gallery';
+
+  /// Upload a gallery photo and enforce the max-photo limit.
+  Future<String> uploadGalleryPhoto(File file) async {
+    await _ensureAuthenticated();
+
+    final optimized = await _prepareOptimizedImage(file);
+    final extension = _fileExtension(optimized.path);
+    final ts = DateTime.now().millisecondsSinceEpoch;
+    final path = '$_galleryDirectory/$ts.$extension';
+
+    await _storage.from(SupabaseOptions.photosBucket).upload(
+      path,
+      optimized,
+      fileOptions: FileOptions(
+        contentType: _contentTypeFor(extension),
+        upsert: true,
+      ),
+    );
+
+    final rawUrl =
+        _storage.from(SupabaseOptions.photosBucket).getPublicUrl(path);
+    final publicUrl = '$rawUrl?v=$ts';
+
+    if (optimized.path != file.path) {
+      try {
+        await optimized.delete();
+      } catch (_) {}
+    }
+
+    // Enforce limit — delete oldest photos beyond the max.
+    await enforceGalleryLimit();
+
+    return publicUrl;
+  }
+
+  /// List all gallery photo URLs sorted newest-first.
+  Future<List<String>> listGalleryPhotos() async {
+    try {
+      await _ensureAuthenticated();
+      final files = await _storage
+          .from(SupabaseOptions.photosBucket)
+          .list(path: _galleryDirectory, searchOptions: const SearchOptions(sortBy: SortBy(column: 'name', order: 'desc')));
+
+      final urls = <String>[];
+      for (final file in files) {
+        if (file.name == '.emptyFolderPlaceholder') continue;
+        final path = '$_galleryDirectory/${file.name}';
+        final rawUrl =
+            _storage.from(SupabaseOptions.photosBucket).getPublicUrl(path);
+        final ts = DateTime.now().millisecondsSinceEpoch;
+        urls.add('$rawUrl?v=$ts');
+      }
+      return urls;
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// Delete a gallery photo by its public URL.
+  Future<void> deleteGalleryPhoto(String publicUrl) async {
+    await deleteByPublicUrl(publicUrl);
+  }
+
+  /// Enforce gallery limit: if more than [galleryMaxPhotos], delete the oldest.
+  Future<void> enforceGalleryLimit() async {
+    try {
+      await _ensureAuthenticated();
+      final files = await _storage
+          .from(SupabaseOptions.photosBucket)
+          .list(path: _galleryDirectory, searchOptions: const SearchOptions(sortBy: SortBy(column: 'name', order: 'asc')));
+
+      // Filter out placeholders.
+      final realFiles = files
+          .where((f) => f.name != '.emptyFolderPlaceholder')
+          .toList();
+
+      if (realFiles.length > galleryMaxPhotos) {
+        final toDelete = realFiles.sublist(0, realFiles.length - galleryMaxPhotos);
+        for (final file in toDelete) {
+          final path = '$_galleryDirectory/${file.name}';
+          try {
+            await _storage.from(SupabaseOptions.photosBucket).remove([path]);
+          } catch (_) {}
+        }
+      }
+    } catch (_) {}
   }
 }

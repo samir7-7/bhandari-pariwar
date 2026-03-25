@@ -340,7 +340,7 @@ final memberDisplayGenerationProvider = Provider<Map<String, int>>((ref) {
 
   final base = ref.watch(generationBaseProvider);
   return {
-    for (final entry in raw.entries) entry.key: entry.value + (base - 1),
+    for (final entry in raw.entries) entry.key: entry.value + base,
   };
 });
 
@@ -356,7 +356,7 @@ final maxDisplayGenerationProvider = Provider<int>((ref) {
   final maxDepth = ref.watch(maxGenerationDepthProvider);
   final base = ref.watch(generationBaseProvider);
   if (maxDepth == 0) return base;
-  return maxDepth + (base - 1);
+  return maxDepth + base;
 });
 
 /// Current generation depth setting for the slider.

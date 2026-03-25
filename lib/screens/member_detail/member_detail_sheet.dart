@@ -213,14 +213,14 @@ class MemberDetailSheet extends ConsumerWidget {
                       if (displayBirthDateAd != null)
                         _InfoRow(
                           icon: Icons.cake_outlined,
-                          label: 'Birth (AD)',
+                          label: l10n.birthAD,
                           value: dateFormat.format(displayBirthDateAd),
                           iconColor: Colors.green.shade400,
                         ),
                       if ((member.birthDateBs ?? '').trim().isNotEmpty)
                         _InfoRow(
                           icon: Icons.event_note_outlined,
-                          label: 'Birth (BS)',
+                          label: l10n.birthBS,
                           value: member.birthDateBs!.trim(),
                           iconColor: Colors.green.shade300,
                         ),
@@ -257,84 +257,84 @@ class MemberDetailSheet extends ConsumerWidget {
                       if (motherName.isNotEmpty)
                         _InfoRow(
                           icon: Icons.badge_outlined,
-                          label: 'Mother Name',
+                          label: l10n.motherName,
                           value: motherName,
                           iconColor: const Color(0xFF8B7355),
                         ),
                       if (birthPlace.isNotEmpty)
                         _InfoRow(
                           icon: Icons.place_outlined,
-                          label: 'Birth Place',
+                          label: l10n.birthPlace,
                           value: birthPlace,
                           iconColor: Colors.brown.shade400,
                         ),
                       if (currentAddress.isNotEmpty)
                         _InfoRow(
                           icon: Icons.home_outlined,
-                          label: 'Current Address',
+                          label: l10n.currentAddress,
                           value: currentAddress,
                           iconColor: Colors.brown.shade400,
                         ),
                       if (permanentAddress.isNotEmpty)
                         _InfoRow(
                           icon: Icons.location_city_outlined,
-                          label: 'Permanent Address',
+                          label: l10n.permanentAddress,
                           value: permanentAddress,
                           iconColor: Colors.brown.shade400,
                         ),
                       if ((member.mobilePrimary ?? '').trim().isNotEmpty)
                         _InfoRow(
                           icon: Icons.phone_outlined,
-                          label: 'Mobile',
+                          label: l10n.mobile,
                           value: member.mobilePrimary!.trim(),
                           iconColor: Colors.teal.shade500,
                         ),
                       if ((member.mobileSecondary ?? '').trim().isNotEmpty)
                         _InfoRow(
                           icon: Icons.phone_android_outlined,
-                          label: 'Alt Mobile',
+                          label: l10n.altMobile,
                           value: member.mobileSecondary!.trim(),
                           iconColor: Colors.teal.shade400,
                         ),
                       if ((member.email ?? '').trim().isNotEmpty)
                         _InfoRow(
                           icon: Icons.email_outlined,
-                          label: 'Email',
+                          label: l10n.email,
                           value: member.email!.trim(),
                           iconColor: Colors.blueGrey.shade500,
                         ),
                       if (education.isNotEmpty)
                         _InfoRow(
                           icon: Icons.school_outlined,
-                          label: 'Education/Profession',
+                          label: l10n.educationProfession,
                           value: education,
                           iconColor: Colors.indigo.shade400,
                         ),
                       if ((member.bloodGroup ?? '').trim().isNotEmpty)
                         _InfoRow(
                           icon: Icons.bloodtype_outlined,
-                          label: 'Blood Group',
+                          label: l10n.bloodGroup,
                           value: member.bloodGroup!.trim(),
                           iconColor: Colors.red.shade400,
                         ),
                       if (member.familyCount != null)
                         _InfoRow(
                           icon: Icons.groups_outlined,
-                          label: 'Family Count',
+                          label: l10n.familyCount,
                           value: member.familyCount.toString(),
                           iconColor: Colors.deepOrange.shade400,
                         ),
                       if (member.sonsCount != null)
                         _InfoRow(
                           icon: Icons.boy_outlined,
-                          label: 'Sons',
+                          label: l10n.sons,
                           value: member.sonsCount.toString(),
                           iconColor: Colors.orange.shade500,
                         ),
                       if (member.daughtersCount != null)
                         _InfoRow(
                           icon: Icons.girl_outlined,
-                          label: 'Daughters',
+                          label: l10n.daughters,
                           value: member.daughtersCount.toString(),
                           iconColor: Colors.pink.shade300,
                         ),
@@ -350,7 +350,7 @@ class MemberDetailSheet extends ConsumerWidget {
                       if (note.isNotEmpty)
                         _InfoRow(
                           icon: Icons.format_quote_outlined,
-                          label: 'Notes',
+                          label: l10n.notes,
                           value: note,
                           iconColor: const Color(0xFF8B7355),
                         ),
@@ -377,7 +377,7 @@ class MemberDetailSheet extends ConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Text(
-                            'No additional details available',
+                            l10n.noAdditionalDetails,
                             style: TextStyle(
                               color: Colors.grey.shade400,
                               fontStyle: FontStyle.italic,

@@ -10,6 +10,7 @@ import 'package:bhandari_pariwar/screens/about/bidesh_samiti_screen.dart';
 import 'package:bhandari_pariwar/screens/about/elder_sayings_screen.dart';
 import 'package:bhandari_pariwar/screens/about/memorial_sayings_screen.dart';
 import 'package:bhandari_pariwar/screens/about/acknowledgements_screen.dart';
+import 'package:bhandari_pariwar/screens/about/gallery_screen.dart' as bhandari_gallery;
 
 class AboutScreen extends ConsumerWidget {
   final VoidCallback? onBack;
@@ -48,6 +49,8 @@ class AboutScreen extends ConsumerWidget {
           _MemorialSayingsCard(langCode: langCode),
           const SizedBox(height: 16),
           _ElderSayingsCard(langCode: langCode),
+          const SizedBox(height: 16),
+          _GalleryCard(langCode: langCode),
         ],
       ),
     );
@@ -377,6 +380,36 @@ class _ElderSayingsCard extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => const ElderSayingsScreen(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _GalleryCard extends StatelessWidget {
+  final String langCode;
+
+  const _GalleryCard({required this.langCode});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Card(
+      child: ListTile(
+        leading: const Icon(Icons.photo_library, color: Color(0xFFC2185B)),
+        title: Text(
+          l10n.gallery,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Text(l10n.gallerySubtitle),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const bhandari_gallery.GalleryScreen(),
             ),
           );
         },

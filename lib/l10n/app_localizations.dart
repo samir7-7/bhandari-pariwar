@@ -787,6 +787,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to read'**
   String get tapToRead;
+
+  /// No description provided for @birthAD.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth (AD)'**
+  String get birthAD;
+
+  /// No description provided for @birthBS.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth (BS)'**
+  String get birthBS;
+
+  /// No description provided for @motherName.
+  ///
+  /// In en, this message translates to:
+  /// **'Mother\'s Name'**
+  String get motherName;
+
+  /// No description provided for @birthPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth Place'**
+  String get birthPlace;
+
+  /// No description provided for @currentAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Address'**
+  String get currentAddress;
+
+  /// No description provided for @permanentAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent Address'**
+  String get permanentAddress;
+
+  /// No description provided for @mobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile'**
+  String get mobile;
+
+  /// No description provided for @altMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Alt Mobile'**
+  String get altMobile;
+
+  /// No description provided for @educationProfession.
+  ///
+  /// In en, this message translates to:
+  /// **'Education/Profession'**
+  String get educationProfession;
+
+  /// No description provided for @bloodGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood Group'**
+  String get bloodGroup;
+
+  /// No description provided for @familyCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Family Count'**
+  String get familyCount;
+
+  /// No description provided for @sons.
+  ///
+  /// In en, this message translates to:
+  /// **'Sons'**
+  String get sons;
+
+  /// No description provided for @daughters.
+  ///
+  /// In en, this message translates to:
+  /// **'Daughters'**
+  String get daughters;
+
+  /// No description provided for @notes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notes;
+
+  /// No description provided for @noAdditionalDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'No additional details available'**
+  String get noAdditionalDetails;
+
+  /// No description provided for @personalDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Details'**
+  String get personalDetails;
+
+  /// No description provided for @relationships.
+  ///
+  /// In en, this message translates to:
+  /// **'Relationships'**
+  String get relationships;
+
+  /// No description provided for @adminActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Actions'**
+  String get adminActions;
+
+  /// No description provided for @gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get gallery;
+
+  /// No description provided for @gallerySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Family photos and memories'**
+  String get gallerySubtitle;
+
+  /// No description provided for @addPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photo'**
+  String get addPhoto;
+
+  /// No description provided for @noPhotosYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No photos yet'**
+  String get noPhotosYet;
+
+  /// No description provided for @deletePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Photo'**
+  String get deletePhoto;
+
+  /// No description provided for @deletePhotoConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this photo?'**
+  String get deletePhotoConfirm;
+
+  /// No description provided for @photoAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo added successfully!'**
+  String get photoAdded;
+
+  /// No description provided for @photoDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo deleted successfully!'**
+  String get photoDeleted;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
 }
 
 class _AppLocalizationsDelegate

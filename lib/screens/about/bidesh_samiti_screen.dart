@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:bhandari_pariwar/l10n/app_localizations.dart';
 import 'package:bhandari_pariwar/models/kendriya_samiti.dart';
 import 'package:bhandari_pariwar/providers/content_provider.dart';
 import 'package:bhandari_pariwar/providers/settings_provider.dart';
 import 'package:bhandari_pariwar/providers/auth_provider.dart';
 import 'package:bhandari_pariwar/screens/about/edit_bidesh_samiti_screen.dart';
+import 'package:bhandari_pariwar/widgets/smart_photo.dart';
 
 class BideshSamitiScreen extends ConsumerWidget {
   const BideshSamitiScreen({super.key});
@@ -183,7 +183,11 @@ class _CoordinatorCard extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: _buildPhoto(member.photoUrl, 120),
+            child: SmartPhoto(
+              photoUrl: member.photoUrl,
+              storageDirectory: 'bidesh_samiti/${member.storageKey}',
+              size: 120,
+            ),
           ),
         ),
         const SizedBox(height: 12),
@@ -249,7 +253,11 @@ class _MemberGridTile extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(7),
-                child: _buildPhoto(member.photoUrl, 72),
+                child: SmartPhoto(
+                  photoUrl: member.photoUrl,
+                  storageDirectory: 'bidesh_samiti/${member.storageKey}',
+                  size: 72,
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -286,38 +294,7 @@ class _MemberGridTile extends StatelessWidget {
   }
 }
 
-Widget _buildPhoto(String? photoUrl, double size) {
-  if (photoUrl != null && photoUrl.isNotEmpty) {
-    return CachedNetworkImage(
-      imageUrl: photoUrl,
-      width: size,
-      height: size,
-      fit: BoxFit.cover,
-      placeholder: (_, __) => SizedBox(
-        width: size,
-        height: size,
-        child: const Center(
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
-      ),
-      errorWidget: (_, __, ___) => _placeholderIcon(size),
-    );
-  }
-  return _placeholderIcon(size);
-}
 
-Widget _placeholderIcon(double size) {
-  return Container(
-    width: size,
-    height: size,
-    color: const Color(0xFFF5E6C8),
-    child: Icon(
-      Icons.person,
-      size: size * 0.5,
-      color: const Color(0xFF6D4C2A),
-    ),
-  );
-}
 
 class _PhoneChip extends StatelessWidget {
   final String phone;

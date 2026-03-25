@@ -368,4 +368,86 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tapToRead => 'Tap to read';
+
+  @override
+  String get birthAD => 'Birth (AD)';
+
+  @override
+  String get birthBS => 'Birth (BS)';
+
+  @override
+  String get motherName => 'Mother\'s Name';
+
+  @override
+  String get birthPlace => 'Birth Place';
+
+  @override
+  String get currentAddress => 'Current Address';
+
+  @override
+  String get permanentAddress => 'Permanent Address';
+
+  @override
+  String get mobile => 'Mobile';
+
+  @override
+  String get altMobile => 'Alt Mobile';
+
+  @override
+  String get educationProfession => 'Education/Profession';
+
+  @override
+  String get bloodGroup => 'Blood Group';
+
+  @override
+  String get familyCount => 'Family Count';
+
+  @override
+  String get sons => 'Sons';
+
+  @override
+  String get daughters => 'Daughters';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get noAdditionalDetails => 'No additional details available';
+
+  @override
+  String get personalDetails => 'Personal Details';
+
+  @override
+  String get relationships => 'Relationships';
+
+  @override
+  String get adminActions => 'Admin Actions';
+
+  @override
+  String get gallery => 'Gallery';
+
+  @override
+  String get gallerySubtitle => 'Family photos and memories';
+
+  @override
+  String get addPhoto => 'Add Photo';
+
+  @override
+  String get noPhotosYet => 'No photos yet';
+
+  @override
+  String get deletePhoto => 'Delete Photo';
+
+  @override
+  String get deletePhotoConfirm =>
+      'Are you sure you want to delete this photo?';
+
+  @override
+  String get photoAdded => 'Photo added successfully!';
+
+  @override
+  String get photoDeleted => 'Photo deleted successfully!';
+
+  @override
+  String get confirm => 'Confirm';
 }

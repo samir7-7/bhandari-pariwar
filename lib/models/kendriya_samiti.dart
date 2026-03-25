@@ -29,6 +29,21 @@ class KendriyaSamitiMember {
     return address[languageCode] ?? address['en'] ?? '';
   }
 
+  /// Deterministic key used as the storage sub-directory name for this
+  /// member's photo.  Must match the key produced by [_memberPhotoKey] in
+  /// the edit screens so that the display screens can resolve photos from
+  /// the same directory.
+  String get storageKey {
+    final nameEn = name['en'] ?? '';
+    final nameNe = name['ne'] ?? '';
+    final raw = 'sn_${serialNumber}_${nameEn}_$nameNe'.toLowerCase();
+    final normalized = raw
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+        .replaceAll(RegExp(r'_+'), '_')
+        .replaceAll(RegExp(r'^_|_$'), '');
+    return normalized.isEmpty ? 'sn_$serialNumber' : normalized;
+  }
+
   factory KendriyaSamitiMember.fromMap(Map<String, dynamic> map) {
     return KendriyaSamitiMember(
       serialNumber: map['serialNumber'] ?? 0,

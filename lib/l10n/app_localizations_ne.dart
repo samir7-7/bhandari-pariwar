@@ -368,4 +368,85 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get tapToRead => 'पढ्न ट्याप गर्नुहोस्';
+
+  @override
+  String get birthAD => 'जन्म (ई.सं.)';
+
+  @override
+  String get birthBS => 'जन्म (वि.सं.)';
+
+  @override
+  String get motherName => 'आमाको नाम';
+
+  @override
+  String get birthPlace => 'जन्मस्थान';
+
+  @override
+  String get currentAddress => 'हालको ठेगाना';
+
+  @override
+  String get permanentAddress => 'स्थायी ठेगाना';
+
+  @override
+  String get mobile => 'मोबाइल';
+
+  @override
+  String get altMobile => 'वैकल्पिक मोबाइल';
+
+  @override
+  String get educationProfession => 'शिक्षा/पेशा';
+
+  @override
+  String get bloodGroup => 'रक्त समूह';
+
+  @override
+  String get familyCount => 'परिवार संख्या';
+
+  @override
+  String get sons => 'छोराहरू';
+
+  @override
+  String get daughters => 'छोरीहरू';
+
+  @override
+  String get notes => 'टिप्पणी';
+
+  @override
+  String get noAdditionalDetails => 'थप विवरण उपलब्ध छैन';
+
+  @override
+  String get personalDetails => 'व्यक्तिगत विवरण';
+
+  @override
+  String get relationships => 'सम्बन्धहरू';
+
+  @override
+  String get adminActions => 'प्रशासक कार्यहरू';
+
+  @override
+  String get gallery => 'ग्यालेरी';
+
+  @override
+  String get gallerySubtitle => 'पारिवारिक फोटो र सम्झनाहरू';
+
+  @override
+  String get addPhoto => 'फोटो थप्नुहोस्';
+
+  @override
+  String get noPhotosYet => 'अहिलेसम्म कुनै फोटो छैन';
+
+  @override
+  String get deletePhoto => 'फोटो हटाउनुहोस्';
+
+  @override
+  String get deletePhotoConfirm => 'के तपाईं यो फोटो हटाउन चाहनुहुन्छ?';
+
+  @override
+  String get photoAdded => 'फोटो सफलतापूर्वक थपियो!';
+
+  @override
+  String get photoDeleted => 'फोटो सफलतापूर्वक हटाइयो!';
+
+  @override
+  String get confirm => 'पुष्टि गर्नुहोस्';
 }

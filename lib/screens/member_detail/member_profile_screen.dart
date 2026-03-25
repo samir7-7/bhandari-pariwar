@@ -154,18 +154,18 @@ class MemberProfileScreen extends ConsumerWidget {
                 _ProfileHeader(member: member, langCode: langCode, gen: gen),
                 const SizedBox(height: 12),
                 _DetailSection(
-                  title: 'Personal Details',
+                  title: l10n.personalDetails,
                   children: [
                     if (displayBirthDateAd != null)
                       _DetailRow(
                         icon: Icons.cake_outlined,
-                        label: 'Birth (AD)',
+                        label: l10n.birthAD,
                         value: dateFormat.format(displayBirthDateAd),
                       ),
                     if ((member.birthDateBs ?? '').trim().isNotEmpty)
                       _DetailRow(
                         icon: Icons.event_note_outlined,
-                        label: 'Birth (BS)',
+                        label: l10n.birthBS,
                         value: member.birthDateBs!.trim(),
                       ),
                     if (member.deathDate != null)
@@ -177,61 +177,61 @@ class MemberProfileScreen extends ConsumerWidget {
                     if (birthPlace.isNotEmpty)
                       _DetailRow(
                         icon: Icons.place_outlined,
-                        label: 'Birth Place',
+                        label: l10n.birthPlace,
                         value: birthPlace,
                       ),
                     if (currentAddress.isNotEmpty)
                       _DetailRow(
                         icon: Icons.home_outlined,
-                        label: 'Current Address',
+                        label: l10n.currentAddress,
                         value: currentAddress,
                       ),
                     if (permanentAddress.isNotEmpty)
                       _DetailRow(
                         icon: Icons.location_city_outlined,
-                        label: 'Permanent Address',
+                        label: l10n.permanentAddress,
                         value: permanentAddress,
                       ),
                     if ((member.mobilePrimary ?? '').trim().isNotEmpty)
                       _DetailRow(
                         icon: Icons.phone_outlined,
-                        label: 'Mobile',
+                        label: l10n.mobile,
                         value: member.mobilePrimary!.trim(),
                       ),
                     if ((member.mobileSecondary ?? '').trim().isNotEmpty)
                       _DetailRow(
                         icon: Icons.phone_android_outlined,
-                        label: 'Alt Mobile',
+                        label: l10n.altMobile,
                         value: member.mobileSecondary!.trim(),
                       ),
                     if ((member.email ?? '').trim().isNotEmpty)
                       _DetailRow(
                         icon: Icons.email_outlined,
-                        label: 'Email',
+                        label: l10n.email,
                         value: member.email!.trim(),
                       ),
                     if (education.isNotEmpty)
                       _DetailRow(
                         icon: Icons.school_outlined,
-                        label: 'Education/Profession',
+                        label: l10n.educationProfession,
                         value: education,
                       ),
                     if ((member.bloodGroup ?? '').trim().isNotEmpty)
                       _DetailRow(
                         icon: Icons.bloodtype_outlined,
-                        label: 'Blood Group',
+                        label: l10n.bloodGroup,
                         value: member.bloodGroup!.trim(),
                       ),
                     if (member.familyCount != null)
                       _DetailRow(
                         icon: Icons.groups_outlined,
-                        label: 'Family Count',
+                        label: l10n.familyCount,
                         value: member.familyCount.toString(),
                       ),
                     if (note.isNotEmpty)
                       _DetailRow(
                         icon: Icons.format_quote_outlined,
-                        label: 'Notes',
+                        label: l10n.notes,
                         value: note,
                       ),
                     if (displayBirthDateAd == null &&
@@ -248,7 +248,7 @@ class MemberProfileScreen extends ConsumerWidget {
                         member.familyCount == null &&
                         note.isEmpty)
                       Text(
-                        'No additional details available',
+                        l10n.noAdditionalDetails,
                         style: TextStyle(
                           color: Colors.grey.shade600,
                           fontStyle: FontStyle.italic,
@@ -258,7 +258,7 @@ class MemberProfileScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
                 _DetailSection(
-                  title: 'Relationships',
+                  title: l10n.relationships,
                   children: [
                     if (parent != null)
                       _LinkedMemberRow(
@@ -285,7 +285,7 @@ class MemberProfileScreen extends ConsumerWidget {
                     ),
                     _LinkedMemberRow(
                       icon: Icons.badge_outlined,
-                      label: 'Mother Name',
+                      label: l10n.motherName,
                       member: mother,
                       langCode: langCode,
                       fallbackText: motherName,
@@ -309,14 +309,14 @@ class MemberProfileScreen extends ConsumerWidget {
                     ),
                     _LinkedMemberWrap(
                       icon: Icons.boy_outlined,
-                      label: 'Sons',
+                      label: l10n.sons,
                       members: sons,
                       langCode: langCode,
                       onTap: (target) => _openMember(context, target),
                     ),
                     _LinkedMemberWrap(
                       icon: Icons.girl_outlined,
-                      label: 'Daughters',
+                      label: l10n.daughters,
                       members: daughters,
                       langCode: langCode,
                       onTap: (target) => _openMember(context, target),
@@ -326,7 +326,7 @@ class MemberProfileScreen extends ConsumerWidget {
                 if (isAdmin) ...[
                   const SizedBox(height: 12),
                   _DetailSection(
-                    title: 'Admin Actions',
+                    title: l10n.adminActions,
                     children: [
                       Wrap(
                         spacing: 8,
@@ -410,6 +410,7 @@ class _ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -467,17 +468,17 @@ class _ProfileHeader extends StatelessWidget {
                   runSpacing: 6,
                   children: [
                     _HeaderTag(
-                      text: member.isMale ? 'Male' : 'Female',
+                      text: member.isMale ? l10n.male : l10n.female,
                       color: member.isMale
                           ? const Color(0xFF5B8DB8)
                           : const Color(0xFFC48B9F),
                     ),
                     _HeaderTag(
-                      text: 'Generation $gen',
+                      text: '${l10n.generation} $gen',
                       color: const Color(0xFF8B7355),
                     ),
                     if (!member.isAlive)
-                      const _HeaderTag(text: 'Deceased', color: Color(0xFF7D7D7D)),
+                      _HeaderTag(text: l10n.deceased, color: const Color(0xFF7D7D7D)),
                   ],
                 ),
               ],
