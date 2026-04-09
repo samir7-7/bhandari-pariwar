@@ -449,4 +449,110 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get confirm => 'पुष्टि गर्नुहोस्';
+
+  @override
+  String get signUp => 'दर्ता गर्नुहोस्';
+
+  @override
+  String get signIn => 'लगइन गर्नुहोस्';
+
+  @override
+  String get fullName => 'पूरा नाम';
+
+  @override
+  String get contact => 'सम्पर्क नम्बर';
+
+  @override
+  String get confirmPassword => 'पासवर्ड पुष्टि गर्नुहोस्';
+
+  @override
+  String get alreadyHaveAccount => 'पहिले नै खाता छ? लगइन गर्नुहोस्';
+
+  @override
+  String get dontHaveAccount => 'खाता छैन? दर्ता गर्नुहोस्';
+
+  @override
+  String get signupRequestSent => 'दर्ता अनुरोध पठाइयो!';
+
+  @override
+  String get signupRequestPending =>
+      'तपाईंको खाता अनुरोध पेश गरिएको छ। प्रशासकले स्वीकृत गरेपछि तपाईं लगइन गर्न सक्नुहुनेछ।';
+
+  @override
+  String get cancelRequest => 'अनुरोध रद्द गर्नुहोस्';
+
+  @override
+  String get requestCancelled => 'अनुरोध सफलतापूर्वक रद्द गरियो।';
+
+  @override
+  String get accountPending =>
+      'तपाईंको खाता अझै स्वीकृतिको प्रतीक्षामा छ। कृपया पर्खनुहोस्।';
+
+  @override
+  String get accountRejected =>
+      'तपाईंको खाता अनुरोध अस्वीकार गरिएको छ। कृपया प्रशासकसँग सम्पर्क गर्नुहोस्।';
+
+  @override
+  String get accountApproved => 'तपाईंको खाता स्वीकृत भएको छ!';
+
+  @override
+  String get pendingRequests => 'दर्ता अनुरोधहरू';
+
+  @override
+  String get approveUser => 'स्वीकृत गर्नुहोस्';
+
+  @override
+  String get rejectUser => 'अस्वीकार गर्नुहोस्';
+
+  @override
+  String get deleteUser => 'हटाउनुहोस्';
+
+  @override
+  String get noPendingRequests => 'कुनै पनि दर्ता अनुरोध छैन';
+
+  @override
+  String get userApproved => 'प्रयोगकर्ता सफलतापूर्वक स्वीकृत भयो!';
+
+  @override
+  String get userRejected => 'प्रयोगकर्ता अस्वीकार गरियो।';
+
+  @override
+  String get userDeleted => 'प्रयोगकर्ता अनुरोध हटाइयो।';
+
+  @override
+  String get notificationPermissionTitle => 'अपडेट रहनुहोस्';
+
+  @override
+  String get notificationPermissionBody =>
+      'पारिवारिक कार्यक्रम, नयाँ सूचना र खाता स्वीकृतिको अपडेट प्राप्त गर्न सूचना सक्षम गर्नुहोस्।';
+
+  @override
+  String get enableNotificationsButton => 'सूचना सक्षम गर्नुहोस्';
+
+  @override
+  String get skipButton => 'छोड्नुहोस्';
+
+  @override
+  String get passwordMismatch => 'पासवर्ड मेल खाँदैन';
+
+  @override
+  String get signupFailed => 'दर्ता असफल भयो। कृपया पुनः प्रयास गर्नुहोस्।';
+
+  @override
+  String get fieldRequired => 'यो फिल्ड आवश्यक छ';
+
+  @override
+  String get invalidEmail => 'कृपया मान्य इमेल प्रविष्ट गर्नुहोस्';
+
+  @override
+  String get passwordTooShort => 'पासवर्ड कम्तिमा ६ अक्षरको हुनुपर्छ';
+
+  @override
+  String get manageSignupRequests => 'दर्ता अनुरोध व्यवस्थापन';
+
+  @override
+  String get logoutConfirm => 'के तपाईं लगआउट गर्न चाहनुहुन्छ?';
+
+  @override
+  String get welcomeBack => 'पुनः स्वागत छ!';
 }

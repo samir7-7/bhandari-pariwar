@@ -450,4 +450,110 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirm => 'Confirm';
+
+  @override
+  String get signUp => 'Sign Up';
+
+  @override
+  String get signIn => 'Sign In';
+
+  @override
+  String get fullName => 'Full Name';
+
+  @override
+  String get contact => 'Contact Number';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account? Sign In';
+
+  @override
+  String get dontHaveAccount => 'Don\'t have an account? Sign Up';
+
+  @override
+  String get signupRequestSent => 'Signup Request Sent!';
+
+  @override
+  String get signupRequestPending =>
+      'Your account request has been submitted. You will be able to login once an admin approves your request.';
+
+  @override
+  String get cancelRequest => 'Cancel Request';
+
+  @override
+  String get requestCancelled => 'Request cancelled successfully.';
+
+  @override
+  String get accountPending =>
+      'Your account is still pending approval. Please wait.';
+
+  @override
+  String get accountRejected =>
+      'Your account request was rejected. Please contact the admin.';
+
+  @override
+  String get accountApproved => 'Your account has been approved!';
+
+  @override
+  String get pendingRequests => 'Signup Requests';
+
+  @override
+  String get approveUser => 'Approve';
+
+  @override
+  String get rejectUser => 'Reject';
+
+  @override
+  String get deleteUser => 'Delete';
+
+  @override
+  String get noPendingRequests => 'No pending signup requests';
+
+  @override
+  String get userApproved => 'User approved successfully!';
+
+  @override
+  String get userRejected => 'User rejected.';
+
+  @override
+  String get userDeleted => 'User request deleted.';
+
+  @override
+  String get notificationPermissionTitle => 'Stay Updated';
+
+  @override
+  String get notificationPermissionBody =>
+      'Enable notifications to receive updates about family events, new notices, and account approvals.';
+
+  @override
+  String get enableNotificationsButton => 'Enable Notifications';
+
+  @override
+  String get skipButton => 'Skip';
+
+  @override
+  String get passwordMismatch => 'Passwords do not match';
+
+  @override
+  String get signupFailed => 'Signup failed. Please try again.';
+
+  @override
+  String get fieldRequired => 'This field is required';
+
+  @override
+  String get invalidEmail => 'Please enter a valid email';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 6 characters';
+
+  @override
+  String get manageSignupRequests => 'Manage Signup Requests';
+
+  @override
+  String get logoutConfirm => 'Are you sure you want to logout?';
+
+  @override
+  String get welcomeBack => 'Welcome back!';
 }

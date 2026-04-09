@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bhandari_pariwar/providers/auth_provider.dart';
 import 'package:bhandari_pariwar/screens/splash/splash_screen.dart';
 import 'package:bhandari_pariwar/screens/home/home_screen.dart';
 import 'package:bhandari_pariwar/screens/family_tree/family_tree_screen.dart';
@@ -9,13 +10,14 @@ import 'package:bhandari_pariwar/screens/admin/admin_login_screen.dart';
 import 'package:bhandari_pariwar/screens/admin/add_member_screen.dart';
 import 'package:bhandari_pariwar/screens/admin/add_notice_screen.dart';
 import 'package:bhandari_pariwar/screens/admin/edit_content_screen.dart';
-import 'package:bhandari_pariwar/providers/settings_provider.dart';
+import 'package:bhandari_pariwar/screens/admin/user_requests_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final hasSelectedLanguage = ref.watch(hasSelectedLanguageProvider);
+  final hasApprovedAccess = ref.watch(hasApprovedAccessProvider);
+  final isAdmin = ref.watch(isAdminProvider);
 
   return GoRouter(
-    initialLocation: hasSelectedLanguage ? '/home' : '/splash',
+    initialLocation: '/splash',
     routes: [
       GoRoute(
         path: '/splash',
@@ -24,6 +26,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/home',
         builder: (context, state) {
+          if (!hasApprovedAccess) return const SplashScreen();
           final tab = state.uri.queryParameters['tab'];
           return HomeScreen(initialTab: _parseTab(tab));
         },
@@ -31,21 +34,28 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/tree',
         builder: (context, state) {
+          if (!hasApprovedAccess) return const SplashScreen();
           final memberId = state.uri.queryParameters['memberId'];
           return FamilyTreeScreen(focusMemberId: memberId);
         },
       ),
       GoRoute(
         path: '/member/:memberId',
-        builder: (context, state) => MemberProfileScreen(
-          memberId: state.pathParameters['memberId']!,
-        ),
+        builder: (context, state) {
+          if (!hasApprovedAccess) return const SplashScreen();
+          return MemberProfileScreen(
+            memberId: state.pathParameters['memberId']!,
+          );
+        },
       ),
       GoRoute(
         path: '/notices/:noticeId',
-        builder: (context, state) => NoticeDetailScreen(
-          noticeId: state.pathParameters['noticeId']!,
-        ),
+        builder: (context, state) {
+          if (!hasApprovedAccess) return const SplashScreen();
+          return NoticeDetailScreen(
+            noticeId: state.pathParameters['noticeId']!,
+          );
+        },
       ),
       GoRoute(
         path: '/admin/login',
@@ -54,6 +64,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/admin/add-member',
         builder: (context, state) {
+          if (!isAdmin) return const SplashScreen();
           final parentId = state.uri.queryParameters['parentId'];
           final asSpouse = state.uri.queryParameters['asSpouse'] == 'true';
           return AddMemberScreen(parentId: parentId, asSpouse: asSpouse);
@@ -61,19 +72,35 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/admin/edit-member/:memberId',
-        builder: (context, state) => AddMemberScreen(
-          editMemberId: state.pathParameters['memberId'],
-        ),
+        builder: (context, state) {
+          if (!isAdmin) return const SplashScreen();
+          return AddMemberScreen(
+            editMemberId: state.pathParameters['memberId'],
+          );
+        },
       ),
       GoRoute(
         path: '/admin/add-notice',
-        builder: (context, state) => const AddNoticeScreen(),
+        builder: (context, state) {
+          if (!isAdmin) return const SplashScreen();
+          return const AddNoticeScreen();
+        },
       ),
       GoRoute(
         path: '/admin/edit-content/:contentId',
-        builder: (context, state) => EditContentScreen(
-          contentId: state.pathParameters['contentId']!,
-        ),
+        builder: (context, state) {
+          if (!isAdmin) return const SplashScreen();
+          return EditContentScreen(
+            contentId: state.pathParameters['contentId']!,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/admin/user-requests',
+        builder: (context, state) {
+          if (!isAdmin) return const SplashScreen();
+          return const UserRequestsScreen();
+        },
       ),
     ],
   );

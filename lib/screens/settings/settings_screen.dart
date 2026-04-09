@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:bhandari_pariwar/l10n/app_localizations.dart';
 import 'package:bhandari_pariwar/providers/auth_provider.dart';
 import 'package:bhandari_pariwar/providers/settings_provider.dart';
@@ -18,12 +20,18 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  static final Uri _privacyPolicyUri = Uri.parse(
+    'https://bhandari-pariwar.web.app/privacy-policy.html',
+  );
+
   bool _isSeeding = false;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isAdmin = ref.watch(isAdminProvider);
+    final authSession = ref.watch(authSessionProvider).valueOrNull;
+    final appUser = ref.watch(currentAppUserProvider).valueOrNull;
     final langCode = ref.watch(currentLanguageProvider);
     final notificationsEnabled = ref.watch(notificationsEnabledProvider);
 
@@ -40,6 +48,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       body: ListView(
         children: [
           const SizedBox(height: 8),
+          if (authSession?.firebaseUser != null) ...[
+            ListTile(
+              leading: const Icon(Icons.account_circle_outlined),
+              title: Text(appUser?.fullName.isNotEmpty == true
+                  ? appUser!.fullName
+                  : authSession!.firebaseUser!.email ?? 'Account'),
+              subtitle: Text(
+                isAdmin
+                    ? 'Admin account'
+                    : (appUser?.email ?? authSession?.firebaseUser?.email ?? ''),
+              ),
+            ),
+            const Divider(),
+          ],
           // Language
           ListTile(
             leading: const Icon(Icons.language),
@@ -55,19 +77,47 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             title: Text(l10n.enableNotifications),
             value: notificationsEnabled,
             onChanged: (enabled) async {
-              ref
-                  .read(notificationsEnabledProvider.notifier)
-                  .setEnabled(enabled);
               if (!enabled) {
-                await NotificationService.removeToken();
+                await ref
+                    .read(notificationsEnabledProvider.notifier)
+                    .setEnabled(false);
+                await NotificationService.removeCurrentUserToken();
               } else {
-                await NotificationService.initialize();
+                await ref
+                    .read(hasPromptedNotificationsProvider.notifier)
+                    .markPrompted();
+                final settings = await NotificationService.requestPermission();
+                final granted =
+                    settings.authorizationStatus ==
+                            AuthorizationStatus.authorized ||
+                        settings.authorizationStatus ==
+                            AuthorizationStatus.provisional;
+                await ref
+                    .read(notificationsEnabledProvider.notifier)
+                    .setEnabled(granted);
+                if (granted) {
+                  await NotificationService.syncCurrentUserToken();
+                } else if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Notification permission was not granted.'),
+                    ),
+                  );
+                }
               }
             },
           ),
           const Divider(),
           // Admin section
           if (isAdmin) ...[
+            ListTile(
+              leading: const Icon(Icons.how_to_reg, color: Colors.green),
+              title: const Text('Manage signup requests'),
+              subtitle: const Text('Approve or remove pending user requests'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => context.push('/admin/user-requests'),
+            ),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.cloud_upload, color: Colors.blue),
               title: Text(l10n.seedData),
@@ -82,20 +132,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               onTap: _isSeeding ? null : () => _confirmSeedData(context),
             ),
             const Divider(),
-            ListTile(
-              leading: const Icon(Icons.logout, color: Colors.red),
-              title: Text(l10n.logout),
-              onTap: () async {
-                await ref.read(authServiceProvider).signOut();
-              },
-            ),
-          ] else
-            ListTile(
-              leading: const Icon(Icons.admin_panel_settings),
-              title: Text(l10n.adminLogin),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.push('/admin/login'),
-            ),
+          ],
+          ListTile(
+            leading: const Icon(Icons.logout, color: Colors.red),
+            title: Text(l10n.logout),
+            onTap: () async {
+              await ref.read(authServiceProvider).signOut();
+              if (mounted) {
+                context.go('/splash');
+              }
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.privacy_tip_outlined),
+            title: const Text('Privacy Policy'),
+            subtitle: const Text('View how this app handles data'),
+            trailing: const Icon(Icons.open_in_new),
+            onTap: () => _openPrivacyPolicy(context),
+          ),
           const Divider(),
           // App version
           ListTile(
@@ -190,6 +245,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       }
     } finally {
       if (mounted) setState(() => _isSeeding = false);
+    }
+  }
+
+  Future<void> _openPrivacyPolicy(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final launched = await launchUrl(
+      _privacyPolicyUri,
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!launched && mounted) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Could not open privacy policy.')),
+      );
     }
   }
 }

@@ -4,6 +4,13 @@
   },
   "functions": {
     "source": "firebase/functions"
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
   }
 }
-

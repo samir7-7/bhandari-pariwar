@@ -28,10 +28,36 @@ class NoticesScreen extends ConsumerWidget {
               )
             : null,
         title: Text(l10n.notices),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: l10n.retry,
+            onPressed: () => ref.invalidate(allNoticesProvider),
+          ),
+        ],
       ),
       body: noticesAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('${l10n.error}: $e')),
+        error: (e, _) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '${l10n.error}: $e',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton.icon(
+                  onPressed: () => ref.invalidate(allNoticesProvider),
+                  icon: const Icon(Icons.refresh),
+                  label: Text(l10n.retry),
+                ),
+              ],
+            ),
+          ),
+        ),
         data: (notices) {
           if (notices.isEmpty) {
             return Center(
@@ -43,6 +69,12 @@ class NoticesScreen extends ConsumerWidget {
                   const SizedBox(height: 16),
                   Text(l10n.noNotices,
                       style: TextStyle(color: Colors.grey.shade500)),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: () => ref.invalidate(allNoticesProvider),
+                    icon: const Icon(Icons.refresh),
+                    label: Text(l10n.retry),
+                  ),
                 ],
               ),
             );

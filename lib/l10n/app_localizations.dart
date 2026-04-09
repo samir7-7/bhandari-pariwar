@@ -949,6 +949,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm'**
   String get confirm;
+
+  /// No description provided for @signUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get signUp;
+
+  /// No description provided for @signIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signIn;
+
+  /// No description provided for @fullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fullName;
+
+  /// No description provided for @contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Number'**
+  String get contact;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Sign In'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @dontHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? Sign Up'**
+  String get dontHaveAccount;
+
+  /// No description provided for @signupRequestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Signup Request Sent!'**
+  String get signupRequestSent;
+
+  /// No description provided for @signupRequestPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account request has been submitted. You will be able to login once an admin approves your request.'**
+  String get signupRequestPending;
+
+  /// No description provided for @cancelRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Request'**
+  String get cancelRequest;
+
+  /// No description provided for @requestCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Request cancelled successfully.'**
+  String get requestCancelled;
+
+  /// No description provided for @accountPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is still pending approval. Please wait.'**
+  String get accountPending;
+
+  /// No description provided for @accountRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account request was rejected. Please contact the admin.'**
+  String get accountRejected;
+
+  /// No description provided for @accountApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been approved!'**
+  String get accountApproved;
+
+  /// No description provided for @pendingRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Signup Requests'**
+  String get pendingRequests;
+
+  /// No description provided for @approveUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get approveUser;
+
+  /// No description provided for @rejectUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get rejectUser;
+
+  /// No description provided for @deleteUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteUser;
+
+  /// No description provided for @noPendingRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'No pending signup requests'**
+  String get noPendingRequests;
+
+  /// No description provided for @userApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'User approved successfully!'**
+  String get userApproved;
+
+  /// No description provided for @userRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'User rejected.'**
+  String get userRejected;
+
+  /// No description provided for @userDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'User request deleted.'**
+  String get userDeleted;
+
+  /// No description provided for @notificationPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay Updated'**
+  String get notificationPermissionTitle;
+
+  /// No description provided for @notificationPermissionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable notifications to receive updates about family events, new notices, and account approvals.'**
+  String get notificationPermissionBody;
+
+  /// No description provided for @enableNotificationsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Notifications'**
+  String get enableNotificationsButton;
+
+  /// No description provided for @skipButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skipButton;
+
+  /// No description provided for @passwordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordMismatch;
+
+  /// No description provided for @signupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Signup failed. Please try again.'**
+  String get signupFailed;
+
+  /// No description provided for @fieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get fieldRequired;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get invalidEmail;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters'**
+  String get passwordTooShort;
+
+  /// No description provided for @manageSignupRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Signup Requests'**
+  String get manageSignupRequests;
+
+  /// No description provided for @logoutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get logoutConfirm;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back!'**
+  String get welcomeBack;
 }
 
 class _AppLocalizationsDelegate

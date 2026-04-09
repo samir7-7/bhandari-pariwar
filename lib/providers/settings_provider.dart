@@ -13,6 +13,7 @@ class SettingsService {
   static const _languageKey = 'language_code';
   static const _notificationsKey = 'notifications_enabled';
   static const _hasSelectedLanguageKey = 'has_selected_language';
+  static const _hasPromptedNotificationsKey = 'has_prompted_notifications';
 
   SharedPreferences? _prefs;
 
@@ -49,6 +50,16 @@ class SettingsService {
   Future<void> setHasSelectedLanguage(bool value) async {
     final p = await prefs;
     await p.setBool(_hasSelectedLanguageKey, value);
+  }
+
+  Future<bool> getHasPromptedNotifications() async {
+    final p = await prefs;
+    return p.getBool(_hasPromptedNotificationsKey) ?? false;
+  }
+
+  Future<void> setHasPromptedNotifications(bool value) async {
+    final p = await prefs;
+    await p.setBool(_hasPromptedNotificationsKey, value);
   }
 }
 
@@ -120,5 +131,27 @@ class HasSelectedLanguageNotifier extends StateNotifier<bool> {
   Future<void> markSelected() async {
     state = true;
     await _service.setHasSelectedLanguage(true);
+  }
+}
+
+final hasPromptedNotificationsProvider =
+    StateNotifierProvider<HasPromptedNotificationsNotifier, bool>((ref) {
+  return HasPromptedNotificationsNotifier(ref.watch(settingsServiceProvider));
+});
+
+class HasPromptedNotificationsNotifier extends StateNotifier<bool> {
+  HasPromptedNotificationsNotifier(this._service) : super(false) {
+    _load();
+  }
+
+  final SettingsService _service;
+
+  Future<void> _load() async {
+    state = await _service.getHasPromptedNotifications();
+  }
+
+  Future<void> markPrompted() async {
+    state = true;
+    await _service.setHasPromptedNotifications(true);
   }
 }

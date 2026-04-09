@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:bhandari_pariwar/config/auth_constants.dart';
 import 'package:bhandari_pariwar/models/kendriya_samiti.dart';
 import 'package:bhandari_pariwar/models/elder_saying.dart';
 import 'package:bhandari_pariwar/models/committee_member.dart';
@@ -27,17 +28,25 @@ class SeedService {
       FirebaseFirestore.instance.collection('members');
   static bool _autoSeedDone = false;
 
-
-  Future<void> _ensureFirebaseAuth() async {
+  Future<void> _ensureAdminAuth() async {
     final auth = FirebaseAuth.instance;
-    if (auth.currentUser == null) {
-      await auth.signInAnonymously();
+    final user = auth.currentUser;
+    if (user == null || !AuthConstants.isAdminEmail(user.email)) {
+      throw StateError(
+        'Admin sign-in is required before seeding data.',
+      );
     }
   }
 
   /// Auto-seeds the database on first launch if it's empty.
   Future<void> autoSeedIfEmpty() async {
     if (_autoSeedDone) return;
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null || !AuthConstants.isAdminEmail(user.email)) {
+      return;
+    }
+
     _autoSeedDone = true;
 
     final snap = await _membersCollection.limit(1).get();
@@ -63,7 +72,7 @@ class SeedService {
   }
 
   Future<int> seedMembersFromAsset({bool replaceExisting = false}) async {
-    await _ensureFirebaseAuth();
+    await _ensureAdminAuth();
 
     final payload = await _loadMembersAssetPayload();
 

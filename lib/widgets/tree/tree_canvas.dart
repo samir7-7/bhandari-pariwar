@@ -242,11 +242,49 @@ class _TreeCanvasState extends ConsumerState<TreeCanvas> {
 
     return membersAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error: $e')),
+      error: (e, _) => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Error: $e',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: () => ref.invalidate(allMembersProvider),
+                icon: const Icon(Icons.refresh),
+                label: const Text('Reload'),
+              ),
+            ],
+          ),
+        ),
+      ),
       data: (_) {
         final members = ref.watch(treeMembersProvider);
         if (members.isEmpty) {
-          return const Center(child: Text('No members in selected branch'));
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'No members in selected branch',
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: () => ref.invalidate(allMembersProvider),
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Reload'),
+                  ),
+                ],
+              ),
+            ),
+          );
         }
 
         WidgetsBinding.instance.addPostFrameCallback((_) {

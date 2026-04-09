@@ -3,13 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bhandari_pariwar/firebase_options.dart';
 import 'package:bhandari_pariwar/config/supabase_options.dart';
 import 'package:bhandari_pariwar/app.dart';
-import 'package:bhandari_pariwar/services/notification_service.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -28,27 +26,9 @@ Future<void> _initializeSupabase() async {
   }
 }
 
-/// Signs in to Firebase anonymously so the seed service can write to
-/// Firestore (rules require request.auth != null) without requiring
-/// the user to log in as an admin.
-Future<void> _ensureFirebaseAuth() async {
-  final auth = FirebaseAuth.instance;
-  if (auth.currentUser == null) {
-    await auth.signInAnonymously();
-  }
-}
-
 Future<void> _initializeBackgroundServices() async {
   try {
-    await NotificationService.initialize();
-  } catch (_) {}
-
-  try {
     await _initializeSupabase();
-  } catch (_) {}
-
-  try {
-    await _ensureFirebaseAuth();
   } catch (_) {}
 }
 

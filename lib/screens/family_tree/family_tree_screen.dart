@@ -250,6 +250,11 @@ class _FamilyTreeScreenState extends ConsumerState<FamilyTreeScreen> {
               onPressed: _openSearchSheet,
               tooltip: l10n.searchMember,
             ),
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Reload',
+            onPressed: () => ref.invalidate(allMembersProvider),
+          ),
           // Member count badge
           membersAsync.whenOrNull(
                 data: (_) => Center(
